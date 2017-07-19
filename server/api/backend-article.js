@@ -67,8 +67,8 @@ exports.insert = (req, res) => {
         is_delete: 0,
         timestamp: moment().format('X')
     };
-    Article.createAsync(data).then(result => {
-        return Category.updateAsync({ _id: category }, { '$inc': { 'cate_num': 1 } }).then(() => {
+    Article.create(data).then(result => {
+        return Category.update({ _id: category }, { '$inc': { 'cate_num': 1 } }).then(() => {
             return res.json({
                 code: 200,
                 message: '发布成功',
@@ -92,8 +92,8 @@ exports.insert = (req, res) => {
  */
 exports.deletes = (req, res) => {
     let id = req.query.id;
-    Article.updateAsync({ _id: id }, { is_delete: 1 }).then(() => {
-        return Category.updateAsync({ _id: id }, { '$inc': { 'cate_num': 1 } }).then(result => {
+    Article.update({ _id: id }, { is_delete: 1 }).then(() => {
+        return Category.update({ _id: id }, { '$inc': { 'cate_num': 1 } }).then(result => {
             res.json({
                 code: 200,
                 message: '更新成功',
@@ -117,8 +117,8 @@ exports.deletes = (req, res) => {
  */
 exports.recover = (req, res) => {
     let id = req.query.id;
-    Article.updateAsync({ _id: id }, { is_delete: 0 }).then(() => {
-        return Category.updateAsync({ _id: id }, { '$inc': { 'cate_num': 1 } }).then(() => {
+    Article.update({ _id: id }, { is_delete: 0 }).then(() => {
+        return Category.update({ _id: id }, { '$inc': { 'cate_num': 1 } }).then(() => {
             res.json({
                 code: 200,
                 message: '更新成功',
@@ -154,11 +154,11 @@ exports.modify = (req, res) => {
         html,
         update_date: moment().format('YYYY-MM-DD HH:mm:ss')
     };
-    Article.findOneAndUpdateAsync({ _id: id }, data, { new: true }), then(result => {
+    Article.findOneAndUpdate({ _id: id }, data, { new: true }), then(result => {
         if (category !== category_old) {
             Promise.all([
-                Category.updateAsync({ _id: category }, { '$inc': { 'cate_num': 1 } }),
-                Category.updateAsync({ _id: category_old }, { '$inc': { 'cate_num': -1 } })
+                Category.update({ _id: category }, { '$inc': { 'cate_num': 1 } }),
+                Category.update({ _id: category_old }, { '$inc': { 'cate_num': -1 } })
             ]).then(() => {
                 res.json({
                     code: 200,
