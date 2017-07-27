@@ -112,3 +112,54 @@ exports.getList = (req, res) => {
         });
     }
 };
+
+/**
+ * 评论删除
+ * @method deleteAdmin
+ * @param  {[type]}    req [description]
+ * @param  {[type]}    res [description]
+ * @return {[type]}        [description]
+ */
+exports.deletes = (req, res) => {
+    let id = req.query.id;
+    Comment.update({_id: id}, { is_delete: 1}).then(() => {
+        return Article.update({_id: id}, {'$inc': {'comment_count': -1}}).then(() => {
+            res.json({
+                code: 200,
+                message: '删除成功',
+                data: 'success'
+            });
+        });
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
+};
+
+/**
+ * 评论恢复
+ * @method deleteAdmin
+ * @param  {[type]}    req [description]
+ * @param  {[type]}    res [description]
+ * @return {[type]}        [description]
+ */
+
+ exports.recover = (req, res) => {
+    let id = req.query.id;
+    Comment.update({_id: id}, {is_delete: 0}).then(() => {
+        return Article.update({_id: id}, {'$inc': {'comment_count': 1}}).then(() => {
+            res.json({
+                code: 200,
+                message: '恢复成功',
+                data: 'success'
+            });
+        });
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
+ };

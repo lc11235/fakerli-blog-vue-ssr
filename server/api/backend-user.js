@@ -4,7 +4,7 @@ const moment = require('moment');
 const jwt = require('jsonwebtoken');
 
 const mongoose = require('../mongoose');
-const Admin = mongoose.model('Adming');
+const Admin = mongoose.model('Admin');
 const fsExistsSync = require('../utils').fsExistsSync;
 const config = require('../config');
 const md5Pre = config.md5Pre;

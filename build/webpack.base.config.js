@@ -43,7 +43,7 @@ const config = {
             path.join(__dirname, '../node_modules')
         ]
     },
-    modules: {
+    module: {
         rules: [{
             test: /\.js$/,
             loader: 'babel-loader',

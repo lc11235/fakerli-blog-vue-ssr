@@ -1,8 +1,8 @@
 const mongoose = require('../mongoose');
-const Schema = mongosse.Schema;
+const Schema = mongoose.Schema;
 const Promise = require('bluebird');
 
-const CategorySchema = new Schema = ({
+const CategorySchema = new Schema ({
     cate_name: String,
     cate_order: String,
     cate_num: Number,

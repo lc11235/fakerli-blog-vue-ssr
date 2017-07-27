@@ -17,8 +17,10 @@ Object.keys(filters).forEach(key => {
     Vue.filter(key, filters[key]);
 });
 
-const app =new Vue({
+const app = new Vue({
     router,
     store,
     render: h => h(App)
 });
+
+app.$mount('#app');

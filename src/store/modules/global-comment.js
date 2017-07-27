@@ -48,6 +48,12 @@ const mutations = {
 };
 
 const getters = {
+    ['getCommentList'](state) {
+        return state.lists;
+    }
+};
+
+export default {
     namespaced: true,
     state,
     actions,

@@ -1,6 +1,6 @@
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-const loaders = {};
+let loaders = {};
 if(process.env.NODE_ENV !== 'production'){
     loaders = {
         css: 'vue-style-loader!css-loader',

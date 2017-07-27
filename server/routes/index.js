@@ -70,7 +70,7 @@ router.get('/backend/user/list', isAdmin, frontendUser.getList);
 // 获取单个用户
 router.get('/backend/user/item', isAdmin, frontendUser.getItem);
 // 编辑用户
-router.post('/backend/user/modify', isAdmin, ,multipartMiddleware, frontendUser.modify);
+router.post('/backend/user/modify', isAdmin, multipartMiddleware, frontendUser.modify);
 // 删除用户
 router.get('/backend/user/delete', isAdmin,frontendUser.deletes);
 // 恢复用户
@@ -82,7 +82,7 @@ router.post('/frontend/comment/insert', isUser, multipartMiddleware, frontendCom
 // 读取评论列表
 router.get('/frontend/comment/list', frontendComment.getList);
 // 删除评论
-router.get('/frontend/comment.delete', isAdmin, frontendComment.deletes);
+router.get('/frontend/comment/delete', isAdmin, frontendComment.deletes);
 // 恢复评论
 router.get('/frontend/comment/recover', isAdmin, frontendComment.recover);
 
@@ -120,7 +120,7 @@ router.get('*', (req, res) => {
       res.json({
             code: -200,
             message: '没有找到该页面'
-      })
+      });
 });
 
 module.exports = router;

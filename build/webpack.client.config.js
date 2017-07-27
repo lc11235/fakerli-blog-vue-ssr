@@ -9,7 +9,7 @@ const prodConfig = require('./webpack.client.prod.config');
 const vueConfig = require('./vue-loader.config');
 const projectRoot = path.resolve(__dirname, '../');
 
-const config = merge(baseConfig, {
+let config = merge(baseConfig, {
     externals: {
         'jquery': 'jQeury'
     },

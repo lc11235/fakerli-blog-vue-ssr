@@ -1,5 +1,5 @@
 const mongoose = require('../mongoose');
-const Schema = mongosse.Schema;
+const Schema = mongoose.Schema;
 const Promise = require('bluebird');
 
 const AdminSchema = new Schema({

@@ -126,9 +126,9 @@ exports.recover = (req, res) => {
             });
         });
     }).catch(err => {
-        res.json(err => {
+        res.json({
             code: -200,
-                message: err.toString()
+            message: err.toString()
         });
     });
 };

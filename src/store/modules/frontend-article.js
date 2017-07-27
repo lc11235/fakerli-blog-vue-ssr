@@ -33,7 +33,7 @@ const actions = {
             });
         }
     },
-    async ['getArticleItem']({commit, statem rootState: {route: { path, params: { id }}}}) {
+    async ['getArticleItem']({commit, state, rootState: {route: { path, params: { id }}}}) {
         if(path === state.item.path) {
             global.progress = 100;
             return;

@@ -49,7 +49,7 @@
                     this.$store.dispatch('global/showMsg', '请将表单填写完整！');
                     return;
                 }
-                cosnt { data: {message, code}} = await api.post('frontend/user/login', this.form);
+                const { data: {message, code}} = await api.post('frontend/user/login', this.form);
                 if(code === 200) {
                     this.$store.dispatch('global/showMsg', {
                         type: 'success',

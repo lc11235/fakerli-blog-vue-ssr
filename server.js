@@ -9,7 +9,7 @@ const compression = require('compression');
 // const HTMLStream = require('vue-ssr-html-stream');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
-const bodyParser = reuqire('body-parser');
+const bodyParser = require('body-parser');
 const { createBundleRenderer } = require('vue-server-renderer');
 const config = require('./src/api/config-server');
 const resolve = file => path.resolve(__dirname, file);
