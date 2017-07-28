@@ -27,10 +27,10 @@
 </template>
 
 <script lang="babel">
-import api from '~api'
-import metaMixin from '~mixins'
-import account from '~components/aside-account.vue'
-import aInput from '~components/_input.vue'
+import api from '~api';
+import metaMixin from '~mixins';
+import account from '~components/aside-account.vue';
+import aInput from '~components/_input.vue';
 export default {
     mixins: [metaMixin],
     data() {
@@ -40,7 +40,7 @@ export default {
                 password: '',
                 re_password: ''
             }
-        }
+        };
     },
     components: {
         aInput,
@@ -49,32 +49,32 @@ export default {
     methods: {
         async modify() {
             if (!this.form.password || !this.form.old_password || !this.form.re_password) {
-                this.$store.dispatch('global/showMsg', '请将表单填写完整!')
-                return
+                this.$store.dispatch('global/showMsg', '请将表单填写完整!');
+                return;
             } else if (this.form.password !== this.form.re_password) {
-                this.$store.dispatch('global/showMsg', '两次密码输入不一致!')
-                return
+                this.$store.dispatch('global/showMsg', '两次密码输入不一致!');
+                return;
             }
-            const { data: { code, data} } = await api.post('frontend/user/password', this.form)
+            const { data: { code, data} } = await api.post('frontend/user/password', this.form);
             if (code === 200) {
                 this.$store.dispatch('global/showMsg', {
                     type: 'success',
                     content: data
-                })
-                this.form.old_password = ''
-                this.form.password = ''
-                this.form.re_password = ''
+                });
+                this.form.old_password = '';
+                this.form.password = '';
+                this.form.re_password = '';
             }
         }
     },
     mounted() {
-        this.$store.dispatch('global/gProgress', 100)
+        this.$store.dispatch('global/gProgress', 100);
     },
     metaInfo () {
         return {
             title: '密码 - fakerli的博客',
             meta: [{ vmid: 'description', name: 'description', content: 'fakerli的博客' }]
-        }
+        };
     }
 }
 </script>

@@ -12,12 +12,12 @@ const state = {
 
 const actions = {
     async ['getCommentList']({commit, rootState: {route: {path, prarms: {id}}}}, config) {
-        const {data: {data, code}} = await api.get('frontend/comment/list', {...config, id, cache: true});
+        const {data: {data, code}} = await api.get('frontend/comment/list', { ...config, id, cache: true });
         if(data && code === 200) {
             commit('receiveCommentList', {
                 ...config,
                 ...data,
-                path 
+                path
             });
         }
     }

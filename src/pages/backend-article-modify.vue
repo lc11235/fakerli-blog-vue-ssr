@@ -66,7 +66,7 @@
                 }
                 this.form.content = content;
                 const {data: {message, code, data}} = await api.post('backend/article/modify', this.form);
-                fi(code === 200) {
+                if(code === 200) {
                     this.$store.dispatch('global/showMsg', {
                         type: 'success',
                         content: message
@@ -90,7 +90,7 @@
                     width: "100%",
                     height: 500,
                     markdown: data.content,
-                    placeholder: '请输入内容...'，
+                    placeholder: '请输入内容...',
                     path: '/static/editor.md/lib/',
                     toolbarIcons() {
                         return [

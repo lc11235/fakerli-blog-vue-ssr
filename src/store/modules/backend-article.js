@@ -58,17 +58,17 @@ const mutations = {
         }
     },
     ['updateArticleItem'](state, data) {
-        const index = state.lists.data.findIndex(ii => ii_id === data._id);
+        const index = state.lists.data.findIndex(ii => ii._id === data._id);
         if(index > -1) {
             state.lists.data.splice(index, 1, data);
         }
     },
     ['deleteArticle'](state, id) {
-        const obj = state.lists.data.find(ii => ii_id === id);
+        const obj = state.lists.data.find(ii => ii._id === id);
         if(obj) obj.is_delete = 1;
     },
     ['recoverArticle'] (state, id) {
-        const obj = state.lists.data.find(ii => ii_id === id);
+        const obj = state.lists.data.find(ii => ii._id === id);
         if(obj) obj.is_delete = 0;
     }
 };
@@ -84,7 +84,7 @@ const getters = {
 
 export default {
     namespaced: true,
-    state, 
+    state,
     actions,
     mutations,
     getters

@@ -2,7 +2,7 @@ import { app, store, router } from './app';
 
 import "./assets/css/hljs/googlecode.css";
 import "./assets/css/style.css";
-import "./assets/less/frontedn.less";
+import "./assets/less/frontend.less";
 import "toastr/build/toastr.css";
 import "nprogress/nprogress.css";
 

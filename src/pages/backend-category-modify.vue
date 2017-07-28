@@ -52,7 +52,7 @@
                     return;
                 }
 
-                const {data: {message, code, data}} => await api.post('backend/category/modify', this.form);
+                const {data: {message, code, data}} = await api.post('backend/category/modify', this.form);
                 if(code === 200 && data) {
                     this.$store.dispatch('global/showMsg', {
                         type: 'success',

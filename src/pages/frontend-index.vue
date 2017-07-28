@@ -28,7 +28,7 @@
     import topicsItem from '../components/topics-item.vue';
     import topicsItemNone from '../components/topics-item-none.vue';
     import category from '../components/aside-category.vue';
-    import trending from '../comoonents/aside-trending.vue';
+    import trending from '../components/aside-trending.vue';
     import { ssp } from '../utils';
     import metaMiin from '~mixins';
 
@@ -68,7 +68,7 @@
                 fetchInitialData(this.$store, {page: 1});
             }
         },
-        beforeRouteLeave(to, from, next) => {
+        beforeRouteLeave(to, from, next) {
             const scrollTop = document.body.scrollTop;
             const path = from.path;
             if(scrollTop){

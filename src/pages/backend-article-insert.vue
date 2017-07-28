@@ -61,7 +61,7 @@
                     return;
                 }
                 this.form.content = content;
-                const {data: {message, code, data}} = awair api.post('backend/article/insert', this.form);
+                const {data: {message, code, data}} = await api.post('backend/article/insert', this.form);
                 if(code === 200) {
                     this.$store.dispatch('global/showMsg', {
                         type: 'success',

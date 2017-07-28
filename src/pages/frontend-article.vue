@@ -86,7 +86,7 @@
             fetchInitialData(this.$store);
         },
         metaInfo() {
-            const title = this.article.data,title ? this.article.data.title + ' 学习是为了探索这个世界的本质' : '学习是为了探索这个世界的本质';
+            const title = this.article.data.title ? this.article.data.title + ' 学习是为了探索这个世界的本质' : '学习是为了探索这个世界的本质';
             return {
                 title,
                 meta: [{vmid: 'description', name: 'description', content: title}]
