@@ -32,7 +32,7 @@ function checkCode(res) {
     } else if(res.data.code === -400){
         window.location.href = '/';
     } else if(res.data.code !== 200){
-        strore.dispatch('global/showMsg',res.data.message);
+        store.dispatch('global/showMsg',res.data.message);
     }
     return res;
 }
