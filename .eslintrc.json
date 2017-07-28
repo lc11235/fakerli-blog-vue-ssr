@@ -68,6 +68,7 @@
         }
     },
     "rules": {
+        "import/no-unresolved": 0,
         "accessor-pairs": 2,
         "arrow-spacing": 2,
         "block-scoped-var": 2,
