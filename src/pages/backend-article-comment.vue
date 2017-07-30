@@ -14,7 +14,7 @@
                         <div class="comment-footer">
                             <span class="comment-time">{{ item.timestamp | timeAgo }}</span>
                             <a v-if="item.is_delete" @click="recover(item._id)" href="javascript:;" class="comment-action-item comment-reply">恢复</a>
-                            <a v-else @click="deletes(itme._id)" href="javascript:;" class="comment-action-item comment-reply">删除</a>
+                            <a v-else @click="deletes(item._id)" href="javascript:;" class="comment-action-item comment-reply">删除</a>
                         </div>
                     </div>
                 </div>

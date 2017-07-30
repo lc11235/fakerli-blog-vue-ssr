@@ -14,7 +14,7 @@ const actions = {
     ['gProgress']({commit}, payload) {
         commit('progress', payload);
     },
-    ['shwoMsg'](store, config) {
+    ['showMsg'](store, config) {
         let content, type;
         if(typeof config === 'string') {
             content = config;
@@ -31,7 +31,7 @@ const actions = {
 };
 
 const mutations = {
-    ['progress '](state, payload) {
+    ['progress'](state, payload) {
         state.progress = payload;
     },
     ['showLoginModal'](state, payload) {

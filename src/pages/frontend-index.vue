@@ -12,7 +12,7 @@
                         </a>
                     </div>
                 </template>
-                <topics-itme-none v-else>当前分类还没有文章...</topics-itme-none>
+                <topics-item-none v-else>当前分类还没有文章...</topics-item-none>
             </div>
         </div>
         <div class="main-right">
@@ -30,7 +30,7 @@
     import category from '../components/aside-category.vue';
     import trending from '../components/aside-trending.vue';
     import { ssp } from '../utils';
-    import metaMiin from '~mixins';
+    import metaMixin from '~mixins';
 
     const fetchInitialData = async (store, config = {page:1}) => {
         const {params: {id, key, by}, path} = store.state.route;
@@ -46,7 +46,7 @@
         prefetch: fetchInitialData,
         mixins: [metaMixin],
         components: {
-            topicItem, topicsItemNone, category, trending
+            topicsItem, topicsItemNone, category, trending
         },
         computed: {
             ...mapGetters({

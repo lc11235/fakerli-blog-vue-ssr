@@ -87,6 +87,9 @@ app.use('/static', serve('./dist/static', true));
 app.use('/manifest.json', serve('./manifest.json'));
 app.use('/service-worker.js', serve('./dist/service-worker.js'));
 
+//api路由
+app.use('/api', routes);
+
 // 前台路由， SSR渲染
 app.get(['/', '/category/:id', '/search/:qs', '/article/:id', '/about', '/trending/:by', '/user/account', '/user/password'], (req, res) => {
     if((req.originalUrl === '/user/account' || req.originalUrl === '/user/password') && !req.cookies.user){

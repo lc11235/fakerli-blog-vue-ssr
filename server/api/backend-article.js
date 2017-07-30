@@ -35,7 +35,7 @@ exports.getList = (req, res) => {
  * @return {[type]}     [description]
  */
 exports.getItem = (req, res) => {
-    itme(req, res, Article);
+    item(req, res, Article);
 };
 
 /**

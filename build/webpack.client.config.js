@@ -11,7 +11,7 @@ const projectRoot = path.resolve(__dirname, '../');
 
 let config = merge(baseConfig, {
     externals: {
-        'jquery': 'jQeury'
+        'jquery': 'jQuery'
     },
     module: {
         rules: [{
