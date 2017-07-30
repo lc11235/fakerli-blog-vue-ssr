@@ -5,7 +5,7 @@
             来自分类 <router-link :to="'/category/' + item.category" v-text="item.category_name" class="feed-minor-link"></router-link>
         </span>
         <div class="feed-main-link-wrap">
-            <router-link :to="'/article' + item._id" v-text="item.title" class="feed-main-link"></router-link>
+            <router-link :to="'/article/' + item._id" v-text="item.title" class="feed-main-link"></router-link>
         </div>
         <div class="feed-desc-wrap">
             <div class="feed-article-content markdonw-body" v-text="item.content"></div>

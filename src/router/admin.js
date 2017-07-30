@@ -65,7 +65,7 @@ const router = new VueRouter({
         {name: 'user_list', path: '/backend/user/list', component: userList, meta: {scrollToTop: true}, beforeEnter: guardRoute},
         {name: 'user_modfiy', path: '/backend/user/modify/:id', component: userModify, meta: {scrollToTop: true}, beforeEnter: guardRoute},
 
-        {name: '*', redirect: { name: 'login'}}
+        {path: '*', redirect: { name: 'login'}}
     ]
 });
 

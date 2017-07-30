@@ -29,7 +29,7 @@ router.get('/backend/article/list', isAdmin, backendArticle.getList);
 // 管理时，获取单篇文章
 router.get('/backend/article/item', isAdmin, backendArticle.getItem);
 // 管理时，发布文章
-router.get('/backend/article/insert', isAdmin, multipartMiddleware, backendArticle.insert);  
+router.post('/backend/article/insert', isAdmin, multipartMiddleware, backendArticle.insert);  
 // 管理时，删除文章
 router.get('/backend/article/delete', isAdmin, backendArticle.deletes);
 // 管理时，恢复文章

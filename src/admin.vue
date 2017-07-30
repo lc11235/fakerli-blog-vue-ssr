@@ -9,7 +9,7 @@
                     </transition>
                 </div>
             </div>
-            <backedn-menu v-if="!isLogin"></backedn-menu>
+            <backend-menu v-if="!isLogin"></backend-menu>
         </div>
     </div>
 </template>

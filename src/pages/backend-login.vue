@@ -42,7 +42,7 @@
                 }
             }
         },
-        conponents: {
+        components: {
             aInput
         },
         methods: {

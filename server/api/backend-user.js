@@ -99,7 +99,7 @@ exports.login = (req, res) => {
 exports.insert = (req, res, next) => {
     let email = req.body.email,
         password = req.body.password,
-        uaername =req.body.username;
+        username =req.body.username;
     if(fsExistsSync('./admin.lock')){
         return res.render('admin-add.html', {message: '请先把 admin.lock 删除'});
     }
@@ -117,7 +117,7 @@ exports.insert = (req, res, next) => {
             create_date: moment().format('YYYY-MM-DD HH:mm:ss'),
             update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
             is_delete: 0,
-            timestamp: moment.format('X')
+            timestamp: moment().format('X')
         }).then(() => {
             fs.writeFile('./admin.lock', username, (err) => {
                 if(err){
@@ -129,7 +129,7 @@ exports.insert = (req, res, next) => {
         });
     }).then(message => {
         res.render('admin-add.html', {message});
-    }).catch(err => next(err));
+    }).catch(err => console.log(err));
 };
 
 /**

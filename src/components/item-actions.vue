@@ -51,7 +51,7 @@
                 const top = window.screen.height / 2 - 250;
                 const left = window.screen.width / 2 - 300;
                 const title = this.item.title + ' - 学习是为了探索这个世界的本质';
-                const url = 'https://www.fakerli.com/article' + this.item_id;
+                const url = 'https://www.fakerli.com/article' + this.item._id;
                 window.open("http://service.weibo.com/share/share.php?title=" + encodeURIComponent(title.replace(/&nbsp;/g, " ").replace(/<br \/>/g, " ")) + "&url=" + encodeURIComponent(url), "分享至新浪微博", "height=500, width=600, top=" + top + ", left=" + left + ", toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no");
             }
         }
