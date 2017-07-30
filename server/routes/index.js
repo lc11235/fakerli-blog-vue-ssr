@@ -17,7 +17,7 @@ const backendArticle = require('../api/backend-article'),
 router.get('/backend', (req, res) => {
       res.render('admin-add.html', {title: '添加管理员', message: ''});
 });
-router.post('backend', (req, res) => {
+router.post('/backend', (req, res) => {
       backendUser.insert(req, res);
 });
 

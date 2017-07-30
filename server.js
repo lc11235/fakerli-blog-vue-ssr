@@ -15,7 +15,7 @@ const config = require('./src/api/config-server');
 const resolve = file => path.resolve(__dirname, file);
 
 const serverInfo = 
-  `express/${require('express/package.json').version}` +
+  `express/${require('express/package.json').version} ` +
   `vue-server-renderer/${require('vue-server-renderer/package.json').version}`;
 
 // 引入mongoose相关模型
