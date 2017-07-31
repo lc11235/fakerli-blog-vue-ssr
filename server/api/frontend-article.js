@@ -36,7 +36,7 @@ exports.getList = (req, res) => {
     }
 
     let filds = 'title content category category_name visit like comment_count create_date update_date is_delete timestamp';
-
+    
     Promise.all([
         Article.find(data, filds).sort(sort).skip(skip).limit(limit).exec(),
         Article.count(data)

@@ -24,7 +24,7 @@ Vue.use(VueRouter);
 
 const scrollBehavior = to => {
     const position = {};
-    if(to.path) {
+    if(to.hash) {
         position.selector = to.hash;
     }
     if(to.matched.some(mm => mm.meta.scrollToTop)) {

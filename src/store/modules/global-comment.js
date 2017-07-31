@@ -4,7 +4,6 @@ const state = {
     lists: {
         data: [],
         hasNext: 0,
-        hasPrev: 0,
         page: 1,
         path: ''
     }
