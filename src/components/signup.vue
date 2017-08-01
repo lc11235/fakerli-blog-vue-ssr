@@ -54,11 +54,11 @@
             },
             login() {
                 this.$store.commit('global/showLoginModal', true);
-                tiis.$store.commit('global/showRegisterModal', false);
+                this.$store.commit('global/showRegisterModal', false);
             },
             async register() {
                 if(!this.form.username || !this.form.password || !this.form.email) {
-                    this.$store.dispatch('global.showMsg', '请将表单填写完整！');
+                    this.$store.dispatch('global/showMsg', '请将表单填写完整！');
                     return ;
                 } else if (strlen(this.form.username) < 4) {
                     this.$store.dispatch('global/showMsg', '用户名长度至少2个中文或4个英文');
