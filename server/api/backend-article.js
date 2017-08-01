@@ -154,7 +154,7 @@ exports.modify = (req, res) => {
         html,
         update_date: moment().format('YYYY-MM-DD HH:mm:ss')
     };
-    Article.findOneAndUpdate({ _id: id }, data, { new: true }), then(result => {
+    Article.findOneAndUpdate({ _id: id }, data, { new: true }).then(result => {
         if (category !== category_old) {
             Promise.all([
                 Category.update({ _id: category }, { '$inc': { 'cate_num': 1 } }),

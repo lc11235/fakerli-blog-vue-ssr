@@ -170,6 +170,11 @@ app.use(function(err, req, res){
     res.send(err.message);
 });
 
+process.on('unhandledRejection', (reason, p) => {
+  console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+  // application specific logging, throwing an error, or other logic here
+});
+
 const port = process.env.PORT || config.port || 8080;
 app.listen(port, () => {
     console.log(`Server started at localhost:${port}`);

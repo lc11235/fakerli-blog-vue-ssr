@@ -52,5 +52,6 @@ export default {
             }
         });
         if(config.cached && params.cache) config.cached.set(key, res);
+        return res;
     }
 };
