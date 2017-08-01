@@ -221,7 +221,7 @@ a {
 }
 
 .wrap {
-    width: 1000px;
+    width: 1200px;
     margin: 0 auto;
     position: relative;
 }
@@ -262,7 +262,7 @@ a {
 }
 
 .right-part {
-    float: right;
+    float: left;
 }
 
 .btn {

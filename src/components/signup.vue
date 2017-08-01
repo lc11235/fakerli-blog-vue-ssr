@@ -21,7 +21,7 @@
                         <p class="error-info input-info hidden">长度至少6位</p>
                     </div>
                     <div class="input-wrap">
-                        <input v-model="form.re_password" type="text" placeholder="重复密码" class="base-input">
+                        <input v-model="form.re_password" type="password" placeholder="重复密码" class="base-input">
                         <p class="error-info input-info hidden">长度至少6位</p>
                     </div>
                     <a @click="register" href="javascript:;" class="btn signup-btn btn-yellow">确认注册</a>
