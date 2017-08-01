@@ -56,7 +56,7 @@ exports.item = (req, res, mongoDB) => {
             message: '参数错误'
         });
     }
-    mongoDB.findOne({ _id: id }).then(reqult => {
+    mongoDB.findOne({ _id: id }).then(result => {
         res.json({
             code: 200,
             data: result

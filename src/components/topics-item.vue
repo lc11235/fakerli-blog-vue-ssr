@@ -1,17 +1,21 @@
 <template>
     <div class="feed-content">
         <div class="feed-content-item">
-            <span class="feed-time">{{ resizeDate(item.update_date)}}</span>
-            <span class="feed-source">
-                来自分类 <router-link :to="'/category/' + item.category" v-text="item.category_name" class="feed-minor-link"></router-link>
-            </span>
-            <div class="feed-main-link-wrap">
+            <div class="feed-time feed-bottom-margin">{{ resizeDate(item.update_date)}}</div>
+            <div class="feed-main-link-wrap feed-bottom-margin">
                 <router-link :to="'/article/' + item._id" v-text="item.title" class="feed-main-link"></router-link>
             </div>
-            <div class="feed-desc-wrap">
-                <div class="feed-article-content markdonw-body" v-text="item.content"></div>
+            <div class="feed-desc-wrap feed-bottom-margin">
+                <div class="feed-article-content markdonw-body">
+                    {{item.content}}
+                    <router-link :to="'/article/' + item._id">[阅读全文]</router-link>
+                </div>
+                
             </div>
-            <actions :item="item"></actions>
+            <actions :item="item" class="feed-bottom-margin"></actions>
+            <div class="feed-source feed-bottom-margin">
+                <router-link :to="'/category/' + item.category" v-text="item.category_name" class="feed-minor-link"></router-link>
+            </div>
         </div>
     </div>
 </template>

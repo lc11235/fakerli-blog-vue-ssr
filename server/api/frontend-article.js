@@ -45,7 +45,7 @@ exports.getList = (req, res) => {
             totalPage = Math.ceil(total / limit),
             user_id = req.cookies.userid;
         data = data.map(item => {
-            item.content = item.content.substring(0, 500) + '...';
+            item.content = item.content.substring(0, 150);
             return item;
         });
         let json = {

@@ -23,7 +23,7 @@
     import aInput from '../components/_input.vue';
 
     const fetchInitialData = async store => {
-        await store.dispatch('global/category/getCategoryitem');
+        await store.dispatch('global/category/getCategoryItem');
     };
 
     export default {
@@ -48,7 +48,7 @@
         methods: {
             async modify() {
                 if(!this.form.cate_name || !this.form.cate_order) {
-                    this.$store.dispatch('global.showMsg', '请将表单填写完整！');
+                    this.$store.dispatch('global/showMsg', '请将表单填写完整！');
                     return;
                 }
 
