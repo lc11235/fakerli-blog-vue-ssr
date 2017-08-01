@@ -50,13 +50,13 @@ exports.list = (req, res, mongoDB, sort) => {
  */
 exports.item = (req, res, mongoDB) => {
     let id = req.query.id;
-    if(!id) {
+    if (!id) {
         res.json({
             code: -200,
             message: '参数错误'
         });
     }
-    mongoDB.findOne({_id: id}).then(reqult => {
+    mongoDB.findOne({ _id: id }).then(reqult => {
         res.json({
             code: 200,
             data: result
@@ -79,7 +79,7 @@ exports.item = (req, res, mongoDB) => {
  */
 exports.deletes = (req, res, mongoDB) => {
     let id = req.query.id;
-    mongoDB.update({_id: id}, {is_delete: 1}).then(() => {
+    mongoDB.update({ _id: id }, { is_delete: 1 }).then(() => {
         res.json({
             code: 200,
             message: '更新成功',
@@ -103,7 +103,7 @@ exports.deletes = (req, res, mongoDB) => {
  * @return {[type]}         [description]
  */
 exports.modify = (res, mongoDB, id, data) => {
-    mongoDB.findOneAndUpdate({_id: id}, data, {new: true}).then(result => {
+    mongoDB.findOneAndUpdate({ _id: id }, data, { new: true }).then(result => {
         res.json({
             code: 200,
             message: '更新成功',
@@ -127,7 +127,7 @@ exports.modify = (res, mongoDB, id, data) => {
  */
 exports.recover = (req, res, mongoDB) => {
     let id = req.query.id;
-    mongoDB.update({_id: id}, {is_delete: 0}).then(() => {
+    mongoDB.update({ _id: id }, { is_delete: 0 }).then(() => {
         res.json({
             code: 200,
             message: '更新成功',
