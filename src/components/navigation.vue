@@ -1,6 +1,9 @@
 <template>
-    <nav class="global-nav">
-        <div v-if="backend" class="wrap clearfix">
+    <aside id="menu" class="hide">
+        <div v-if="backend" class="inner flex-row-vertical">
+            <a @click="hide" href="javascript:;" class="header-icon" id="menu-off">
+                <i class="icon icon-nav-home"></i>
+            </a>
             <div class="left-part">
                 <a href="/" exact class="logo-link">
                     <i class="icon icon-nav-logon"></i>
@@ -22,7 +25,10 @@
                 </div>
             </div>
         </div>
-        <div v-else class="wrap clearfix">
+        <div v-else class="inner flex-row-vertical">
+            <a @click="hide" href="javascript:;" class="header-icon" id="menu-off">
+                <i class="icon icon-nav-home"></i>
+            </a>
             <div class="left-part">
                 <router-link to="/" active-class="current" exact class="nav-link">
                     <i class="icon icon-nav-home"></i>
@@ -60,7 +66,7 @@
                 </span>
             </div>
         </div>
-    </nav>
+    </aside>
 </template>
 
 <script lang="babel">
@@ -82,6 +88,9 @@
                     return false;
                 }
                 this.$router.replace('/search/' + qs);
+            },
+            hide() {
+                $('#menu').addClass('hide');
             }
         }
     }

@@ -3,7 +3,7 @@
         <div class="feed-content-item">
             <div class="feed-time feed-bottom-margin">{{ resizeDate(item.update_date)}}</div>
             <div class="feed-main-link-wrap feed-bottom-margin">
-                <router-link :to="'/article/' + item._id" v-text="item.title" class="feed-main-link"></router-link>
+                <router-link :to="'/article/' + item._id" v-text="item.title" class="post-title-link"></router-link>
             </div>
             <div class="feed-desc-wrap feed-bottom-margin">
                 <div class="feed-article-content markdonw-body">

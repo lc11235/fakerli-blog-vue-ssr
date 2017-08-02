@@ -24,8 +24,7 @@ fieldset, button, input, textarea, th, td {
 body, button, input, select, textarea {
     color: #333;
     outline: none;
-	font-family: -apple-system-font, "Helvetica Neue", Tahoma, "PingFang SC", "lantinghei sc", "Microsoft Yahei", sans-serif;
-	font-size: 16px;
+	font: normal 1em Roboto,"Helvetica Neue",Helvetica,Arial,"Microsoft Yahei",sans-serif;
 	line-height: 1.6;
 	-moz-font-feature-settings: 'kern' 1;
 	-o-font-feature-settings: 'kern' 1;
@@ -135,6 +134,11 @@ article, aside, canvas, figure, figure img, figcaption, hgroup, footer, header, 
 }
 
 /*自己引入*/
+body {
+    -webkit-tap-highlight-color: rgba(255,255,255,0);
+    -webkit-overflow-scrolling: touch
+}
+
 .canvas{
         position: fixed;
         z-index: -1;
@@ -161,24 +165,19 @@ article, aside, canvas, figure, figure img, figcaption, hgroup, footer, header, 
     color: #727272;
 }
 
-.feed-main-link{
-    font-size: 24px;
-    line-height: 32px;
-    font-weight: 400;
-    color: #3f51b5;
-}
-
 .feed-bottom-margin{
     margin-bottom: 10px;
 }
 
-.feed-main-link:hover::after, .feed-main-link:active::after{
-    visibility: visible;
-    -webkit-transform: scaleX(1);
-    transform: scaleX(1);
+.post-title-link {
+    color: #3f51b5;
+    position: relative;
+    display: inline-block;
+    font-weight: 400;
+    font-size: 24px;
 }
 
-.feed-main-link::after{
+.post-title-link::after {
     content: "";
     position: absolute;
     width: 100%;
@@ -190,7 +189,17 @@ article, aside, canvas, figure, figure img, figcaption, hgroup, footer, header, 
     -webkit-transform: scaleX(0);
     transform: scaleX(0);
     -webkit-transition: .4s ease-in-out;
-    transition: .4s ease-in-out;
+    transition: .4s ease-in-out
+}
+
+.post-title-link:hover {
+    text-decoration: none
+}
+
+.post-title-link:hover::after,.post-title-link:active::after {
+    visibility: visible;
+    -webkit-transform: scaleX(1);
+    transform: scaleX(1)
 }
 
 .article-category-list{
@@ -202,6 +211,190 @@ article, aside, canvas, figure, figure img, figcaption, hgroup, footer, header, 
 
 .feed-desc-wrap{
     height: 100px;
+}
+
+#menu{
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 66;
+    width: 240px;
+    min-height: 100%;
+    background: #3f51b5;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
+    -webkit-transition: .4s cubic-bezier(.18, .81, .3, .89);
+    transition: .4s cubic-bezier(.18, .81, .3, .89);
+}
+
+#menu.hide{
+    -webkit-transform: translateX(-100%);
+    transform: translateX(-100%);
+}
+
+#menu.hide #menu-off {
+    -webkit-transform: scale(0);
+    transform: scale(0)
+}
+
+.top-header{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    color: #fff;
+    height: 56px;
+    background: #3f51b5;
+    -webkit-transition: padding-left .6s ease-in-out,background-color .3s cubic-bezier(.4, 0, .2, 1),box-shadow .15s linear;
+    transition: padding-left .6s ease-in-out,background-color .3s cubic-bezier(.4, 0, .2, 1),box-shadow .15s linear;
+    z-index: 30;
+}
+
+.header-icon{
+    width: 56px;
+    height: 56px;
+    line-height: 56px;
+    text-align: center;
+    color: #fff;
+}
+
+#menu .inner{
+    position: relative;
+    height: 100%;
+}
+
+.flex-row-vertical{
+    display: flex;
+    flex-direction: column;
+}
+
+#menu-off{
+    position: absolute;
+    top: 0;
+    left: 100%;
+    -webkit-transition: .4s ease-in-out;
+    transition: .4s ease-in-out;
+}
+
+.body-wrap {
+    padding: 30px 0 40px;
+    min-height: calc(100vh - 340px)
+}
+
+.container {
+    width: 960px;
+    margin: 0 auto
+}
+
+.container:after {
+    content: "";
+    display: table;
+    clear: both
+}
+
+#main{
+    padding-left: 240px;
+    min-height: 100%;
+    -webkit-transition: .4s ease-in-out;
+    transition: .4s ease-in-out;
+}
+
+#menu.hide+#main {
+    padding-left: 0;
+}
+
+.fade-scale.in {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none
+}
+.fade-scale {
+    -webkit-transition: .6s ease-in-out;
+    transition: .6s ease-in-out;
+    -webkit-transform: translate(10%, 20%) scale(.6);
+    transform: translate(10%, 20%) scale(.6)
+}
+
+.content-header {
+    min-height: 210px;
+    margin-left: -240px;
+    padding: 104px 16px 48px 256px;
+    color: #fff;
+    background: #3f51b5;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.2);
+    box-sizing: border-box;
+}
+
+.content-header .subtitle {
+    padding-top: 6px;
+    font-weight: 300;
+    color: #c5cae9
+}
+
+.content-header .title {
+    font-weight: 500
+}
+
+.header-title{
+    visibility: hidden;
+    font-weight: 400;
+    line-height: 56px;
+    font-size: 16px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.top-header.fixed .header-title {
+    visibility: visible;
+}
+
+.flex-row{
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+.flex-col{
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+}
+
+*,*::before,*::after {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box
+}
+
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 8px;
+    height: 8px
+}
+
+::-webkit-scrollbar-track {
+    background-color: inherit
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #b6b6b6;
+    border: 1px solid #fff;
+    border-radius: 10px
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #9d9d9d
+}
+
+::-webkit-scrollbar-thumb:active {
+    background-color: #838383
+}
+
+.ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap
 }
 
 /*自己引入*/    
@@ -217,7 +410,7 @@ a {
     text-decoration: none;
     /*-webkit-transition: all 0.2s ease;
     transition: all 0.2s ease;*/
-    color: #3aced5;
+    color: #3f51b5;
 }
 
 .wrap {
@@ -459,7 +652,7 @@ a {
 
 .global-nav {
     height: 60px;
-    background: #54d9e0;
+    background: #3f51b5;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
