@@ -5,10 +5,6 @@
                 <i class="icon icon-close-white"></i>
             </a>
             <div class="left-part">
-                <a href="/" exact class="logo-link">
-                    <i class="icon icon-nav-logon"></i>
-                    <span class="hidden">学习是为了探索这个世界的本质</span>
-                </a>
                 <div class="main-nav">
                     <a href="/" class="nav-link">
                         <i class="icon icon-nav-explore"></i>
@@ -29,27 +25,35 @@
             <a @click="hide" href="javascript:;" class="header-icon" id="menu-off">
                 <i class="icon icon-close-white"></i>
             </a>
-            <div class="left-part">
-                <router-link to="/" active-class="current" exact class="nav-link">
-                    <i class="icon icon-nav-home"></i>
-                    <span class="text">学习是为了探索这个世界的本质</span>
-                </router-link>
-                <div class="main-nav">
-                    <router-link to="/" active-class="current" exact class="nav-link">
+            <div class="face-wrap">
+                <a href="/">
+                    <img src="/static/images/me.jpg">
+                </a>
+                <span>fakerli's blog</span>
+            </div>
+            <div class="bars-wrap">
+                <ul class="ul-buttons">
+                    <li>
+                    <router-link to="/" >
                         <i class="icon icon-nav-home"></i>
                         <span class="text">首页</span>
                     </router-link>
-                    <router-link to="/trending/visit" active-class="current" class="nav-link">
+                    </li>
+                    <li>
+                    <router-link to="/trending/visit" >
                         <i class="icon icon-nav-explore"></i>
                         <span class="text">热门</span>
                     </router-link>
-                    <router-link to="/about" active-class="current" class="nav-link">
+                    </li>
+                    <li>
+                    <router-link to="/about" >
                         <i class="icon icon-nav-features"></i>
                         <span class="text">关于</span>
                     </router-link>
-                </div>
+                    </li>
+                </ul>
             </div>
-            <div class="right-part">
+            <div class="link-wrap">
                 <span class="nav-search">
                     <i class="icon icon-search-white"></i>
                     <input @keyup.enter="search($event)" placeholder="记得按回车哦" class="nav-search-input">
