@@ -2,7 +2,7 @@
     <aside id="menu" class="hide">
         <div v-if="backend" class="inner flex-row-vertical">
             <a @click="hide" href="javascript:;" class="header-icon" id="menu-off">
-                <i class="icon icon-nav-home"></i>
+                <i class="icon icon-close-white"></i>
             </a>
             <div class="left-part">
                 <a href="/" exact class="logo-link">
@@ -27,7 +27,7 @@
         </div>
         <div v-else class="inner flex-row-vertical">
             <a @click="hide" href="javascript:;" class="header-icon" id="menu-off">
-                <i class="icon icon-nav-home"></i>
+                <i class="icon icon-close-white"></i>
             </a>
             <div class="left-part">
                 <router-link to="/" active-class="current" exact class="nav-link">
