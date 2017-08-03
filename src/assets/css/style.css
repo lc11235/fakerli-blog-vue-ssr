@@ -31,21 +31,38 @@ body, button, input, select, textarea {
 	-webkit-font-smoothing: antialiased;
 }
 
-h1 {
+h1,h2,h3,h4,h5,h6 {
+    font-weight: 400
+}
+
+h1,.h1 {
+    font-size: 44px;
+    line-height: 48px
+}
+
+h2,.h2 {
+    font-size: 34px;
+    line-height: 40px
+}
+
+h3,.h3 {
+    font-size: 24px;
+    line-height: 32px
+}
+
+h4,.h4 {
     font-size: 20px;
-    /* 18px / 12px = 1.5 */
+    line-height: 28px
 }
 
-h2 {
-    font-size: 18px;
-}
-
-h3 {
+h5,.h5 {
     font-size: 16px;
+    line-height: 24px
 }
 
-h4, h5, h6 {
-    font-size: 100%;
+h6,.h6 {
+    font-size: 12px;
+    line-height: 20px
 }
 
 address, cite, dfn, em, var {
@@ -348,6 +365,10 @@ body {
     visibility: visible;
 }
 
+.top-header.fixed{
+        box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
+}
+
 .flex-row{
     display: -webkit-box;
     display: -webkit-flex;
@@ -465,6 +486,60 @@ body {
     line-height: 45px;
     text-align: center;
     margin-right: 20px;
+}
+
+.ul-buttons li a.inline{
+    display: inline-block;
+    width: 40px;
+}
+
+.search-wrap {
+    position: relative;
+    min-width: 56px
+}
+
+.search-wrap.in .search-input {
+    width: 320px;
+    opacity: 1
+}
+
+.search-wrap.in #search {
+    color: #c5cae9
+}
+
+.search-wrap .search-input {
+    position: relative;
+    z-index: 2;
+    width: 0;
+    height: 36px;
+    margin: 10px 10px 0 0;
+    border: none;
+    background: transparent;
+    color: #fff;
+    border-bottom: 2px solid #fff;
+    border-radius: 0;
+    opacity: 0;
+    -webkit-transition: .2s ease-in-out;
+    transition: .2s ease-in-out
+}
+
+.search-wrap .search-input::-webkit-input-placeholder {
+    color: #c5cae9
+}
+
+.search-wrap .header-icon {
+    position: absolute;
+    top: 0;
+    z-index: 3
+}
+
+.search-wrap #search {
+    right: 0
+}
+
+.search-wrap #back {
+    display: none;
+    left: 0
 }
 
 /*自己引入*/    

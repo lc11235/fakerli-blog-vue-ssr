@@ -1,6 +1,6 @@
 <template>
     <div id="app" class="g-doc">
-        <Navigation :backend="backend" />
+        <Navigation />
         <main id="main">
             <top-header />
             <content-header />

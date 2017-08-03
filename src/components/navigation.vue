@@ -1,29 +1,8 @@
 <template>
     <aside id="menu" class="hide">
-        <div v-if="backend" class="inner flex-row-vertical">
+        <div class="inner flex-row-vertical">
             <a @click="hide" href="javascript:;" class="header-icon" id="menu-off">
-                <i class="icon icon-close-white"></i>
-            </a>
-            <div class="left-part">
-                <div class="main-nav">
-                    <a href="/" class="nav-link">
-                        <i class="icon icon-nav-explore"></i>
-                        <span class="text">首页</span>
-                    </a>
-                    <a href="/trending/visit" class="nav-link">
-                        <i class="icon icon-nav-explore"></i>
-                        <span class="text">热门</span>
-                    </a>
-                    <a href="/about" class="nav-link">
-                        <i class="icon icon-nav-features"></i>
-                        <span class="text">关于</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div v-else class="inner flex-row-vertical">
-            <a @click="hide" href="javascript:;" class="header-icon" id="menu-off">
-                <i class="icon icon-close-white"></i>
+                <i class="fa fa-lg fa-remove"></i>
             </a>
             <div class="face-wrap">
                 <a href="/">
@@ -35,38 +14,58 @@
                 <ul class="ul-buttons">
                     <li>
                     <router-link to="/" >
-                        <i class="icon icon-nav-home"></i>
+                        <i class="fa fa-home"></i>
                         <span class="text">首页</span>
                     </router-link>
                     </li>
                     <li>
                     <router-link to="/trending/visit" >
-                        <i class="icon icon-nav-explore"></i>
-                        <span class="text">热门</span>
+                        <i class="fa fa-archive"></i>
+                        <span class="text">归档</span>
+                    </router-link>
+                    </li>
+                    <li>
+                    <router-link to="/trending/visit" >
+                        <i class="fa fa-tags"></i>
+                        <span class="text">标签</span>
                     </router-link>
                     </li>
                     <li>
                     <router-link to="/about" >
-                        <i class="icon icon-nav-features"></i>
+                        <i class="fa fa-user"></i>
                         <span class="text">关于</span>
                     </router-link>
                     </li>
                 </ul>
             </div>
             <div class="link-wrap">
+                <ul class="ul-buttons">
+                    <li>
+                        <a class="inline" rel="nofollow" target="_blank" href="mailto:lc11235@qq.com">
+                            <i class="fa fa-envelope" title="邮箱"></i>
+                        </a>
+                    
+                    
+                        <a class="inline" rel="nofollow" target="_blank" href="https://www.zhihu.com/people/lichang">
+                            <i class="fa fa-clone" title="知乎"></i>
+                        </a>
+                    
+                    
+                        <a class="inline" rel="nofollow" target="_blank" href="https://github.com/lc11235">
+                            <i class="fa fa-github" title="Github"></i>
+                        </a>
+                    
+                    
+                        <a class="inline" rel="nofollow" target="_blank" href="https://www.fakerli.com/rss.html">
+                            <i class="fa fa-rss" title="RSS"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div>
                 <span class="nav-search">
                     <i class="icon icon-search-white"></i>
                     <input @keyup.enter="search($event)" placeholder="记得按回车哦" class="nav-search-input">
-                </span>
-                <span v-if="isLogin" class="nav-me">
-                    <router-link to="/user/account" class="nav-me-link">
-                        <img src="//ww2.sinaimg.cn/large/005uQRNCgw1f4ij3d8m05j301s01smwx.jpg" alt="" class="nav-avatar-img">
-                    </router-link>
-                </span>
-                <span v-else class="nav-me">
-                    <a @click="login" href="javascript:;" class="nav-me-link">
-                        <img src="//ww2.sinaimg.cn/large/005uQRNCgw1f4ij3d8m05j301s01smwx.jpg" alt="" class="nav-avatar-img">
-                    </a>
                 </span>
             </div>
         </div>
@@ -76,16 +75,7 @@
 <script lang="babel">
     import cookies from 'js-cookie';
     export default {
-        props: ['backend'],
-        data() {
-            return {
-                isLogin: cookies.get('user')
-            };
-        },
         methods: {
-            login() {
-                this.$store.commit('global/showLoginModal', true);
-            },
             search(e) {
                 let qs = e.target.value;
                 if(qs === "") {

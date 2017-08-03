@@ -1,6 +1,6 @@
 <template>
     <div id="app" class="g-doc">
-        <Navigation :backend="backend"></Navigation>
+        <Navigation></Navigation>
         <div class="main wrap clearfix">
             <div class="main-left">
                 <div class="home-feeds cards-wrap">
