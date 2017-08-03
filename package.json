@@ -42,7 +42,8 @@
         "vue-ssr-html-stream": "^2.2.0",
         "vue-template-compiler": "^2.4.1",
         "vuex": "^2.3.1",
-        "vuex-router-sync": "^4.2.0"
+        "vuex-router-sync": "^4.2.0",
+        "algoliasearch":"^3.24.3"
     },
     "devDependencies": {
         "autoprefixer": "^7.1.2",

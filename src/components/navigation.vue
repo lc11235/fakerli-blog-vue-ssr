@@ -5,9 +5,9 @@
                 <i class="fa fa-lg fa-remove"></i>
             </a>
             <div class="face-wrap">
-                <a href="/">
+                <router-link to="/" >
                     <img src="/static/images/me.jpg">
-                </a>
+                </router-link>
                 <span>fakerli's blog</span>
             </div>
             <div class="bars-wrap">
