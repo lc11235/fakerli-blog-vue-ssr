@@ -41,39 +41,18 @@
                 </div>
             </div>
         </div>
-        <div class="main-right">
-            <trending :trending="trending"></trending>
-        </div>
     </div>
 </template>
 
 <script lang="babel">
     import { mapGetters } from 'vuex';
     import metaMixin from '~mixins';
-    import trending from '../components/aside-trending.vue';
-
-    const fetchInitialData = async store => {
-        await store.dispatch('frontend/article/getTrending');
-    };
 
     export default {
         name: 'frontend-index',
-        prefetch: fetchInitialData,
         mixins: [metaMixin],
-        components: {
-            trending
-        },
-        computed: {
-            ...mapGetters({
-                trending: 'frontend/article/getTrending'
-            })
-        },
         mounted () {
-            if(this.trending.length <= 0) {
-                fetchInitialData(this.$store);
-            } else {
-                this.$store.dispatch('global/gProgress', 100);
-            }
+            this.$store.dispatch('global/gProgress', 100);
         },
         metaInfo () {
             return {

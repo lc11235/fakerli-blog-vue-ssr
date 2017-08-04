@@ -1,12 +1,6 @@
 const moment = require('moment');
 const mongoose = require('../mongoose');
 const Category = mongoose.model('Category');
-const general = require('./general');
-
-const item = general.item;
-const modify = general.modify;
-const recover = general.recover;
-const deletes = general.deletes;
 
 /**
  * 管理时, 获取分类列表
@@ -33,7 +27,24 @@ exports.getList = (req, res) => {
 };
 
 exports.getItem = (req, res) => {
-    item(req, res, Category);
+    let cate_name = req.query.cate_name;
+    if (!id) {
+        res.json({
+            code: -200,
+            message: '参数错误'
+        });
+    }
+    Category.findOne({ cate_name: cate_name }).then(result => {
+        res.json({
+            code: 200,
+            data: result
+        });
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
 };
 
 exports.insert = (req, res) => {
@@ -64,19 +75,54 @@ exports.insert = (req, res) => {
 };
 
 exports.deletes = (req, res) => {
-    deletes(req, res, Category);
+    let cate_name = req.query.cate_name;
+    Category.update({ cate_name: cate_name }, { is_delete: 1 }).then(() => {
+        res.json({
+            code: 200,
+            message: '更新成功',
+            data: 'success'
+        });
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
 };
 
 exports.recover = (req, res) => {
-    recover(req, res, Category);
+    let cate_name = req.query.cate_name;
+    Category.update({ cate_name: cate_name }, { is_delete: 0 }).then(() => {
+        res.json({
+            code: 200,
+            message: '更新成功',
+            data: 'success'
+        });
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
 };
 
 exports.modify = (req, res) => {
-    let _id = req.body.id,
-        cate_name = req.body.cate_name,
+    let cate_name = req.body.cate_name,
         cate_order = req.body.cate_order;
-
-    modify(res, Category, _id, {
+    let data = {
         cate_name, cate_order, update_date: moment().format('YYYY-MM-DD HH:mm:ss')
+    };
+    Category.findOneAndUpdate({ cate_name: cate_name }, data, { new: true }).then(result => {
+        res.json({
+            code: 200,
+            message: '更新成功',
+            data: result
+        });
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
     });
+    
 };

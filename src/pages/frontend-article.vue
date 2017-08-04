@@ -6,12 +6,12 @@
                     <div class="answer-content">加载中，请稍等...</div>
                 </div>
             </template>
-            <template v-else-if="article.data._id">
+            <template v-else-if="article.data.title">
                 <div class="card card-question-head">
                     <div class="question-content">
-                        <router-link :to="'/category/' + article.data.category" v-text="article.data.category_name" class="topic-link-item"></router-link>
+                        <router-link v-for="name in article.data.category_name" :to="'/category/' + name" v-text="name" class="topic-link-item"></router-link>
                         <h2 class="question-title">
-                            <router-link :to="'/article/' +article.data._id" v-text="article.data.title" class="question-title-link"></router-link>
+                            <router-link :to="'/article/' +article.data.title" v-text="article.data.title" class="question-title-link"></router-link>
                         </h2>
                     </div>
                 </div>
@@ -19,9 +19,7 @@
                     <div class="answer-content">
                         <div class="article-content markdown-body" v-html="addTarget(article.data.html)"></div>
                     </div>
-                    <actions :item="article.data"></actions>
                 </div>
-                <comment :comments="comments"></comment>
             </template>
             <template v-else>
                 <div class="card card-answer">
@@ -29,24 +27,13 @@
                 </div>
             </template>
         </div>
-        <div class="main-right">
-            <category :category="category"></category>
-            <trending :trending="trending"></trending>
-        </div>
     </div>
 </template>
 
 <script lang="babel">
     import { mapGetters } from 'vuex';
     import metaMixin from '~mixins';
-    import actions from '../components/item-actions.vue';
-    import category from '../components/aside-category.vue';
-    import trending from '../components/aside-trending.vue';
-    import comment from '../components/frontend-comment.vue';
     const fetchInitialData = async store => {
-        store.dispatch('global/category/getCategoryList');
-        store.dispatch('frontend/article/getTrending');
-        store.dispatch(`global/comment/getCommentList`, {page: 1, limit: 5});
         await store.dispatch(`frontend/article/getArticleItem`);
     };
 
@@ -64,17 +51,8 @@
         },
         computed: {
             ...mapGetters({
-                article: 'frontend/article/getArticleItem',
-                comments: 'global/comment/getCommentList',
-                category: 'global/category/getCategoryList',
-                trending: 'frontend/article/getTrending'
+                article: 'frontend/article/getArticleItem'
             })
-        },
-        components: {
-            actions,
-            comment,
-            category,
-            trending
         },
         methods: {
             addTarget(content) {

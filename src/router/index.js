@@ -38,10 +38,8 @@ const router = new VueRouter({
     scrollBehavior,
     routes: [
         {name: 'index', path: '/', component: index},
-        {name: 'trending', path: '/trending/:by', component: index},
-        {name: 'category', path: '/category/:id', component: index},
-        {name: 'search', path: '/search/:key', component: index},
-        {name: 'article', path: '/article/:id', component: article, meta: {scrollToTop: true}},
+        {name: 'category', path: '/category/:cate_name', component: index},
+        {name: 'article', path: '/article/:title', component: article, meta: {scrollToTop: true}},
         {name: 'about', path: '/about', component: about, meta: {scrollToTop: true}}
     ]
 });

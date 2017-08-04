@@ -12,7 +12,6 @@
                 </div>
                 
             </div>
-            <actions :item="item" class="feed-bottom-margin"></actions>
             <div class="feed-source feed-bottom-margin">
                 <router-link :to="'/category/' + item.category" v-text="item.category_name" class="feed-minor-link"></router-link>
             </div>
@@ -21,7 +20,6 @@
 </template>
 
 <script lang="babel">
-    import actions from './item-actions.vue';
     export default {
         name: 'index-item',
         serverCacheKey: props => {
@@ -32,9 +30,6 @@
             return {
                 showMore: false
             };
-        },
-        components: {
-            actions
         },
         methods: {
             resizeDate(date) {

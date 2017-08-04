@@ -6,7 +6,6 @@ import backendUser from './modules/backend-user';
 import frontendArticle from './modules/frontend-article';
 import global from './modules/global';
 import globalCategory from './modules/global-category';
-import globalComment from './modules/global-comment';
 
 Vue.use(Vuex);
 
@@ -30,8 +29,7 @@ export default new Vuex.Store({
             namespaced: true,
             ...global,
             modules: {
-                category: globalCategory,
-                comment: globalComment
+                category: globalCategory
             }
         }
     }

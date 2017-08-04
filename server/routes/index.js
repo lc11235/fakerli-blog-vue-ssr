@@ -7,11 +7,7 @@ const backendArticle = require('../api/backend-article'),
       backendCategory = require('../api/backend-category'),
       backendUser = require('../api/backend-user'),
       frontendArticle = require('../api/frontend-article'),
-      frontendComment = require('../api/frontend-comment'),
-      frontendLike = require('../api/frontend-like'),
-      frontendUser = require('../api/frontend-user'),
       isAdmin = require('./is-admin'),
-      isUser = require('./is-user');
 
 // 添加管理员
 router.get('/backend', (req, res) => {
@@ -65,27 +61,6 @@ router.get('/backend/admin/delete', isAdmin, backendUser.deletes);
 // 恢复管理员
 router.get('/backend/admin/recover', isAdmin, backendUser.recover);
 
-// 用户列表
-router.get('/backend/user/list', isAdmin, frontendUser.getList);
-// 获取单个用户
-router.get('/backend/user/item', isAdmin, frontendUser.getItem);
-// 编辑用户
-router.post('/backend/user/modify', isAdmin, multipartMiddleware, frontendUser.modify);
-// 删除用户
-router.get('/backend/user/delete', isAdmin,frontendUser.deletes);
-// 恢复用户
-router.get('/backend/user/recover', isAdmin, frontendUser.recover);
-
-// ------ 评论 ------
-// 发布评论
-router.post('/frontend/comment/insert', isUser, multipartMiddleware, frontendComment.insert);
-// 读取评论列表
-router.get('/frontend/comment/list', frontendComment.getList);
-// 删除评论
-router.get('/frontend/comment/delete', isAdmin, frontendComment.deletes);
-// 恢复评论
-router.get('/frontend/comment/recover', isAdmin, frontendComment.recover);
-
 // ================= 前台 =================
 // ------ 文章 ------
 // 前台浏览时, 获取文章列表
@@ -94,26 +69,6 @@ router.get('/frontend/article/list', frontendArticle.getList);
 router.get('/frontend/article/item', frontendArticle.getItem);
 // 前台浏览时, 热门文章
 router.get('/frontend/trending', frontendArticle.getTrending);
-
-// ------ 用户 ------
-// 前台注册
-router.post('/frontend/user/insert', multipartMiddleware, frontendUser.insert);
-// 前台登录
-router.post('/frontend/user/login', multipartMiddleware, frontendUser.login);
-// 前台退出
-router.post('/frontend/user/logout', isUser, frontendUser.logout);
-// 前台账号读取
-router.get('/frontend/user/account', isUser, frontendUser.getItem);
-// 前台账号修改
-router.post('/frontend/user/account', isUser, multipartMiddleware, frontendUser.account);
-// 前台密码修改
-router.post('/frontend/user/password', isUser, multipartMiddleware, frontendUser.password);
-
-// ------ 喜欢 ------
-// 喜欢
-router.get('/frontend/like', isUser, frontendLike.like);
-// 取消喜欢
-router.get('/frontend/unlike', isUser, frontendLike.unlike);
 
 // ------ 404 ------
 router.get('*', (req, res) => {

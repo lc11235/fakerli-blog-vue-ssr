@@ -12,10 +12,6 @@ const secret = config.secretServer;
 const general = require('./general');
 
 const list = general.list;
-const item = general.item;
-const modify = general.modify;
-const deletes = general.deletes;
-const recover = general.recover;
 
 /**
  * 获取管理员列表
@@ -36,7 +32,24 @@ exports.getList = (req, res) => {
  * @return {[type]}     [description]
  */
 exports.getItem = (req, res) => {
-    item(req, res, Admin);
+    let username = req.query.username;
+    if (!id) {
+        res.json({
+            code: -200,
+            message: '参数错误'
+        });
+    }
+    Admin.findOne({ username: username }).then(result => {
+        res.json({
+            code: 200,
+            data: result
+        });
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
 };
 
 /**
@@ -140,15 +153,25 @@ exports.insert = (req, res, next) => {
  * @return {[type]}        [description]
  */
 exports.modify = (req, res) => {
-    let _id = req.body.id,
-        email = req.body.email,
+    let email = req.body.email,
         password = req.body.password,
         username = req.body.username;
     let data = {
         email, username, update_date: moment().format('YYYY-MM-DD HH:mm:ss')
     }
     if(password) data.password = md5(md5Pre = password);
-    modify(res, Admin, _id, data);
+    Admin.findOneAndUpdate({ username: username }, data, { new: true }).then(result => {
+        res.json({
+            code: 200,
+            message: '更新成功',
+            data: result
+        });
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
 };
 
 /**
@@ -159,7 +182,19 @@ exports.modify = (req, res) => {
  * @return {[type]}        [description]
  */
 exports.deletes = (req, res) => {
-    deletes(req, res, Admin);
+    let username = req.query.username;
+    Admin.update({ username: username }, { is_delete: 1 }).then(() => {
+        res.json({
+            code: 200,
+            message: '更新成功',
+            data: 'success'
+        });
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
 };
 
 /**
@@ -170,5 +205,17 @@ exports.deletes = (req, res) => {
  * @return {[type]}        [description]
  */
 exports.recover = (req, res) => {
-    recover(req, res, Admin);
+    let username = req.query.username;
+    Admin.update({ username: username }, { is_delete: 0 }).then(() => {
+        res.json({
+            code: 200,
+            message: '更新成功',
+            data: 'success'
+        });
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
 };
