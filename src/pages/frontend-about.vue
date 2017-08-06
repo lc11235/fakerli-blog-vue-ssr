@@ -35,7 +35,7 @@
                         <h3 class="about-title">关于网站</h3>
                         <p>本站服务端采用 express + mongoDB 搭建, 客户端采用 Vue2 的服务端渲染搭建</p>
                         <p>网站分成前台和后台, 前台采用 SSR 模式渲染, 后台采用 SPA 模式</p>
-                        <p>主要功能包括: 管理员, 用户, 分类, 文章, 评论, 文章点赞</p>
+                        <p>主要功能包括: 管理员, 用户, 标签, 文章, 评论, 文章点赞</p>
                         <p>主要技术栈: express, mongoose, vue2, vue2-router, vuex, webpack, babel, eslint</p>
                     </div>
                 </div>
@@ -59,6 +59,12 @@
                 title: '学习是为了探索这个世界的本质',
                 meta: [{vmid: 'description', name: 'description', content: 'fakerli的博客'}]
             };
-        }
+        },
+        beforeRouteLeave(to, from, next) {
+            if(to.path === '/') {
+                this.$store.dispatch('global/changeTitle', `Fakerli's Blog`);
+            }
+            next();
+        },
     }
 </script>

@@ -9,7 +9,7 @@
             <template v-else-if="article.data.title">
                 <div class="card card-question-head">
                     <div class="question-content">
-                        <router-link v-for="name in article.data.category_name" :to="'/category/' + name" v-text="name" class="topic-link-item"></router-link>
+                        <router-link v-for="tag in article.data.tags" :key="tag" :to="'/tag/' + tag" v-text="tag" class="topic-link-item"></router-link>
                         <h2 class="question-title">
                             <router-link :to="'/article/' +article.data.title" v-text="article.data.title" class="question-title-link"></router-link>
                         </h2>
@@ -34,7 +34,7 @@
     import { mapGetters } from 'vuex';
     import metaMixin from '~mixins';
     const fetchInitialData = async store => {
-        await store.dispatch(`frontend/article/getArticleItem`);
+        await store.dispatch('frontend/article/getArticleItem');
     };
 
     export default {

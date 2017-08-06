@@ -4,10 +4,10 @@ const multipart = require('connect-multiparty');
 const multipartMiddleware = multipart();
 
 const backendArticle = require('../api/backend-article'),
-      backendCategory = require('../api/backend-category'),
+      backendTag = require('../api/backend-tag'),
       backendUser = require('../api/backend-user'),
       frontendArticle = require('../api/frontend-article'),
-      isAdmin = require('./is-admin'),
+      isAdmin = require('./is-admin');
 
 // 添加管理员
 router.get('/backend', (req, res) => {
@@ -33,19 +33,19 @@ router.get('/backend/article/recover', isAdmin, backendArticle.recover);
 // 管理时，编辑文章
 router.post('/backend/article/modify', isAdmin, multipartMiddleware, backendArticle.modify);
 
-// ------- 分类 -------
-// 管理时, 获取分类列表
-router.get('/backend/category/list', backendCategory.getList);
-// 管理时, 获取单个分类
-router.get('/backend/category/item', backendCategory.getItem);
-// 管理时, 添加分类
-router.post('/backend/category/insert', multipartMiddleware, isAdmin, backendCategory.insert);
-// 管理时, 删除分类
-router.get('/backend/category/delete', isAdmin, backendCategory.deletes);
-// 管理时, 恢复分类
-router.get('/backend/category/recover', isAdmin, backendCategory.recover);
-// 管理时, 编辑分类
-router.post('/backend/category/modify', isAdmin, multipartMiddleware, backendCategory.modify);
+// ------- 标签 -------
+// 管理时, 获取标签列表
+router.get('/backend/tag/list', backendTag.getList);
+// 管理时, 获取单个标签
+router.get('/backend/tag/item', backendTag.getItem);
+// 管理时, 添加标签
+router.post('/backend/tag/insert', multipartMiddleware, isAdmin, backendTag.insert);
+// 管理时, 删除标签
+router.get('/backend/tag/delete', isAdmin, backendTag.deletes);
+// 管理时, 恢复标签
+router.get('/backend/tag/recover', isAdmin, backendTag.recover);
+// 管理时, 编辑标签
+router.post('/backend/tag/modify', isAdmin, multipartMiddleware, backendTag.modify);
 
 // ------- 管理 -------
 // 后台登录
@@ -67,8 +67,6 @@ router.get('/backend/admin/recover', isAdmin, backendUser.recover);
 router.get('/frontend/article/list', frontendArticle.getList);
 // 前台浏览时, 获取单篇文章
 router.get('/frontend/article/item', frontendArticle.getItem);
-// 前台浏览时, 热门文章
-router.get('/frontend/trending', frontendArticle.getTrending);
 
 // ------ 404 ------
 router.get('*', (req, res) => {

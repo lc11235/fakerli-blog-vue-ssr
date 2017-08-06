@@ -11,8 +11,7 @@ const state = {
         data: {},
         path: '',
         isLoad: false
-    },
-    trending: []
+    }
 };
 
 const actions = {
@@ -32,12 +31,12 @@ const actions = {
             });
         }
     },
-    async ['getArticleItem']({commit, state, rootState: {route: { path, params: { id }}}}) {
+    async ['getArticleItem']({commit, state, rootState: {route: { path, params: { title }}}}) {
         if(path === state.item.path) {
             global.progress = 100;
             return;
         }
-        const {data: {data, code}} = await api.get('frontend/article/item', {id, markdown: 1, cache: true});
+        const {data: {data, code}} = await api.get('frontend/article/item', {title, markdown: 1, cache: true});
         if(data && code === 200) {
             commit('receiveArticleItem', {
                 data,
@@ -69,6 +68,9 @@ const mutations = {
 const getters = {
     ['getArticleList'](state) {
         return state.lists;
+    },
+    ['getArticleItem'](state) {
+        return state.item
     }
 };
 

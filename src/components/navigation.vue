@@ -19,13 +19,13 @@
                     </router-link>
                     </li>
                     <li>
-                    <router-link to="/trending/visit" >
+                    <router-link to="/archives" >
                         <i class="fa fa-archive"></i>
                         <span class="text">归档</span>
                     </router-link>
                     </li>
                     <li>
-                    <router-link to="/trending/visit" >
+                    <router-link to="/tags" >
                         <i class="fa fa-tags"></i>
                         <span class="text">标签</span>
                     </router-link>
@@ -62,12 +62,6 @@
                     </li>
                 </ul>
             </div>
-            <div>
-                <span class="nav-search">
-                    <i class="icon icon-search-white"></i>
-                    <input @keyup.enter="search($event)" placeholder="记得按回车哦" class="nav-search-input">
-                </span>
-            </div>
         </div>
     </aside>
 </template>
@@ -76,13 +70,6 @@
     import cookies from 'js-cookie';
     export default {
         methods: {
-            search(e) {
-                let qs = e.target.value;
-                if(qs === "") {
-                    return false;
-                }
-                this.$router.replace('/search/' + qs);
-            },
             hide() {
                 $('#menu').addClass('hide');
             }

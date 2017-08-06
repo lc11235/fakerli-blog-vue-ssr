@@ -2,15 +2,14 @@
     <div class="settings-main card">
         <div class="settings-main-content">
             <div class="list-section">
-                <div class="list-title">分类名称</div>
-                <div class="list-time">分类排序</div>
+                <div class="list-title">标签名称</div>
+                <div class="list-time">标签排序</div>
                 <div class="list-action">操作</div>
             </div>
-            <div v-for="item in category" class="list-section">
-                <div class="list-title">{{ item.cate_name }}</div>
-                <div class="list-time">{{ item.cate_order }}</div>
+            <div v-for="tag in tags" :key="tag.tag_name" class="list-section">
+                <div class="list-title">{{ tag.tag_name }}</div>
                 <div class="list-action">
-                    <router-link :to="'/backend/category/modify/' + item._id" class="badge badge-success">编辑</router-link>
+                    <router-link :to="'/backend/tag/modify/' + tag.tag_name" class="badge badge-success">编辑</router-link>
                 </div>
             </div>
         </div>
@@ -20,18 +19,18 @@
 <script lang="babel">
     import { mapGetters } from 'vuex';
     const fetchInitialData = async (store, config = {limit: 99}) => {
-        await store.dispatch('global/category/getCategoryList', config);
+        await store.dispatch('global/tag/getTagList', config);
     };
 
     export default {
-        name: 'backend-category-list',
+        name: 'backend-tag-list',
         computed: {
             ...mapGetters({
-                category: 'global/category/getCategoryList'
+                tags: 'global/tag/getTagList'
             })
         },
         mounted() {
-            if(this.category.length <= 0) {
+            if(this.tags.length <= 0) {
                 fetchInitialData(this.$store);
             }
         }

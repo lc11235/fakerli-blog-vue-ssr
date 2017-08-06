@@ -3,13 +3,13 @@
         <div class="settings-main-content">
             <div class="list-section list-header">
                 <div class="list-title">标题</div>
-                <div class="list-category">分类</div>
+                <div class="list-tag">标签</div>
                 <div class="list-date">最后更新</div>
                 <div class="list-action">操作</div>
             </div>
-            <div v-for="item in topics.data" class="list-section">
+            <div v-for="item in topics.data" :key="item.title" class="list-section">
                 <div class="list-title">{{ item.title }}</div>
-                <div class="list-category">{{ item.category_name }}</div>
+                <div class="list-tag">{{ item.tag_name }}</div>
                 <div class="list-date">{{ item.update_date | timeAgo }}</div>
                 <div class="list-action">
                     <router-link :to="'/backend/article/modify/' + item._id" class="badge badge-success">编辑</router-link>

@@ -6,32 +6,32 @@ const state = {
 };
 
 const actions = {
-    async ['getCategoryList']({commit, state}, config) {
+    async ['getTagList']({commit, state}, config) {
         if(state.lists.length) return;
-        const {data: {data, code}} = await api.get('backend/category/list', {...config, cache: true});
+        const {data: {data, code}} = await api.get('backend/tag/list', {...config, cache: true});
         if(data && code === 200) {
-            commit('receiveCategoryList', data.list);
+            commit('receiveTagList', data.list);
         }
     },
-    async ['getCategoryItem']({commit, rootState: {route: {params: {id}}}}) {
-        const {data: {data, code}} = await api.get('backend/category/item', {id});
+    async ['getTagItem']({commit, rootState: {route: {params: {id}}}}) {
+        const {data: {data, code}} = await api.get('backend/tag/item', {id});
         if(data && code === 200) {
-            commit('receiveCategoryItem', data);
+            commit('receiveTagItem', data);
         }
     }
 };
 
 const mutations = {
-    ['receiveCategoryList'](state, payload) {
+    ['receiveTagList'](state, payload) {
         state.lists = payload;
     },
-    ['receiveCategoryItem'](state, payload) {
+    ['receiveTagItem'](state, payload) {
         state.item = payload;
     },
-    ['insertCategoryItem'](state, payload) {
+    ['insertTagItem'](state, payload) {
         state.lists = [payload].concat(state.lists);
     },
-    ['updateCategoryItem'](state, payload) {
+    ['updateTagItem'](state, payload) {
         state.item = payload;
         const index = state.lists.findIndex(ii => ii._id === payload._id);
         if(index > -1) {
@@ -41,10 +41,10 @@ const mutations = {
 };
 
 const getters = {
-    ['getCategoryList'] (state) {
+    ['getTagList'] (state) {
         return state.lists;
     },
-    ['getCategoryItem'](state) {
+    ['getTagItem'](state) {
         return state.item;
     }
 };

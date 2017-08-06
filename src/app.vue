@@ -2,15 +2,11 @@
     <div id="app" class="g-doc">
         <Navigation />
         <main id="main">
-            <top-header />
-            <content-header />
+            <top-header :title="global.title" />
+            <content-header :title="global.title" />
             <transition name="fade" mode="out-in">
                 <router-view :key="key" class="router"></router-view>
             </transition>
-            <template v-if="!backend">
-                <sign-up :show="global.showRegisterModal"></sign-up>
-                <sign-in :show="global.showLoginModal"></sign-in>
-            </template>
             <back-top />
         </main>
     </div>
@@ -20,8 +16,6 @@
     import { mapGetters } from 'vuex';
     import NProgress from 'nprogress';
     import Navigation from './components/navigation.vue';
-    import signUp from './components/signup.vue';
-    import signIn from './components/signin.vue';
     import backTop from './components/backtop.vue';
     import topHeader from './components/top-header.vue';
     import contentHeader from './components/content-header.vue';
@@ -34,17 +28,12 @@
             }),
             key() {
                 return this.$route.path.replace(/\//g, ' ');
-            },
-            backend() {
-                return this.$route.path.indexOf('backend') >= 0;
             }
         },
         components: {
             Navigation,
             topHeader,
             contentHeader,
-            signUp,
-            signIn,
             backTop,
         },
         watch: {

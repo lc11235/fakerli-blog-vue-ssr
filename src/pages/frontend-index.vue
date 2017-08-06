@@ -12,7 +12,7 @@
                         </a>
                     </div>
                 </template>
-                <topics-item-none v-else>当前分类还没有文章...</topics-item-none>
+                <topics-item-none v-else>当前标签还没有文章...</topics-item-none>
             </div>
         </div>
     </div>
@@ -27,7 +27,7 @@
     import metaMixin from '~mixins';
 
     const fetchInitialData = async (store, config = {page:1}) => {
-        const {params: {id, key, by}, path} = store.state.route;
+        const {params: {title, by}, path} = store.state.route;
         const base = {...config, limit: 10, title, by};
         await store.dispatch('frontend/article/getArticleList', base);
         if(config.page === 1) ssp(path);
@@ -66,19 +66,13 @@
             } else {
                 store2.remove(path);
             }
+            if(to.path === '/about') {
+                this.$store.dispatch('global/changeTitle', 'About');
+            }
             next();
         },
         metaInfo() {
             let title = '学习是为了探索这个世界的本质';
-            const {articleTitle, by} = this.$route.params;
-            if(articleTitle) {
-                const obj = this.category.find(item => item._id === id);
-                if(obj) {
-                    title = obj.cate_name + ' - ' + title;
-                }
-            } else if (by) {
-                title = '热门 - ' + title;
-            }
             return {
                 title,
                 meta: [{vmid: 'description', name: 'description', content: title}]

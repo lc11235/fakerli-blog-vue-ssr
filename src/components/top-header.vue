@@ -4,7 +4,7 @@
             <a @click="visible" href="javascript:;" class="header-icon">
                 <i class="fa fa-lg fa-bars"></i>
             </a>
-            <div class="flex-col header-title ellipsis">fakerli's blog</div>
+            <div class="flex-col header-title ellipsis">{{title}}</div>
             <div class="search-wrap" id="search-wrap">
                 <a href="javascript:;" class="header-icon" id="back">
                     <i class="fa fa-lg fa-chevron-left"></i>
@@ -24,6 +24,7 @@
 <script lang="babel">
     export default {
         name: 'top-header',
+        props: ["title"],
         methods: {
             visible() {
                 $('#menu').removeClass('hide');

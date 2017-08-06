@@ -542,6 +542,34 @@ body {
     left: 0
 }
 
+.tag-list li{
+    display: inline-block;
+    font-size: 14px;
+    padding: 0 15px;
+    height: 40px;
+    line-height: 40px;
+    color: rgba(36,121,204,.8);
+    border: 1px solid rgba(36,121,204,.8);
+    border-radius: 4px;
+    margin: 0 15px 10px 0;
+    text-decoration: none;
+    -webkit-transition: color .2s cubic-bezier(.4,.01,.165,.99),border .2s cubic-bezier(.4,.01,.165,.99);
+    transition: color .2s cubic-bezier(.4,.01,.165,.99),border .2s cubic-bezier(.4,.01,.165,.99);
+}
+
+.tag-list li:hover, .tag-list a:hover{
+    color: #2479CC;
+    border-color: #2479CC;
+}
+
+.tag-list a{
+    margin: 0 15px 10px 0;
+    border: 1px solid rgba(36,121,204,.8);
+    text-decoration: none;
+    -webkit-transition: color .2s cubic-bezier(.4,.01,.165,.99),border .2s cubic-bezier(.4,.01,.165,.99);
+    transition: color .2s cubic-bezier(.4,.01,.165,.99),border .2s cubic-bezier(.4,.01,.165,.99);
+}
+
 /*自己引入*/    
 nav ul, nav ol {
     list-style: none;
@@ -1883,7 +1911,7 @@ a:hover .icon-arrow-right {
 }
 
 .select-item-wrap .select-item {
-    width: 100%;
+    width: 80%;
     line-height: 44px;
     cursor: pointer;
     -webkit-appearance: none;
@@ -2035,7 +2063,7 @@ a:hover .icon-arrow-right {
     width: 310px;
 }
 
-.list-section .list-category {
+.list-section .list-tag {
     width: 100px;
 }
 

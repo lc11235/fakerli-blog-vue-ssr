@@ -21,10 +21,7 @@ const serverInfo =
 // 引入mongoose相关模型
 require('./server/models/admin');
 require('./server/models/article');
-require('./server/models/category');
-require('./server/models/comment');
-require('./server/models/like');
-require('./server/models/user');
+require('./server/models/tag');
 
 // 引入api路由
 const routes = require('./server/routes/index');
@@ -91,10 +88,7 @@ app.use('/service-worker.js', serve('./dist/service-worker.js'));
 app.use('/api', routes);
 
 // 前台路由， SSR渲染
-app.get(['/', '/category/:id', '/search/:qs', '/article/:id', '/about', '/trending/:by', '/user/account', '/user/password'], (req, res) => {
-    if((req.originalUrl === '/user/account' || req.originalUrl === '/user/password') && !req.cookies.user){
-        return res.redirect('/');
-    }
+app.get(['/', '/tag/:id', '/search/:qs', '/article/:id', '/about'], (req, res) => {
     if(!renderer){
         return res.end('waiting for compilation... refresh in a moment.');
     }

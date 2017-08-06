@@ -6,8 +6,7 @@ toastr.options.positionClass = 'toast-top-center';
 const state = {
     loading: false,
     progress: 0,
-    showLoginModal: false,
-    showRegisterModal: false,
+    title: `Fakerli's Blog`
 };
 
 const actions = {
@@ -27,6 +26,9 @@ const actions = {
     },
     ['hideMsg']() {
         toastr.clear();
+    },
+    ['changeTitle']({commit}, changeTitle) {
+        commit('title', changeTitle);
     }
 };
 
@@ -34,11 +36,8 @@ const mutations = {
     ['progress'](state, payload) {
         state.progress = payload;
     },
-    ['showLoginModal'](state, payload) {
-        state.showLoginModal = payload;
-    },
-    ['showRegisterModal'](state, payload) {
-        state.showRegisterModal = payload;
+    ['title'](state, changeTitle) {
+        state.title = changeTitle;
     }
 };
 

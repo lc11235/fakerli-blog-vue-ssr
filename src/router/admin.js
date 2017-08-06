@@ -10,15 +10,12 @@ const articleInsert = r => require.ensure([], () => r(require('../pages/backend-
 const articleModify = r => require.ensure([], () => r(require('../pages/backend-article-modify.vue')), 'chunk-backend-article');
 const articleComment = r => require.ensure([], () => r(require('../pages/backend-article-comment.vue')), 'chunk-backend-article');
 
-const categoryList = r => require.ensure([], () => r(require('../pages/backend-category-list.vue')), 'chunk-backend-category');
-const categoryInsert = r => require.ensure([], () => r(require('../pages/backend-category-insert.vue')), 'chunk-backend-category');
-const categoryModify = r => require.ensure([], () => r(require('../pages/backend-category-modify.vue')), 'chunk-backend-category');
+const tagList = r => require.ensure([], () => r(require('../pages/backend-tag-list.vue')), 'chunk-backend-tag');
+const tagInsert = r => require.ensure([], () => r(require('../pages/backend-tag-insert.vue')), 'chunk-backend-tag');
+const tagModify = r => require.ensure([], () => r(require('../pages/backend-tag-modify.vue')), 'chunk-backend-tag');
 
 const adminList = r => require.ensure([], () => r(require('../pages/backend-admin-list.vue')), 'chunk-backend-admin');
 const adminModify = r => require.ensure([], () => r(require('../pages/backend-admin-modify.vue')), 'chunk-backend-admin');
-
-const userList = r => require.ensure([], () => r(require('../pages/backend-user-list.vue')), 'chunk-backend-user');
-const userModify = r => require.ensure([], () => r(require('../pages/backend-user-modify.vue')), 'chunk-backend-user');
 
 Vue.use(VueRouter);
 
@@ -58,12 +55,9 @@ const router = new VueRouter({
         {name: 'article_modify', path: '/backend/article/modify/:id', component: articleModify, meta: {scrollToTop: true}, beforeEnter: guardRoute},
         {name: 'article_comment', path: '/backend/article/comment/:id', component: articleComment, meta: {scrollToTop: true}, beforeEnter: guardRoute},
 
-        {name: 'category_list', path: '/backend/category/list', component: categoryList, meta: {scrollToTop: true}, beforeEnter: guardRoute},
-        {name: 'category_insert', path: '/backend/category/insert', component: categoryInsert, meta: {scrollToTop: true}, beforeEnter: guardRoute},
-        {name: 'category_modify', path: '/backend/category/modify/:id', component: categoryModify, meta: {scrollToTop: true}, beforeEnter: guardRoute},
-
-        {name: 'user_list', path: '/backend/user/list', component: userList, meta: {scrollToTop: true}, beforeEnter: guardRoute},
-        {name: 'user_modfiy', path: '/backend/user/modify/:id', component: userModify, meta: {scrollToTop: true}, beforeEnter: guardRoute},
+        {name: 'tag_list', path: '/backend/tag/list', component: tagList, meta: {scrollToTop: true}, beforeEnter: guardRoute},
+        {name: 'tag_insert', path: '/backend/tag/insert', component: tagInsert, meta: {scrollToTop: true}, beforeEnter: guardRoute},
+        {name: 'tag_modify', path: '/backend/tag/modify/:id', component: tagModify, meta: {scrollToTop: true}, beforeEnter: guardRoute},
 
         {path: '*', redirect: { name: 'login'}}
     ]

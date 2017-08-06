@@ -5,13 +5,19 @@
                 <input type="text" v-model="form.title" placeholder="标题" class="base-input" name="title">
                 <span class="input-info error">请输入标题</span>
             </a-input>
-            <a-input title="分类" :classes="'select-item-wrap'">
+            <a-input title="标签" :classes="'select-item-wrap'">
                 <i class="icon icon-arrow-down"></i>
-                <select v-model="form.category" class="select-item" name="category">
-                    <option value="">请选择分类</option>
-                    <option v-for="item in category" :value="item._id + '|' + item.cate_name">{{ item.cate_name }}</option>
+                <select v-model="form.tag" class="select-item" name="tags">
+                    <option value="">请选择标签</option>
+                    <option v-for="tag in tags" :value="tag.tag_name" :key="tag.tag_name">{{ tag.tag_name }}</option>
                 </select>
-                <span class="input-info error">请输入分类</span>
+                <a @click="addTagList" href="javascript:;" class="btn btn-yellow">添加标签</a>
+                <span class="input-info error">请输入标签</span>
+            </a-input>
+            <a-input title="已有标签" v-if="tagList.length > 0">
+                <ul class="tag-list">
+                    <li v-for="tagItem in tagList" v-text="tagItem" :key="tagItem"></li>
+                </ul>
             </a-input>
             <div class="settings-section">
                 <div id="post-content" class="settings-item-content">
@@ -31,7 +37,7 @@
     import { mapGetters } from 'vuex';
     import aInput from '../components/_input.vue';
     const fetchInitIalData = async (store, config = {limit: 99}) => {
-        await store.dispatch('global/category/getCategoryList', config);
+        await store.dispatch('global/tag/getTagList', config);
     };
 
     export default {
@@ -40,9 +46,11 @@
             return {
                 form: {
                     title: '',
-                    category: '',
+                    tag: '',
+                    tagString: '',
                     content: ''
-                }
+                },
+                tagList:[]
             }
         },
         components: {
@@ -50,13 +58,13 @@
         },
         computed: {
             ...mapGetters({
-                category: 'global/category/getCategoryList'
+                tags: 'global/tag/getTagList'
             })
         },
         methods: {
             async insert(){
                 const content = postEditor.getMarkdown();
-                if(!this.form.title || !this.form.category || !content){
+                if(!this.form.title || !this.form.tagString || !content){
                     this.$store.dispatch('global/showMsg', '请将表单填写完整！');
                     return;
                 }
@@ -70,10 +78,16 @@
                     this.$store.commit('backend/article/insertArticleItem', data);
                     this.$router.push('/backend/article/list');
                 }
+            },
+            addTagList() {
+                if(!this.tagList.includes(this.form.tag)){
+                    this.tagList.push(this.form.tag);
+                    this.form.tagString = this.tagList.join("|");
+                }
             }
         },
         mounted() {
-            if(this.category.length <= 0){
+            if(this.tags.length <= 0){
                 fetchInitIalData(this.$store);
             }
             // eslint-disable-next-line

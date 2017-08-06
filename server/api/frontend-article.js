@@ -10,7 +10,7 @@ const Article = mongoose.model('Article');
  */
 exports.getList = (req, res) => {
     let by = req.query.by,
-        category = req.query.category,
+        tag = req.query.tag,
         limit = req.query.limit,
         page = req.query.page;
     page = parseInt(page, 10);
@@ -21,25 +21,25 @@ exports.getList = (req, res) => {
         is_delete: 0
     },
         skip = (page - 1) * limit;
-    if (category) {
-        data.category = category;
+    if (tag) {
+        data.tags = tag;
     }
     let sort = '-update_date';
     if (by) {
         sort = '-' + by;
     }
 
-    let filds = 'title content category category_name visit like comment_count create_date update_date is_delete timestamp';
+    let filds = 'title content tags create_date update_date is_delete timestamp';
 
     Promise.all([
         Article.find(data, filds).sort(sort).skip(skip).limit(limit).exec(),
         Article.count(data)
     ]).then(([data, total]) => {
-        let totalPage = Math.ceil(total / limit),
-            data = data.map(item => {
-                item.content = item.content.substring(0, 150);
-                return item;
-            });
+        let totalPage = Math.ceil(total / limit);
+        data = data.map(item => {
+            item.content = item.content.substring(0, 150);
+            return item;
+        });
         let json = {
             code: 200,
             data: {
@@ -73,10 +73,8 @@ exports.getItem = (req, res) => {
             message: '参数错误'
         });
     }
-    Promise.all([
-        Article.findOne({ title: title }, { is_delete: 0 }),
-        Article.update({ title: title }, { '$inc': { 'visit': 1 } })
-    ]).then(value => {
+   
+    Article.findOne({ title: title }, { is_delete: 0 }).then(value => {
         let json;
         if (!value[0]) {
             json = {

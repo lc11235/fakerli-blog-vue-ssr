@@ -1,7 +1,7 @@
 const moment = require('moment');
 const mongoose = require('../mongoose');
 const Article = mongoose.model('Article');
-const Category = mongoose.model('Category');
+const Tag = mongoose.model('Tag');
 const general = require('./general');
 
 const list = general.list;
@@ -62,16 +62,16 @@ exports.getItem = (req, res) => {
  * @return {[type]}     [description]
  */
 exports.insert = (req, res) => {
-    let categorys = req.body.category,
+    let tagString = req.body.tagString,
         content = req.body.content,
         html = marked(content),
         title = req.body.title;
-    let arr_category = categorys.split("|");
+    let arr_tag = tagString.split("|");
     let data = {
         title,
         content,
         html,
-        category_name: arr_category,
+        tags: arr_tag,
         visit: 0,
         create_date: moment().format('YYYY-MM-DD HH:mm:ss'),
         update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
@@ -79,7 +79,7 @@ exports.insert = (req, res) => {
         timestamp: moment().format('X')
     };
     Article.create(data).then(result => {
-        return Category.update({ cate_name: { '$in': arr_category } }, { '$inc': { 'cate_num': 1 } }).then(() => {
+        return Tag.update({ tag_name: { '$in': arr_tag } }, { '$inc': { 'tag_num': 1 } }).then(() => {
             return res.json({
                 code: 200,
                 message: '发布成功',
@@ -103,10 +103,10 @@ exports.insert = (req, res) => {
  */
 exports.deletes = (req, res) => {
     let title = req.query.title;
-    let categorys = req.query.categorys;
-    let arr_category = categorys.split("|");
+    let tagList = req.query.tagList;
+    let arr_tag = tagList.split("|");
     Article.update({ title: title }, { is_delete: 1 }).then(() => {
-        return Category.update({ cate_name: { '$in': arr_category } }, { '$inc': { 'cate_num': -1 } }).then(result => {
+        return Tag.update({ tags: { '$in': arr_tag } }, { '$inc': { 'tag_num': -1 } }).then(result => {
             res.json({
                 code: 200,
                 message: '更新成功',
@@ -130,10 +130,10 @@ exports.deletes = (req, res) => {
  */
 exports.recover = (req, res) => {
     let title = req.query.title;
-    let categorys = req.query.categorys;
-    let arr_category = categorys.split("|");
+    let tagList = req.query.tagList;
+    let arr_tag = tagList.split("|");
     Article.update({ title: title }, { is_delete: 0 }).then(() => {
-        return Category.update({ cate_name: { '$in': arr_category } }, { '$inc': { 'cate_num': 1 } }).then(() => {
+        return Tag.update({ tags: { '$in': arr_tag } }, { '$inc': { 'tag_num': 1 } }).then(() => {
             res.json({
                 code: 200,
                 message: '更新成功',
@@ -156,25 +156,25 @@ exports.recover = (req, res) => {
  * @return {[type]}     [description]
  */
 exports.modify = (req, res) => {
-    let categorys = req.query.categorys,
-        categorys_old = req.body.categorys_old,
+    let tagList = req.query.tagList,
+        tagList_old = req.body.tagList_old,
         content = req.body.content,
         html = marked(content),
         title = req.body.title;
-    let arr_categorys = categorys.length > 0 ? categorys.split("|") : null;
-    let arr_categorys_old = categorys_old.length > 0 ? categorys_old.split("|") : null;
+    let arr_tags = tagList.length > 0 ? tagList.split("|") : null;
+    let arr_tags_old = tagList_old.length > 0 ? tagList_old.split("|") : null;
     let data = {
         title: title,
-        $push: { category_name: arr_category },
+        $push: { tags: arr_tag },
         content,
         html,
         update_date: moment().format('YYYY-MM-DD HH:mm:ss')
     };
     Article.findOneAndUpdate({ title: title }, data, { new: true }).then(result => {
-        if (categorys.length > 0 && categorys_old.length > 0) {
+        if (tagList.length > 0 && tagList_old.length > 0) {
             Promise.all([
-                Category.update({ cate_name: { '$in': arr_categorys } }, { '$inc': { 'cate_num': 1 } }),
-                Category.update({ cate_name: { '$in': arr_categorys_old } }, { '$inc': { 'cate_num': -1 } })
+                Tag.update({ tags: { '$in': arr_tags } }, { '$inc': { 'tag_num': 1 } }),
+                Tag.update({ tags: { '$in': arr_tags_old } }, { '$inc': { 'tag_num': -1 } })
             ]).then(() => {
                 res.json({
                     code: 200,
@@ -187,8 +187,8 @@ exports.modify = (req, res) => {
                     message: err.toString()
                 });
             });
-        } else if (categorys.length > 0 && categorys_old.length === 0) {
-            Category.update({ cate_name: { '$in': arr_categorys } }, { '$inc': { 'cate_num': 1 } }).then(() => {
+        } else if (tagList.length > 0 && tagList_old.length === 0) {
+            Tag.update({ tags: { '$in': arr_tags } }, { '$inc': { 'tag_num': 1 } }).then(() => {
                 res.json({
                     code: 200,
                     message: '更新成功',
@@ -200,8 +200,8 @@ exports.modify = (req, res) => {
                     message: err.toString()
                 });
             });
-        } else if (categorys.length === 0 && categorys_old.length > 0) {
-            Category.update({ cate_name: { '$in': arr_categorys_old } }, { '$inc': { 'cate_num': -1 } }).then(() => {
+        } else if (tagList.length === 0 && tagList_old.length > 0) {
+            Tag.update({ tags: { '$in': arr_tags_old } }, { '$inc': { 'tag_num': -1 } }).then(() => {
                 res.json({
                     code: 200,
                     message: '更新成功',
