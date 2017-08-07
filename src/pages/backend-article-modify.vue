@@ -31,8 +31,8 @@
     import api from '~api';
     import { mapGetters } from 'vuex';
     import aInput from '../components/_input.vue';
-    const fetchInitialData = async (store, config = {limti: 99}) => {
-        await store.dispatch('global/tag/getTagList', config);
+    const fetchInitialData = async (store) => {
+        await store.dispatch('global/tag/getTagList');
     };
 
     export default {

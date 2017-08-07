@@ -6,9 +6,9 @@ const state = {
 };
 
 const actions = {
-    async ['getTagList']({commit, state}, config) {
+    async ['getTagList']({commit, state}) {
         if(state.lists.length) return;
-        const {data: {data, code}} = await api.get('backend/tag/list', {...config, cache: true});
+        const {data: {data, code}} = await api.get('backend/tag/list', {cache: true});
         if(data && code === 200) {
             commit('receiveTagList', data.list);
         }

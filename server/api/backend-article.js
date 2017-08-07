@@ -79,7 +79,9 @@ exports.insert = (req, res) => {
         timestamp: moment().format('X')
     };
     Article.create(data).then(result => {
-        return Tag.update({ tag_name: { '$in': arr_tag } }, { '$inc': { 'tag_num': 1 } }).then(() => {
+        return Tag.update({ tag_name: { '$in': arr_tag } }, 
+                          { '$inc': { 'tag_num': 1 } }, 
+                          {upsert: true, multi:true}).then(() => {
             return res.json({
                 code: 200,
                 message: '发布成功',

@@ -51,6 +51,7 @@ exports.insert = (req, res) => {
     } else {
         return Tag.create({
             tag_name,
+            tag_num: 0,
             create_date: moment().format('YYYY-MM-DD HH:mm:ss'),
             update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
             is_delete: 0,

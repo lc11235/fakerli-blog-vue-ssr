@@ -18,8 +18,8 @@
 
 <script lang="babel">
     import { mapGetters } from 'vuex';
-    const fetchInitialData = async (store, config = {limit: 99}) => {
-        await store.dispatch('global/tag/getTagList', config);
+    const fetchInitialData = async (store) => {
+        await store.dispatch('global/tag/getTagList');
     };
 
     export default {

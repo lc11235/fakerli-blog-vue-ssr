@@ -8,6 +8,7 @@
                 <router-view :key="key" class="router"></router-view>
             </transition>
             <back-top />
+            <footer-item />
         </main>
     </div>
 </template>
@@ -19,6 +20,7 @@
     import backTop from './components/backtop.vue';
     import topHeader from './components/top-header.vue';
     import contentHeader from './components/content-header.vue';
+    import footerItem from './components/footer.vue';
 
     export default {
         name: 'app',
@@ -35,6 +37,7 @@
             topHeader,
             contentHeader,
             backTop,
+            footerItem
         },
         watch: {
             'global.progress'(val) {

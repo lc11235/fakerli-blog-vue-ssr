@@ -7,6 +7,19 @@ import * as filters from './filters';
 
 sync(store, router);
 
+router.beforeEach((to, from, next) => {
+    if(to.path === '/tags') {
+        store.dispatch('global/changeTitle', `Tags`);
+    } else if(to.path === '/') {
+        store.dispatch('global/changeTitle', `Fakerli's Blog`);
+    } else if(to.path === '/about') {
+        store.dispatch('global/changeTitle', `About`);
+    } else if(to.path === '/archives') {
+        store.dispatch('global/changeTitle', `Archives`);
+    }
+    next();
+})
+
 Object.keys(filters).forEach(key => {
     Vue.filter(key, filters[key]);
 });

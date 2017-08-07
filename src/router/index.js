@@ -8,6 +8,8 @@ import Meta from 'vue-meta';
 import index from '../pages/frontend-index.vue';
 import article from '../pages/frontend-article.vue';
 import about from '../pages/frontend-about.vue';
+import tags from '../pages/frontend-tags.vue';
+import archives from '../pages/frontend-archives.vue';
 
 Vue.use(VueRouter);
 Vue.use(Meta);
@@ -37,8 +39,9 @@ const router = new VueRouter({
     mode: 'history',
     scrollBehavior,
     routes: [
-        {name: 'index', path: '/', component: index},
-        {name: 'tag', path: '/tag/:tag', component: index},
+        {name: 'index', path: '/', component: index, meta: {scrollToTop: true}},
+        {name: 'tags', path: '/tags', component: tags, meta: {scrollToTop: true}},
+        {name: 'tag', path: '/tag/:tag', component: tags, meta: {scrollToTop: true}},
         {name: 'article', path: '/article/:title', component: article, meta: {scrollToTop: true}},
         {name: 'about', path: '/about', component: about, meta: {scrollToTop: true}}
     ]

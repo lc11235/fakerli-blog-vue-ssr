@@ -1,5 +1,5 @@
 <template>
-    <aside id="menu" class="hide">
+    <aside id="menu">
         <div class="inner flex-row-vertical">
             <a @click="hide" href="javascript:;" class="header-icon" id="menu-off">
                 <i class="fa fa-lg fa-remove"></i>

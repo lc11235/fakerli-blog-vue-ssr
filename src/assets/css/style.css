@@ -236,7 +236,7 @@ body {
     left: 0;
     bottom: 0;
     z-index: 66;
-    width: 240px;
+    width: 250px;
     min-height: 100%;
     background: #3f51b5;
     box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
@@ -294,8 +294,8 @@ body {
 }
 
 .body-wrap {
-    padding: 30px 0 40px;
-    min-height: calc(100vh - 340px)
+    padding: 0 0 40px;
+    min-height: calc(100vh - 230px - 80px);
 }
 
 .container {
@@ -310,14 +310,15 @@ body {
 }
 
 #main{
-    padding-left: 240px;
+    padding-left: 250px;
     min-height: 100%;
     -webkit-transition: .4s ease-in-out;
     transition: .4s ease-in-out;
+    position: relative;
 }
 
 #menu.hide+#main {
-    padding-left: 0;
+    padding-left: 110px;
 }
 
 .fade-scale.in {
@@ -334,7 +335,7 @@ body {
 
 .content-header {
     min-height: 210px;
-    margin-left: -240px;
+    margin-left: -250px;
     padding: 104px 16px 48px 256px;
     color: #fff;
     background: #3f51b5;
@@ -570,6 +571,48 @@ body {
     transition: color .2s cubic-bezier(.4,.01,.165,.99),border .2s cubic-bezier(.4,.01,.165,.99);
 }
 
+.entry-content {
+    font-size: 16px;
+    line-height: 1.8;
+    word-wrap: break-word;
+    border-bottom: 1px solid #ddd;
+    border-top: 1px solid #fff;
+}
+
+.entry-content section a{
+    display: inline-block;
+    font-size: 14px;
+    padding: 0 15px;
+    height: 40px;
+    line-height: 40px;
+    color: rgba(36,121,204,.8);
+    border: 1px solid rgba(36,121,204,.8);
+    border-radius: 4px;
+    margin: 0 15px 10px 0;
+    text-decoration: none;
+    -webkit-transition: color .2s cubic-bezier(.4,.01,.165,.99),border .2s cubic-bezier(.4,.01,.165,.99);
+    transition: color .2s cubic-bezier(.4,.01,.165,.99),border .2s cubic-bezier(.4,.01,.165,.99);
+}
+
+.watelfall-item .feed-content{
+    position: relative;
+    float: left;
+    width: calc(50% - 10px);
+    margin-top: 20px;
+    margin-right: 10px;
+    padding: 0 10px 20px;
+}
+
+footer{
+    height: 80px;
+}
+.copyright{
+    font-size: 12px;
+    height: 40px;
+    padding-top: 26px;
+    border-top: 1px solid #ddd;
+}
+
 /*自己引入*/    
 nav ul, nav ol {
     list-style: none;
@@ -705,12 +748,12 @@ a {
 }
 
 .main {
-    margin-top: 20px;
+    margin-top: 50px;
     padding-bottom: 40px;
 }
 
 .main .main-left {
-    width: 660px;
+    width: 1060px;
     float: left;
 }
 

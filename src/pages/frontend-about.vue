@@ -1,5 +1,5 @@
 <template>
-    <div class="main wrap clearfix">
+    <div class="main wrap body-wrap clearfix">
         <div class="main-left">
             <div class="card card-answer">
                 <div class="answer-content">
@@ -59,12 +59,6 @@
                 title: '学习是为了探索这个世界的本质',
                 meta: [{vmid: 'description', name: 'description', content: 'fakerli的博客'}]
             };
-        },
-        beforeRouteLeave(to, from, next) {
-            if(to.path === '/') {
-                this.$store.dispatch('global/changeTitle', `Fakerli's Blog`);
-            }
-            next();
-        },
+        }
     }
 </script>

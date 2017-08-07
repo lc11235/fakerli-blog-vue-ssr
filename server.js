@@ -88,7 +88,7 @@ app.use('/service-worker.js', serve('./dist/service-worker.js'));
 app.use('/api', routes);
 
 // 前台路由， SSR渲染
-app.get(['/', '/tag/:id', '/search/:qs', '/article/:id', '/about'], (req, res) => {
+app.get(['/', '/tag/:id', '/search/:qs', '/article/:id', '/about', '/tags'], (req, res) => {
     if(!renderer){
         return res.end('waiting for compilation... refresh in a moment.');
     }
