@@ -30,9 +30,11 @@
     import metaMixin from '~mixins';
     const fetchInitialData = async (store, tag)=> {
         await store.dispatch('global/tag/getTagList');
+        const base = {};
         if(tag){
-            await store.dispatch('frontend/article/getArticleList', {tag: tag});
+            base.tag = tag;
         }
+        await store.dispatch('frontend/article/getArticleList', base);
     };
 
     export default {
