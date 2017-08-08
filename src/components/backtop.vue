@@ -1,7 +1,7 @@
 <template>
-    <div v-show="scrollTop > 500" class="back-top">
-        <a @click="handleBackTop" href="javascript:;"></a>
-    </div>
+    <a @click="handleBackTop" href="javascript:;" :class="{in: scrollTop > 300}" class="back-top">
+        <span class="fa fa-chevron-up"></span>
+    </a>
 </template>
 
 <script lang="babel">
@@ -20,6 +20,7 @@
             },
             handleBackTop() {
                 let top = this.scrollTop;
+                this.scrollTop = 0;
                 let timer = setInterval(() => {
                     top -= Math.abs(top * 0.1);
                     if(top <= 1){

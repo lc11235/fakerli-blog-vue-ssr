@@ -10,7 +10,7 @@ const ArticleSchema = new Schema({
     visit: Number,
     create_date: String,
     update_date: String,
-    is_delete:Number,
+    is_delete: Number,
     timestamp: Number
 });
 

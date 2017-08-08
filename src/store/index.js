@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import backendAdmin from './modules/backend-admin';
 import backendArticle from './modules/backend-article';
 import frontendArticle from './modules/frontend-article';
+import frontendArchives from './modules/frontend-archives';
 import global from './modules/global';
 import globalTag from './modules/global-tag';
 
@@ -20,7 +21,8 @@ export default new Vuex.Store({
         frontend: {
             namespaced: true,
             modules: {
-                article: frontendArticle
+                article: frontendArticle,
+                archive: frontendArchives
             }
         },
         global: {

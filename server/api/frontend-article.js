@@ -76,7 +76,7 @@ exports.getItem = (req, res) => {
    
     Article.findOne({ title: title }, { is_delete: 0 }).then(value => {
         let json;
-        if (!value[0]) {
+        if (!value) {
             json = {
                 code: -200,
                 message: '没有找到该文章'
@@ -84,7 +84,7 @@ exports.getItem = (req, res) => {
         } else {
             json = {
                 code: 200,
-                data: value[0]
+                data: value
             }
         }
         res.json(json);

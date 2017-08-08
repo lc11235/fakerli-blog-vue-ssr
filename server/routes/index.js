@@ -7,6 +7,7 @@ const backendArticle = require('../api/backend-article'),
       backendTag = require('../api/backend-tag'),
       backendUser = require('../api/backend-user'),
       frontendArticle = require('../api/frontend-article'),
+      frontendArchive = require('../api/frontend-archive'),
       isAdmin = require('./is-admin');
 
 // 添加管理员
@@ -67,6 +68,10 @@ router.get('/backend/admin/recover', isAdmin, backendUser.recover);
 router.get('/frontend/article/list', frontendArticle.getList);
 // 前台浏览时, 获取单篇文章
 router.get('/frontend/article/item', frontendArticle.getItem);
+
+// ------ 归档 ------
+// 归档列表
+router.get('/frontend/archive/listTitle', frontendArchive.getListTitle);
 
 // ------ 404 ------
 router.get('*', (req, res) => {

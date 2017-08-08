@@ -32,7 +32,7 @@ body, button, input, select, textarea {
 }
 
 h1,h2,h3,h4,h5,h6 {
-    font-weight: 400
+    font-weight: bold;
 }
 
 h1,.h1 {
@@ -594,11 +594,12 @@ body {
 
 .watelfall-item .feed-content{
     position: relative;
-    float: left;
+    display: inline-block;
     width: calc(50% - 10px);
     margin-top: 20px;
     margin-right: 10px;
     padding: 0 10px 20px;
+    vertical-align: top;
 }
 
 footer{
@@ -609,10 +610,99 @@ footer{
     height: 70px;
     padding-top: 26px;
     border-top: 1px solid #ddd;
-    max-width: 1000px;
     margin-left: auto;
     margin-right: auto;
     line-height: 1;
+    text-align: center;
+}
+
+article.archive{
+    border-top: 1px solid #fff;
+    position: relative;
+    padding: 30px 0;
+    word-wrap: break-word;
+}
+
+article .entry-content-archive{
+    font-size: 16px;
+    line-height: 1.8;
+    word-wrap: break-word;
+    margin-bottom: 10px;
+}
+
+article .entry-content-archive ul{
+    margin-left: 25px;
+    margin-top: 15px;
+}
+
+article .entry-content-archive .date{
+    color: #999;
+    font-size: 14px;
+    font-style: italic;
+}
+
+.article-tag, .article-tag-list, .article-tag-list-item{
+    float: left;
+}
+
+.article-tag .tag-icon{
+    color: #999;
+    float: left;
+    margin-right: 10px;
+    margin-top: 6px;
+}
+
+.article-tag a.tag-color{
+    background: #cc8167;
+}
+
+.article-tag a.tag-color::before{
+        border-right-color: #cc8167;
+}
+
+.article-tag a::before{
+    content: " ";
+    width: 0;
+    height: 0;
+    position: absolute;
+    top: 0;
+    left: -18px;
+    border: 9px solid transparent;
+}
+
+.article-tag a::after{
+    content: " ";
+    width: 4px;
+    height: 4px;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 0 0 1px rgba(0,0,0,.3);
+    position: absolute;
+    top: 7px;
+    left: 2px;
+}
+
+.article-tag a{
+    display: inline-block;
+    text-decoration: none;
+    font-weight: 400;
+    font-size: 10px;
+    color: #fff;
+    height: 18px;
+    line-height: 18px;
+    float: left;
+    padding: 0 5px 0 10px;
+    position: relative;
+    border-radius: 0 5px 5px 0;
+    margin: 5px 9px 5px 8px;
+    font-family: Menlo,Monaco,Andale Mono,lucida console,Courier New,monospace;
+}
+
+.article-tag-index{
+    padding-top: 20px;
+    margin: 10px 0;
+    min-height: 72px;
+    border-top: 1px solid #ddd;
 }
 
 /*自己引入*/    

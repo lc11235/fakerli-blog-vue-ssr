@@ -9,7 +9,6 @@
             <template v-else-if="article.data.title">
                 <div class="card card-question-head">
                     <div class="question-content">
-                        <router-link v-for="tag in article.data.tags" :key="tag" :to="'/tag/' + tag" v-text="tag" class="topic-link-item"></router-link>
                         <h2 class="question-title">
                             <router-link :to="'/article/' +article.data.title" v-text="article.data.title" class="question-title-link"></router-link>
                         </h2>
@@ -20,6 +19,16 @@
                         <div class="article-content markdown-body" v-html="addTarget(article.data.html)"></div>
                     </div>
                 </div>
+                <div class="article-tag-index">
+                <div class="article-tag">
+                    <i class="fa fa-tag tag-icon"></i>
+                    <ul class="article-tag-list">
+                        <li v-for="tag in article.data.tags" :key="tag" class="article-tag-list-item">
+                            <router-link  :to="'/tag/' + tag" v-text="tag" class="tag-color"></router-link>
+                        </li>
+                    </ul>
+                </div>
+            </div>
             </template>
             <template v-else>
                 <div class="card card-answer">
@@ -61,7 +70,10 @@
             }
         },
         mounted () {
-            fetchInitialData(this.$store);
+            if(!this.article){
+                fetchInitialData(this.$store);
+            }
+            this.$store.dispatch('global/gProgress', 100);
         },
         metaInfo() {
             const title = this.article.data.title ? this.article.data.title + ' 学习是为了探索这个世界的本质' : '学习是为了探索这个世界的本质';

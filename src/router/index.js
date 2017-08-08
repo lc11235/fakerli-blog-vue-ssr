@@ -41,6 +41,7 @@ const router = new VueRouter({
     routes: [
         {name: 'index', path: '/', component: index, meta: {scrollToTop: true}},
         {name: 'tags', path: '/tags', component: tags, meta: {scrollToTop: true}},
+        {name: 'archives', path: '/archives', component: archives, meta: {scrollToTop: true}},
         {name: 'tag', path: '/tag/:tag', component: tags, meta: {scrollToTop: true}},
         {name: 'article', path: '/article/:title', component: article, meta: {scrollToTop: true}},
         {name: 'about', path: '/about', component: about, meta: {scrollToTop: true}}

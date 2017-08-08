@@ -1,6 +1,5 @@
 <template>
     <div class="main wrap body-wrap">
-    <div class="main-left">
         <div class="entry-content">
             <section>
                 <router-link v-for="tag in tags" :to="'/tags/' + tag.tag_name" :key="tag.tag_num">{{tag.tag_name + '(' + tag.tag_num +')'}}</router-link>
@@ -13,13 +12,12 @@
                 <div class="load-more-wrap">
                     <a v-if="topics.hasNext" @click="loadMore()" href="javascript:;" class="load-more">
                         更多
-                        <i class="icon icon-cicle-loading"></i> 
+                        <i class="icon icon-cicle-loading"></i>
                     </a>
                 </div>
             </template>
             <topics-item-none v-else>当前标签还没有文章...</topics-item-none>
         </div>
-    </div>
     </div>
 </template>
 
@@ -30,7 +28,7 @@
     import metaMixin from '~mixins';
     const fetchInitialData = async (store, tag)=> {
         await store.dispatch('global/tag/getTagList');
-        const base = {};
+        const base = {page: 1};
         if(tag){
             base.tag = tag;
         }

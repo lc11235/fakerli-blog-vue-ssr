@@ -16,6 +16,8 @@ router.beforeEach((to, from, next) => {
         store.dispatch('global/changeTitle', `About`);
     } else if(to.path === '/archives') {
         store.dispatch('global/changeTitle', `Archives`);
+    } else if(to.path.match(/\/article\//g)){
+        store.dispatch('global/changeTitle', `Article`);
     }
     next();
 })

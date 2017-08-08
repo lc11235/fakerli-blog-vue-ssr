@@ -8,14 +8,18 @@
             <div class="feed-desc-wrap feed-bottom-margin">
                 <div class="feed-article-content markdonw-body">
                     {{item.content}}
-                    <router-link :to="'/article/' + item.title">[阅读全文]</router-link>
                 </div>
-                
             </div>
-            <div class="feed-source feed-bottom-margin">
-                <ul class="tag-list">
-                    <router-link v-for="tag in item.tags" :key="tag" :to="'/tag/' + tag" v-text="tag" class="btn btn-yellow"></router-link>
-                </ul>
+            <router-link :to="'/article/' + item.title">阅读全文 >></router-link>
+            <div class="article-tag-index">
+                <div class="article-tag">
+                    <i class="fa fa-tag tag-icon"></i>
+                    <ul class="article-tag-list">
+                        <li v-for="tag in item.tags" :key="tag" class="article-tag-list-item">
+                            <router-link  :to="'/tag/' + tag" v-text="tag" class="tag-color"></router-link>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
