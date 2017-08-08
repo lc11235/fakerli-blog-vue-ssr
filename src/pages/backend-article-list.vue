@@ -9,13 +9,12 @@
             </div>
             <div v-for="item in topics.data" :key="item.title" class="list-section">
                 <div class="list-title">{{ item.title }}</div>
-                <div class="list-tag">{{ item.tag_name }}</div>
+                <div class="list-tag">{{ item.tags[0] }}</div>
                 <div class="list-date">{{ item.update_date | timeAgo }}</div>
                 <div class="list-action">
-                    <router-link :to="'/backend/article/modify/' + item._id" class="badge badge-success">编辑</router-link>
-                    <a v-if="item.is_delete" @click="recover(item._id)" href="javascript:;">恢复</a>
-                    <a v-else @click="deletes(item._id)" href="javascript:;">删除</a>
-                    <router-link v-if="item.comment_count >0" :to="'/backend/article/comment/' + item._id" class="badge badge-success">评论</router-link>
+                    <router-link :to="'/backend/article/modify/' + item.title" class="badge badge-success">编辑</router-link>
+                    <a v-if="item.is_delete" @click="recover(item.title)" href="javascript:;">恢复</a>
+                    <a v-else @click="deletes(item.title)" href="javascript:;">删除</a>
                 </div>
             </div>
         </div>
@@ -43,24 +42,24 @@
             loadMore(page = this.topics.page + 1) {
                 fetchInitialData(this.$store, {page});
             },
-            async recover(id) {
-                const {data: {code, message}} = await api.get('backend/article/recover', {id});
+            async recover(title) {
+                const {data: {code, message}} = await api.get('backend/article/recover', {title});
                 if(code === 200) {
                     this.$store.dispatch('global/showMsg', {
                         type: 'success',
                         content: message
                     });
-                    this.$store.commit('backend/article/recoverArticle', id);
+                    this.$store.commit('backend/article/recoverArticle', title);
                 }
             },
-            async deletes(id) {
-                const {data: {code, message}} = await api.get('backend/article/delete', {id});
+            async deletes(title) {
+                const {data: {code, message}} = await api.get('backend/article/delete', {title});
                 if(code === 200) {
                     this.$store.dispatch('global/showMsg', {
                         type: 'success',
                         content: message
                     });
-                    this.$store.commit('backend/article/deleteArticle', id);
+                    this.$store.commit('backend/article/deleteArticle', title);
                 }
             }
         },

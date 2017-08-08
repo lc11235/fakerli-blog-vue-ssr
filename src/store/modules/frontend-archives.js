@@ -27,7 +27,9 @@ const actions = {
 
 const mutations = {
     ['receiveArticleList'](state, {list, path}) {
-        list = state.lists.data.concat(list);
+        // 因为不是分页查询，所以不需要进行数据的拼接
+        //list = state.lists.data.concat(list);
+        //list = state.lists.data;
         state.lists = {
             data: list, path
         };

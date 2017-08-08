@@ -2,6 +2,7 @@
     <div class="main wrap body-wrap">
         <div class="entry-content">
             <section>
+                <router-link :to="'/tags'">所有</router-link>
                 <router-link v-for="tag in tags" :to="'/tags/' + tag.tag_name" :key="tag.tag_num">{{tag.tag_name + '(' + tag.tag_num +')'}}</router-link>
             </section>
         </div>
@@ -42,13 +43,21 @@
         components: {
             topicsItem, topicsItemNone
         },
+        beforeRouteEnter(to, from, next) {
+            //does NOT have access to `this` component instance
+            next(vm => {
+                if(to.path.match(/\/tags\//g)){
+                    if(to.params.tag){
+                        fetchInitialData(vm.$store, to.params.tag);
+                    }
+                } else {
+                    fetchInitialData(vm.$store);
+                }
+            });
+        },
         beforeRouteUpdate(to, from, next) {
-            if(to.path !== from.path) {
-                fetchInitialData(this.$store);
-            } else {
-                this.$store.dispatch('global/gProgress', 100);
-                next();
-            }
+            fetchInitialData(this.$store, to.params.tag);
+            next();
         },
         computed: {
             ...mapGetters({
@@ -59,8 +68,9 @@
         mounted() {
             if(this.tags.length <= 0){
                 fetchInitialData(this.$store);
+            } else {
+                this.$store.dispatch('global/gProgress', 100);
             }
-            this.$store.dispatch('global/gProgress', 100);
         },
         metaInfo() {
             const title = '学习是为了探索这个世界的本质';

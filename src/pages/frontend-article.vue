@@ -50,6 +50,12 @@
         name: 'frontend-article',
         prefetch: fetchInitialData,
         mixins: [metaMixin],
+        beforeRouteEnter(to, from, next) {
+            //does NOT have access to `this` component instance
+            next(vm => {
+                fetchInitialData(vm.$store);
+            });
+        },
         beforeRouteUpdate(to, from, next) {
             if(to.path !== from.path) {
                 fetchInitialData(this.$store);
@@ -72,8 +78,9 @@
         mounted () {
             if(!this.article){
                 fetchInitialData(this.$store);
+            } else {
+                this.$store.dispatch('global/gProgress', 100);
             }
-            this.$store.dispatch('global/gProgress', 100);
         },
         metaInfo() {
             const title = this.article.data.title ? this.article.data.title + ' 学习是为了探索这个世界的本质' : '学习是为了探索这个世界的本质';

@@ -35,7 +35,7 @@ exports.getList = (req, res) => {
  */
 exports.getItem = (req, res) => {
     let title = req.query.title;
-    if (!id) {
+    if (!title) {
         res.json({
             code: -200,
             message: '参数错误'

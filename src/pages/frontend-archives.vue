@@ -28,6 +28,12 @@
         name: 'frontend-tags',
         prefetch: fetchInitialData,
         mixins: [metaMixin],
+        beforeRouteEnter(to, from, next) {
+            //does NOT have access to `this` component instance
+            next(vm => {
+                fetchInitialData(vm.$store);
+            });
+        },
         beforeRouteUpdate(to, from, next) {
             if(to.path !== from.path) {
                 fetchInitialData(this.$store);

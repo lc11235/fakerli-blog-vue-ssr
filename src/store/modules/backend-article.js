@@ -7,6 +7,10 @@ const state = {
         hasNext: 0,
         hasPrev: 0,
         page: 1
+    },
+    item: {
+        data: {},
+        path: ''
     }
 };
 
@@ -21,10 +25,17 @@ const actions = {
             });
         }
     },
-    async ['getArticleItem'] ({rootState: {route: {params: {id}}}}) {
-        const {data: {data, code}} = await api.get('backend/article/item', {id});
+    async ['getArticleItem'] ({commit, rootState: {route: {path, params: {title}}}}) {
+        if(path === state.item.path) {
+            global.progress = 100;
+            return;
+        }
+        const {data: {data, code}} = await api.get('backend/article/item', {title});
         if(data && code === 200) {
-            return data;
+            commit('receiveArticleItem', {
+                data,
+                path
+            });
         }
     },
     async ['deleteArticle'] ({commit}, config) {
@@ -52,23 +63,28 @@ const mutations = {
             data: list, path, hasNext, hasPrev, page
         };
     },
+    ['receiveArticleItem'] (state, {data, path}) {
+        state.item = {
+            data, path
+        };
+    },
     ['insertArticleItem'](state, payload) {
         if(state.lists.path) {
             state.lists.data = [payload].concat(state.lists.data);
         }
     },
     ['updateArticleItem'](state, data) {
-        const index = state.lists.data.findIndex(ii => ii._id === data._id);
+        const index = state.lists.data.findIndex(ii => ii.title === data.title);
         if(index > -1) {
             state.lists.data.splice(index, 1, data);
         }
     },
-    ['deleteArticle'](state, id) {
-        const obj = state.lists.data.find(ii => ii._id === id);
+    ['deleteArticle'](state, title) {
+        const obj = state.lists.data.find(ii => ii.title === title);
         if(obj) obj.is_delete = 1;
     },
-    ['recoverArticle'] (state, id) {
-        const obj = state.lists.data.find(ii => ii._id === id);
+    ['recoverArticle'] (state, title) {
+        const obj = state.lists.data.find(ii => ii.title === title);
         if(obj) obj.is_delete = 0;
     }
 };
