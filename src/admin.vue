@@ -1,6 +1,5 @@
 <template>
     <div id="app" class="g-doc">
-        <Navigation></Navigation>
         <div class="main wrap clearfix">
             <div class="main-left">
                 <div class="home-feeds cards-wrap">
@@ -17,7 +16,6 @@
 <script lang="babel">
     import { mapGetters } from 'vuex';
     import NProgress from 'nprogress';
-    import Navigation from './components/navigation.vue';
     import backendMenu from './components/backend-menu.vue';
 
     export default {
@@ -37,8 +35,7 @@
             }
         },
         components: {
-            backendMenu,
-            Navigation
+            backendMenu
         },
         watch: {
             'global.progress'(val) {

@@ -49,17 +49,13 @@
                 form: {
                     title: '',
                     tag: '',
+                    title_old: '',
                     tagList_old: '',
+                    tagList_new: '',
                     content: ''
                 },
                 tagList: []
             }
-        },
-        beforeRouteEnter(to, from, next) {
-            //does NOT have access to `this` component instance
-            next(vm => {
-                fetchInitialData(vm.$store);
-            });
         },
         components: {
             aInput
@@ -73,7 +69,7 @@
         methods: {
             async modify() {
                 const content = modifyEditor.getMarkdown();
-                if(!this.form.title || !this.form.tag || !content) {
+                if(!this.form.title || !this.form.tagList_new || !content) {
                     this.$store.dispatch('global/showMsg', '请将表单填写完整！');
                     return;
                 }
@@ -91,7 +87,7 @@
             addTagList() {
                 if(!this.tagList.includes(this.form.tag)){
                     this.tagList.push(this.form.tag);
-                    this.form.tagString = this.tagList.join("|");
+                    this.form.tagList_new = this.tagList.join("|");
                 }
             }
         },
@@ -100,33 +96,63 @@
                 fetchInitialData(this.$store);
             } else {
                 this.tagList = this.item.data.tags;
+                this.form.tagList_old = this.item.data.tags.join("|");
+                this.form.tagList_new = this.item.data.tags.join("|");
                 this.form.title = this.item.data.title;
+                this.form.title_old = this.item.data.title;
                 this.form.content = this.item.data.content;
                 // eslint-disable-next-line
                 window.modifyEditor = editormd("modify-content", {
-                width: "100%",
-                height: 500,
-                markdown: this.item.data.content,
-                placeholder: '请输入内容...',
-                path: '/static/editor.md/lib/',
-                toolbarIcons() {
-                    return [
-                        "bold", "italic", "quote", "|",
-                        "list-ul", "list-ol", "hr", "|",
-                        "link", "reference-link", "image", "code", "table", "|",
-                        "watch", "preview", "fullscreen"
-                    ];
-                },
-                watch: false,
-                saveHTMLToTextarea: true
+                    width: "100%",
+                    height: 500,
+                    markdown: this.item.data.content,
+                    placeholder: '请输入内容...',
+                    path: '/static/editor.md/lib/',
+                    toolbarIcons() {
+                        return [
+                            "bold", "italic", "quote", "|",
+                            "list-ul", "list-ol", "hr", "|",
+                            "link", "reference-link", "image", "code", "table", "|",
+                            "watch", "preview", "fullscreen"
+                        ];
+                    },
+                    watch: false,
+                    saveHTMLToTextarea: true
                 });
             }
         },
         watch: {
-            'form.tag'(val) {
-                const obj = this.tags.find(item => item.tag === val);
-                this.form.tag = obj.tag;
+            item(val) {
+                this.tagList = val.data.tags;
+                this.form.tagList_old = val.data.tags.join("|");
+                this.form.tagList_new = val.data.tags.join("|");
+                this.form.title = val.data.title;
+                this.form.title_old = val.data.title;
+                this.form.content = val.data.content;
+                // eslint-disable-next-line
+                window.modifyEditor = editormd("modify-content", {
+                    width: "100%",
+                    height: 500,
+                    markdown: val.data.content,
+                    placeholder: '请输入内容...',
+                    path: '/static/editor.md/lib/',
+                    toolbarIcons() {
+                        return [
+                            "bold", "italic", "quote", "|",
+                            "list-ul", "list-ol", "hr", "|",
+                            "link", "reference-link", "image", "code", "table", "|",
+                            "watch", "preview", "fullscreen"
+                        ];
+                    },
+                    watch: false,
+                    saveHTMLToTextarea: true
+                });
             }
+        },
+        beforeRouteEnter(to, from, next){
+            next(vm => {
+                fetchInitialData(vm.$store);
+            });
         }
     }
 </script>

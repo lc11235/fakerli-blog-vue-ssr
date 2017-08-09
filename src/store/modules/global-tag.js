@@ -13,8 +13,8 @@ const actions = {
             commit('receiveTagList', data.list);
         }
     },
-    async ['getTagItem']({commit, rootState: {route: {params: {id}}}}) {
-        const {data: {data, code}} = await api.get('backend/tag/item', {id});
+    async ['getTagItem']({commit, rootState: {route: {params: {tag}}}}) {
+        const {data: {data, code}} = await api.get('backend/tag/item', {tag});
         if(data && code === 200) {
             commit('receiveTagItem', data);
         }

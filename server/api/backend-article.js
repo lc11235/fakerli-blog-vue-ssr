@@ -158,52 +158,36 @@ exports.recover = (req, res) => {
  * @return {[type]}     [description]
  */
 exports.modify = (req, res) => {
-    let tagList = req.query.tagList,
+    let tagList_new = req.body.tagList_new,
         tagList_old = req.body.tagList_old,
         content = req.body.content,
-        html = marked(content),
         title = req.body.title;
-    let arr_tags = tagList.length > 0 ? tagList.split("|") : null;
-    let arr_tags_old = tagList_old.length > 0 ? tagList_old.split("|") : null;
+        title_old = req.body.title_old;
+    if (!tagList_new || !tagList_old || !content || !title || !title_old) {
+        res.json({
+            code: -200,
+            message: '参数错误'
+        });
+        return;
+    }
+
+    let html = marked(content);
+    let arr_tags = tagList_new.split('|');
+    let arr_tags_old = tagList_old.split('|');
     let data = {
         title: title,
-        $push: { tags: arr_tag },
+        $set: { tags: arr_tags },
         content,
         html,
         update_date: moment().format('YYYY-MM-DD HH:mm:ss')
     };
-    Article.findOneAndUpdate({ title: title }, data, { new: true }).then(result => {
-        if (tagList.length > 0 && tagList_old.length > 0) {
+    
+    Article.findOneAndUpdate({ title: title_old }, data, { new: true }).then(result => {
+        if (tagList_new !== tagList_old) {
             Promise.all([
-                Tag.update({ tags: { '$in': arr_tags } }, { '$inc': { 'tag_num': 1 } }),
-                Tag.update({ tags: { '$in': arr_tags_old } }, { '$inc': { 'tag_num': -1 } })
+                Tag.update({ tag_name: { '$in': arr_tags } }, { '$inc': { 'tag_num': 1 } }, {upsert: false,multi: true}),
+                Tag.update({ tag_name: { '$in': arr_tags_old } }, { '$inc': { 'tag_num': -1 } }, {upsert: false,multi: true})
             ]).then(() => {
-                res.json({
-                    code: 200,
-                    message: '更新成功',
-                    data: result
-                });
-            }).catch(err => {
-                res.json({
-                    code: -200,
-                    message: err.toString()
-                });
-            });
-        } else if (tagList.length > 0 && tagList_old.length === 0) {
-            Tag.update({ tags: { '$in': arr_tags } }, { '$inc': { 'tag_num': 1 } }).then(() => {
-                res.json({
-                    code: 200,
-                    message: '更新成功',
-                    data: result
-                });
-            }).catch(err => {
-                res.json({
-                    code: -200,
-                    message: err.toString()
-                });
-            });
-        } else if (tagList.length === 0 && tagList_old.length > 0) {
-            Tag.update({ tags: { '$in': arr_tags_old } }, { '$inc': { 'tag_num': -1 } }).then(() => {
                 res.json({
                     code: 200,
                     message: '更新成功',
