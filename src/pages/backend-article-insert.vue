@@ -48,7 +48,8 @@
                     title: '',
                     tag: '',
                     tagString: '',
-                    content: ''
+                    content: '',
+                    html: ''
                 },
                 tagList:[]
             }
@@ -64,11 +65,13 @@
         methods: {
             async insert(){
                 const content = postEditor.getMarkdown();
+                const html = postEditor.getPreviewedHTML();
                 if(!this.form.title || !this.form.tagString || !content){
                     this.$store.dispatch('global/showMsg', '请将表单填写完整！');
                     return;
                 }
                 this.form.content = content;
+                this.form.html = html;
                 const {data: {message, code, data}} = await api.post('backend/article/insert', this.form);
                 if(code === 200) {
                     this.$store.dispatch('global/showMsg', {
@@ -105,7 +108,7 @@
                         "watch", "preview", "fullscreen"
                     ];
                 },
-                watch: false,
+                watch: true,
                 saveHTMLToTextarea: true
             });
         }

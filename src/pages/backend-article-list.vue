@@ -13,8 +13,8 @@
                 <div class="list-date">{{ item.update_date | timeAgo }}</div>
                 <div class="list-action">
                     <router-link :to="'/backend/article/modify/' + item.title" class="badge badge-success">编辑</router-link>
-                    <a v-if="item.is_delete" @click="recover(item.title)" href="javascript:;">恢复</a>
-                    <a v-else @click="deletes(item.title)" href="javascript:;">删除</a>
+                    <a v-if="item.is_delete" @click="recover(item.title, item.tags.join('|'))" href="javascript:;">恢复</a>
+                    <a v-else @click="deletes(item.title, item.tags.join('|'))" href="javascript:;">删除</a>
                 </div>
             </div>
         </div>
@@ -42,8 +42,8 @@
             loadMore(page = this.topics.page + 1) {
                 fetchInitialData(this.$store, {page});
             },
-            async recover(title) {
-                const {data: {code, message}} = await api.get('backend/article/recover', {title});
+            async recover(title, tagList) {
+                const {data: {code, message}} = await api.get('backend/article/recover', {title, tagList});
                 if(code === 200) {
                     this.$store.dispatch('global/showMsg', {
                         type: 'success',
@@ -52,8 +52,8 @@
                     this.$store.commit('backend/article/recoverArticle', title);
                 }
             },
-            async deletes(title) {
-                const {data: {code, message}} = await api.get('backend/article/delete', {title});
+            async deletes(title, tagList) {
+                const {data: {code, message}} = await api.get('backend/article/delete', {title, tagList});
                 if(code === 200) {
                     this.$store.dispatch('global/showMsg', {
                         type: 'success',
@@ -67,6 +67,12 @@
             if(this.topics.data.length <= 0){
                 fetchInitialData(this.$store);
             }
+        },
+        beforeRouteEnter(to, from, next){
+            //does NOT have access to `this` component instance
+            next(vm => {
+                fetchInitialData(vm.$store);
+            });
         }
     }
 </script>

@@ -68,16 +68,11 @@ const mutations = {
             data, path
         };
     },
-    ['insertArticleItem'](state, payload) {
-        if(state.lists.path) {
-            state.lists.data = [payload].concat(state.lists.data);
-        }
+    ['insertArticleItem'](state, data) {
+        state.item.data = data;
     },
     ['updateArticleItem'](state, data) {
-        const index = state.lists.data.findIndex(ii => ii.title === data.title);
-        if(index > -1) {
-            state.lists.data.splice(index, 1, data);
-        }
+        state.item.data = data;
     },
     ['deleteArticle'](state, title) {
         const obj = state.lists.data.find(ii => ii.title === title);

@@ -705,6 +705,30 @@ article .entry-content-archive .date{
     border-top: 1px solid #ddd;
 }
 
+#backmenu{
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 66;
+    width: 250px;
+    min-height: 100%;
+    background: #fff;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
+    -webkit-transition: .4s cubic-bezier(.18, .81, .3, .89);
+    transition: .4s cubic-bezier(.18, .81, .3, .89);
+}
+
+.back-wrap{
+    width: 1200px;
+    margin-left: 300px;
+    position: relative;
+}
+
+.back-body-wrap {
+    min-height: calc(100vh - 50px - 80px);
+}
+
 /*自己引入*/    
 nav ul, nav ol {
     list-style: none;
@@ -2206,6 +2230,10 @@ a:hover .icon-arrow-right {
     width: 100px;
 }
 
+.list-section .list-num {
+    width: 100px;
+}
+
 .list-section .list-action {
     width: 100px;
 }
@@ -2379,53 +2407,6 @@ a:hover .icon-arrow-right {
     background-size: contain;
 }
 
-.icon-nav-logo {
-    width: 109px;
-    height: 31px;
-    background-image: url(../images/@1x/nav-logo.png);
-}
-
-.icon-nav-home {
-    width: 24px;
-    height: 23px;
-    background-image: url(../images/@1x/nav-home.png);
-}
-
-.icon-nav-explore {
-    width: 23px;
-    height: 23px;
-    background-image: url(../images/@1x/nav-explore.png);
-}
-
-.icon-nav-features {
-    width: 23px;
-    height: 22px;
-    background-image: url(../images/@1x/nav-features.png);
-}
-
-.icon-search-white {
-    width: 15px;
-    height: 15px;
-    background-image: url(../images/@1x/search-white.png);
-}
-
-.icon-articles {
-    width: 12px;
-    height: 12px;
-    background-image: url(../images/@1x/articles.png);
-}
-
-.icon-action-articles {
-    width: 16px;
-    height: 16px;
-    background-image: url(../images/@1x/action-articles.png);
-}
-
-.icon-action-comment {
-    width: 16px;
-    height: 16px;
-    background-image: url(../images/@1x/action-comment.png);
-}
 
 .icon-action-fav {
     width: 16px;

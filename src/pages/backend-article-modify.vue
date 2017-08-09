@@ -52,7 +52,8 @@
                     title_old: '',
                     tagList_old: '',
                     tagList_new: '',
-                    content: ''
+                    content: '',
+                    html:''
                 },
                 tagList: []
             }
@@ -69,11 +70,13 @@
         methods: {
             async modify() {
                 const content = modifyEditor.getMarkdown();
+                const html = modifyEditor.getPreviewedHTML()
                 if(!this.form.title || !this.form.tagList_new || !content) {
                     this.$store.dispatch('global/showMsg', '请将表单填写完整！');
                     return;
                 }
                 this.form.content = content;
+                this.form.html = html;
                 const {data: {message, code, data}} = await api.post('backend/article/modify', this.form);
                 if(code === 200) {
                     this.$store.dispatch('global/showMsg', {
@@ -105,7 +108,7 @@
                 window.modifyEditor = editormd("modify-content", {
                     width: "100%",
                     height: 500,
-                    markdown: this.item.data.content,
+                    markdown: this.form.content,
                     placeholder: '请输入内容...',
                     path: '/static/editor.md/lib/',
                     toolbarIcons() {
@@ -116,7 +119,7 @@
                             "watch", "preview", "fullscreen"
                         ];
                     },
-                    watch: false,
+                    watch: true,
                     saveHTMLToTextarea: true
                 });
             }
@@ -133,7 +136,7 @@
                 window.modifyEditor = editormd("modify-content", {
                     width: "100%",
                     height: 500,
-                    markdown: val.data.content,
+                    markdown: this.form.content,
                     placeholder: '请输入内容...',
                     path: '/static/editor.md/lib/',
                     toolbarIcons() {
@@ -144,7 +147,7 @@
                             "watch", "preview", "fullscreen"
                         ];
                     },
-                    watch: false,
+                    watch: true,
                     saveHTMLToTextarea: true
                 });
             }

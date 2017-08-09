@@ -55,7 +55,7 @@ const router = new VueRouter({
 
         {name: 'tag_list', path: '/backend/tag/list', component: tagList, meta: {scrollToTop: true}, beforeEnter: guardRoute},
         {name: 'tag_insert', path: '/backend/tag/insert', component: tagInsert, meta: {scrollToTop: true}, beforeEnter: guardRoute},
-        {name: 'tag_modify', path: '/backend/tag/modify/:title', component: tagModify, meta: {scrollToTop: true}, beforeEnter: guardRoute},
+        {name: 'tag_modify', path: '/backend/tag/modify/:tag_name', component: tagModify, meta: {scrollToTop: true}, beforeEnter: guardRoute},
 
         {path: '*', redirect: { name: 'login'}}
     ]

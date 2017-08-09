@@ -64,7 +64,8 @@ exports.getItem = (req, res) => {
 exports.insert = (req, res) => {
     let tagString = req.body.tagString,
         content = req.body.content,
-        html = marked(content),
+        //html = marked(content),
+        html = req.body.html,
         title = req.body.title;
     let arr_tag = tagString.split("|");
     let data = {
@@ -108,7 +109,7 @@ exports.deletes = (req, res) => {
     let tagList = req.query.tagList;
     let arr_tag = tagList.split("|");
     Article.update({ title: title }, { is_delete: 1 }).then(() => {
-        return Tag.update({ tags: { '$in': arr_tag } }, { '$inc': { 'tag_num': -1 } }).then(result => {
+        return Tag.update({ tag_name: { '$in': arr_tag } }, { '$inc': { 'tag_num': -1 } }, {upsert: false,multi: true}).then(result => {
             res.json({
                 code: 200,
                 message: '更新成功',
@@ -135,7 +136,7 @@ exports.recover = (req, res) => {
     let tagList = req.query.tagList;
     let arr_tag = tagList.split("|");
     Article.update({ title: title }, { is_delete: 0 }).then(() => {
-        return Tag.update({ tags: { '$in': arr_tag } }, { '$inc': { 'tag_num': 1 } }).then(() => {
+        return Tag.update({ tag_name: { '$in': arr_tag } }, { '$inc': { 'tag_num': 1 } }, {upsert: false,multi: true}).then(() => {
             res.json({
                 code: 200,
                 message: '更新成功',
@@ -161,9 +162,10 @@ exports.modify = (req, res) => {
     let tagList_new = req.body.tagList_new,
         tagList_old = req.body.tagList_old,
         content = req.body.content,
+        html = req.body.html,
         title = req.body.title;
         title_old = req.body.title_old;
-    if (!tagList_new || !tagList_old || !content || !title || !title_old) {
+    if (!tagList_new || !tagList_old || !content || !title || !title_old || !html) {
         res.json({
             code: -200,
             message: '参数错误'
@@ -171,7 +173,7 @@ exports.modify = (req, res) => {
         return;
     }
 
-    let html = marked(content);
+    //let html = marked(content);
     let arr_tags = tagList_new.split('|');
     let arr_tags_old = tagList_old.split('|');
     let data = {

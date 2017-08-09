@@ -16,7 +16,7 @@
                 </div>
                 <div class="card card-answer">
                     <div class="answer-content">
-                        <div class="article-content markdown-body" v-html="addTarget(article.data.html)"></div>
+                        <div class="markdown-body editormd-preview-container" v-html="addTarget(article.data.html)"></div>
                     </div>
                 </div>
                 <div class="article-tag-index">

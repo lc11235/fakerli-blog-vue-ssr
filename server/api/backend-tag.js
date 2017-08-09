@@ -99,11 +99,12 @@ exports.recover = (req, res) => {
 };
 
 exports.modify = (req, res) => {
-    let tag_name = req.body.tag_name;
+    let tag_name = req.body.tag_name,
+        tag_name_old = req.body.tag_name_old;
     let data = {
         tag_name, update_date: moment().format('YYYY-MM-DD HH:mm:ss')
     };
-    Tag.findOneAndUpdate({ tag_name: tag_name }, data, { new: true }).then(result => {
+    Tag.findOneAndUpdate({ tag_name: tag_name_old }, data, { new: true }).then(result => {
         res.json({
             code: 200,
             message: '更新成功',

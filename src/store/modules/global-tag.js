@@ -13,8 +13,8 @@ const actions = {
             commit('receiveTagList', data.list);
         }
     },
-    async ['getTagItem']({commit, rootState: {route: {params: {tag}}}}) {
-        const {data: {data, code}} = await api.get('backend/tag/item', {tag});
+    async ['getTagItem']({commit, rootState: {route: {params: {tag_name}}}}) {
+        const {data: {data, code}} = await api.get('backend/tag/item', {tag_name});
         if(data && code === 200) {
             commit('receiveTagItem', data);
         }
@@ -25,18 +25,22 @@ const mutations = {
     ['receiveTagList'](state, payload) {
         state.lists = payload;
     },
-    ['receiveTagItem'](state, payload) {
-        state.item = payload;
+    ['receiveTagItem'](state, data) {
+        state.item = data;
     },
-    ['insertTagItem'](state, payload) {
-        state.lists = [payload].concat(state.lists);
+    ['insertTagItem'](state, data) {
+        state.item = data;
     },
-    ['updateTagItem'](state, payload) {
-        state.item = payload;
-        const index = state.lists.findIndex(ii => ii._id === payload._id);
-        if(index > -1) {
-            state.lists.splice(index, 1, payload);
-        }
+    ['updateTagItem'](state, data) {
+        state.item = data;
+    },
+    ['deleteTag'](state, tag_name) {
+        const obj = state.lists.data.find(ii => ii.tag_name === tag_name);
+        if(obj) obj.is_delete = 1;
+    },
+    ['recoverTag'] (state, tag_name) {
+        const obj = state.lists.data.find(ii => ii.tag_name === tag_name);
+        if(obj) obj.is_delete = 0;
     }
 };
 

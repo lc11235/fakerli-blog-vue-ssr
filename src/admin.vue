@@ -1,15 +1,16 @@
 <template>
     <div id="app" class="g-doc">
-        <div class="main wrap clearfix">
-            <div class="main-left">
+        <backend-menu v-if="!isLogin"></backend-menu>
+        <div class="main back-wrap">
+            <div class="back-body-wrap">
                 <div class="home-feeds cards-wrap">
                     <transition name="fade" mode="out-in">
                         <router-view :key="key" class="router"></router-view>
                     </transition>
                 </div>
             </div>
-            <backend-menu v-if="!isLogin"></backend-menu>
         </div>
+        <footer-item />
     </div>
 </template>
 
@@ -17,6 +18,7 @@
     import { mapGetters } from 'vuex';
     import NProgress from 'nprogress';
     import backendMenu from './components/backend-menu.vue';
+    import footerItem from './components/footer.vue';
 
     export default {
         name: 'backend',
@@ -35,7 +37,7 @@
             }
         },
         components: {
-            backendMenu
+            backendMenu,footerItem
         },
         watch: {
             'global.progress'(val) {

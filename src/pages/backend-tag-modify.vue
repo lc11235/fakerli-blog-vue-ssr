@@ -27,7 +27,7 @@
         data() {
             return {
                 form: {
-                    id: this.$route.params.id,
+                    tag_name_old: '',
                     tag_name: ''
                 }
             }
@@ -42,7 +42,7 @@
         },
         methods: {
             async modify() {
-                if(!this.form.cate_name) {
+                if(!this.form.tag_name) {
                     this.$store.dispatch('global/showMsg', '请将表单填写完整！');
                     return;
                 }
@@ -63,11 +63,13 @@
                 fetchInitialData(this.$store);
             } else {
                 this.form.tag_name = this.item.tag_name;
+                this.form.tag_name_old = this.item.tag_name;
             }
         },
         watch: {
             item(val) {
                 this.form.tag_name = val.tag_name;
+                this.form.tag_name_old = this.item.tag_name;
             }
         }
     }
