@@ -72,8 +72,8 @@ app.use(compression({threshold: 0}));
 // 日志
 app.use(logger('":method :url" :status :res[content-length] ":referrer" ":user-agent"'));
 // body解析中间件
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: false}));
 // cookie解析中间件
 app.use(cookieParser());
 // 设置express静态目录

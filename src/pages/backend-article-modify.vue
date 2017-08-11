@@ -70,7 +70,7 @@
         methods: {
             async modify() {
                 const content = modifyEditor.getMarkdown();
-                const html = modifyEditor.getPreviewedHTML()
+                const html = modifyEditor.getPreviewedHTML();
                 if(!this.form.title || !this.form.tagList_new || !content) {
                     this.$store.dispatch('global/showMsg', '请将表单填写完整！');
                     return;
@@ -120,7 +120,13 @@
                         ];
                     },
                     watch: true,
-                    saveHTMLToTextarea: true
+                    saveHTMLToTextarea: true,
+                    tex: true,
+                    flowChart: true,
+                    sequenceDiagram: true,
+                    taskList: true,
+                    htmlDecode: true,
+                    tocm: true
                 });
             }
         },
@@ -148,7 +154,13 @@
                         ];
                     },
                     watch: true,
-                    saveHTMLToTextarea: true
+                    saveHTMLToTextarea: true,
+                    tex: true,
+                    flowChart: true,
+                    sequenceDiagram: true,
+                    taskList: true,
+                    htmlDecode: true,
+                    tocm: true
                 });
             }
         },

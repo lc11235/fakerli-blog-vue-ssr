@@ -19,6 +19,10 @@
                     <li v-for="tagItem in tagList" v-text="tagItem" :key="tagItem"></li>
                 </ul>
             </a-input>
+            <select class="select-item" name="theme">
+                    <option value="">请选择标签</option>
+                    <option v-for="theme in previewTheme.theme" :value="theme" :key="theme">{{ theme }}</option>
+            </select>
             <div class="settings-section">
                 <div id="post-content" class="settings-item-content">
                     <textarea id="editor" name="content" class="form-control hidden" data-autosave="editor-content"></textarea>
@@ -51,7 +55,13 @@
                     content: '',
                     html: ''
                 },
-                tagList:[]
+                tagList:[],
+                theme: ['default', 'dark'],
+                previewTheme: ['default', '3024-day', '3024-night', 'ambiance', 'ambiance-mobile', 'base16-dark', 'base16-light',
+                            'blackboard', 'cobalt', 'eclipse', 'elegant', 'erlang-dark', 'lesser-dark', 'mbo,mdn-like', 'midnight',
+                            'monokai', 'neat,neo', 'night', 'paraiso-dark', 'paraiso-light', 'pastel-on-dark', 'rubyblue', 'solarized',
+                            'the-matrix', 'tomorrow-night-eighties', 'twilight', 'vibrant-ink', 'xq-dark', 'xq-light'],
+                editorTheme: ['default', 'dark']
             }
         },
         components: {
@@ -100,16 +110,17 @@
                 markdown: "",
                 placeholder: '请输入内容...',
                 path: '/static/editor.md/lib/',
-                toolbarIcons(){
-                    return [
-                        "bold", "italic", "quote", "|",
-                        "list-ul", "list-ol", "hr", "|",
-                        "link", "reference-link", "image", "code", "table", "|",
-                        "watch", "preview", "fullscreen"
-                    ];
-                },
+                theme: "default | dark",
+                previewTheme: "default | dark",
+                editorTheme: "default",
                 watch: true,
-                saveHTMLToTextarea: true
+                saveHTMLToTextarea: true,
+                tex: true,
+                flowChart: true,
+                sequenceDiagram: true,
+                taskList: true,
+                tocm: true,
+                htmlDecode: true
             });
         }
     }
