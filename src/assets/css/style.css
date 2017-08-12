@@ -1,5 +1,6 @@
 html {
-    overflow-y: scroll; 
+    overflow-x: hidden;
+    overflow-y: auto;
     background: #ebf0f0;
 }
 /* 清除内外边距 */
@@ -719,6 +720,17 @@ article .entry-content-archive .date{
     transition: .4s cubic-bezier(.18, .81, .3, .89);
 }
 
+#backmenu.hide{
+    -webkit-transform: translateX(-100%);
+    transform: translateX(-100%);
+}
+
+.back-article{
+    width: 100%;
+    background-color: #3f3f3f;
+    color: #999999;
+}
+
 .back-wrap{
     width: 1350px;
     margin-left: 250px;
@@ -727,6 +739,19 @@ article .entry-content-archive .date{
 
 .back-body-wrap {
     min-height: calc(100vh - 50px - 80px);
+}
+
+.card-question-head {
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    position: relative;
+    display: block;
+}
+
+#backbodywrap{
+    width: 1200px;
+    margin: 0 auto;
 }
 
 /*自己引入*/    

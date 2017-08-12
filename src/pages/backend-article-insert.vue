@@ -18,16 +18,21 @@
                 <ul class="tag-list">
                     <li v-for="tagItem in tagList" v-text="tagItem" :key="tagItem"></li>
                 </ul>
-            </a-input>
-            <select class="select-item" name="theme">
-                    <option value="">请选择标签</option>
-                    <option v-for="theme in previewTheme.theme" :value="theme" :key="theme">{{ theme }}</option>
-            </select>
+            </a-input>            
             <div class="settings-section">
                 <div id="post-content" class="settings-item-content">
                     <textarea id="editor" name="content" class="form-control hidden" data-autosave="editor-content"></textarea>
                 </div>
             </div>
+            <select class="select-item" name="theme" v-model="selectTheme" @change="themeChange(selectTheme, 'theme')">
+                    <option v-for="theme in theme" :value="theme" :key="theme">{{ theme }}</option>
+            </select>
+            <select class="select-item" name="previewTheme" v-model="selectPreviewTheme" @change="themeChange(selectPreviewTheme, 'previewtheme')">
+                    <option v-for="theme in previewTheme" :value="theme" :key="theme">{{ theme }}</option>
+            </select>
+            <select class="select-item" name="editorTheme" v-model="selectEditorTheme" @change="themeChange(selectEditorTheme, 'editortheme')">
+                    <option v-for="theme in editorTheme" :value="theme" :key="theme">{{ theme }}</option>
+            </select>
         </div>
         <div class="settings-footer clearfix">
             <a @click="insert" href="javascript:;" class="btn btn-yellow">添加文章</a>
@@ -55,13 +60,16 @@
                     content: '',
                     html: ''
                 },
-                tagList:[],
+                selectTheme: '',
+                selectPreviewTheme: '',
+                selectEditorTheme: '',
+                tagList: [],
                 theme: ['default', 'dark'],
-                previewTheme: ['default', '3024-day', '3024-night', 'ambiance', 'ambiance-mobile', 'base16-dark', 'base16-light',
+                editorTheme: ['default', '3024-day', '3024-night', 'ambiance', 'ambiance-mobile', 'base16-dark', 'base16-light',
                             'blackboard', 'cobalt', 'eclipse', 'elegant', 'erlang-dark', 'lesser-dark', 'mbo,mdn-like', 'midnight',
                             'monokai', 'neat,neo', 'night', 'paraiso-dark', 'paraiso-light', 'pastel-on-dark', 'rubyblue', 'solarized',
                             'the-matrix', 'tomorrow-night-eighties', 'twilight', 'vibrant-ink', 'xq-dark', 'xq-light'],
-                editorTheme: ['default', 'dark']
+                previewTheme: ['default', 'dark']
             }
         },
         components: {
@@ -97,9 +105,32 @@
                     this.tagList.push(this.form.tag);
                     this.form.tagString = this.tagList.join("|");
                 }
+            },
+            themeChange(themeTitle, source){
+                if(source === 'theme'){
+                    console.log(themeTitle);
+                    postEditor.setTheme(themeTitle);
+                } else if(source === 'previewtheme'){
+                    console.log(themeTitle);
+                    postEditor.setPreviewTheme(themeTitle);
+                } else if(source === 'editortheme'){
+                    console.log(themeTitle);
+                    postEditor.setEditorTheme(themeTitle);
+                }
             }
         },
         mounted() {
+            $('#backmenu').addClass('hide');
+            $('#backmain').removeClass('main');
+            $('#backmain').removeClass('back-wrap');
+            $('#backmain').addClass('back-article');
+            $('#backbodywrap').removeClass('back-body-wrap');
+            $('body').everyTime('100ms', 'A', function() {
+                if($('.editormd-preview-close-btn').length >0){
+                    $('.editormd-preview-close-btn').hide();
+                    $('body').stopTime('A');
+                }
+            });
             if(this.tags.length <= 0){
                 fetchInitIalData(this.$store);
             }
@@ -113,6 +144,16 @@
                 theme: "default | dark",
                 previewTheme: "default | dark",
                 editorTheme: "default",
+                toolbarIcons() {
+                    return [
+                        "undo", "redo", "|",
+                        "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|",
+                        "list-ul", "list-ol", "hr", "|",
+                        "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "emoji", "html-entities", "pagebreak", "|",
+                        "goto-line", "watch", "preview", "fullscreen", "clear", "search", "|",
+                        "help", "info"
+                    ]
+                },
                 watch: true,
                 saveHTMLToTextarea: true,
                 tex: true,

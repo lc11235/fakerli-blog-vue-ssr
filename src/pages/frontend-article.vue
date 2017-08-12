@@ -7,7 +7,7 @@
                 </div>
             </template>
             <template v-else-if="article.data.title">
-                <div class="card card-question-head">
+                <div class="card-question-head">
                     <div class="question-content">
                         <h2 class="question-title">
                             <router-link :to="'/article/' +article.data.title" v-text="article.data.title" class="question-title-link"></router-link>

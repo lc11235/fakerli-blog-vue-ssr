@@ -11,8 +11,8 @@
                 <div class="list-num">{{ tag.tag_num }}</div>
                 <div class="list-action">
                     <router-link :to="'/backend/tag/modify/' + tag.tag_name" class="badge badge-success">编辑</router-link>
-                    <a v-if="item.is_delete" @click="recover(tag.tag_name)" href="javascript:;">恢复</a>
-                    <a v-else @click="deletes(item.tag_name)" href="javascript:;">删除</a>
+                    <a v-if="tag.is_delete" @click="recover(tag.tag_name)" href="javascript:;">恢复</a>
+                    <a v-else @click="deletes(tag.tag_name)" href="javascript:;">删除</a>
                 </div>
             </div>
         </div>

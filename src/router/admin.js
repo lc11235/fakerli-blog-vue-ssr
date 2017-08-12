@@ -35,6 +35,19 @@ const guardRoute = (to, from, next) => {
     if(!token) {
         next('/');
     } else {
+        if(to.path === '/backend/article/insert'){
+            $('#backmenu').addClass('hide');
+            $('#backmain').removeClass('main');
+            $('#backmain').removeClass('back-wrap');
+            $('#backmain').addClass('back-article');
+            $('#backbodywrap').removeClass('back-body-wrap');
+        } else {
+            $('#backmenu').removeClass('hide');
+            $('#backmain').addClass('main');
+            $('#backmain').addClass('back-wrap');
+            $('#backmain').removeClass('back-article');
+            $('#backbodywrap').addClass('back-body-wrap');
+        }
         next();
     }
 };

@@ -1,13 +1,11 @@
 <template>
     <div id="app" class="g-doc">
         <backend-menu v-if="!isLogin"></backend-menu>
-        <div class="main back-wrap">
-            <div class="back-body-wrap">
-                <div class="home-feeds cards-wrap">
-                    <transition name="fade" mode="out-in">
-                        <router-view :key="key" class="router"></router-view>
-                    </transition>
-                </div>
+        <div id="backmain" class="main back-wrap">
+            <div id="backbodywrap" class="back-body-wrap">
+                <transition name="fade" mode="out-in">
+                    <router-view :key="key" class="router"></router-view>
+                </transition>
             </div>
         </div>
         <footer-item />
