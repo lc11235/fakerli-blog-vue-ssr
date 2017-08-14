@@ -21,8 +21,10 @@
             handleBackTop() {
                 let top = this.scrollTop;
                 this.scrollTop = 0;
+                let index = 30;
+                let i = 1;
                 let timer = setInterval(() => {
-                    top -= Math.abs(top * 0.1);
+                    top -= 100 + index *(i++);
                     if(top <= 1){
                         top = 0;
                         clearInterval(timer);
