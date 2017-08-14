@@ -9,8 +9,8 @@
  */
 exports.list = (req, res, mongoDB, sort) => {
     sort = sort || '-_id';
-    let limit = req.body.limit,
-        page = req.body.page;
+    let limit = req.body.limit || req.query.limit,
+        page = req.body.page || req.query.page;
     page = parseInt(page, 10);
     limit = parseInt(limit, 10);
     if (!page) page = 1;

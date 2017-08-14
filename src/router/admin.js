@@ -35,7 +35,7 @@ const guardRoute = (to, from, next) => {
     if(!token) {
         next('/');
     } else {
-        if(to.path === '/backend/article/insert'){
+        if(to.path === '/backend/article/insert' || to.path === '/backend/article/modify'){
             $('#backmenu').addClass('hide');
             $('#backmain').removeClass('main');
             $('#backmain').removeClass('back-wrap');

@@ -40,6 +40,11 @@
                     }else {
                         $('#header').removeClass('fixed');
                     }
+                    if(document.body.scrollTop >= 200){
+                        $('#post-toc').addClass('fixed');
+                    } else {
+                        $('#post-toc').removeClass('fixed');
+                    }
                 }, 100);
             }
         },

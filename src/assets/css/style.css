@@ -754,6 +754,47 @@ article .entry-content-archive .date{
     margin: 0 auto;
 }
 
+.post-widget{
+    width: 400px;
+    height: 600px;
+    position: fixed;
+    top: 280px;
+    right: 10px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background: #fff;
+    z-index: 100;
+    padding: 18px;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-bottom: none;
+    -webkit-transition: .4s cubic-bezier(.18, .81, .3, .89);
+    transition: .4s cubic-bezier(.18, .81, .3, .89);
+}
+
+.post-widget.fixed{
+    top: 76px;
+}
+
+.post-widget.hide{
+    background: transparent;
+    width: 40px;
+    height: 65px;
+    right: 370px;
+    border: 0;
+}
+
+#toc-main.hide{
+    display: none;
+}
+
+.toc-icon{
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    color: #000;
+}
+
 /*自己引入*/    
 nav ul, nav ol {
     list-style: none;

@@ -28,6 +28,7 @@
     import api from '~api';
     import { mapGetters } from 'vuex';
     const fetchInitialData = async (store, config = { page: 1}) => {
+        const base = {...config, limit: 10};
         await store.dispatch('backend/article/getArticleList', config);
     };
 

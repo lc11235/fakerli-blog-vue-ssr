@@ -53,7 +53,8 @@
                     tagList_old: '',
                     tagList_new: '',
                     content: '',
-                    html:''
+                    html:'',
+                    tocHTML: ''
                 },
                 tagList: []
             }
@@ -71,12 +72,14 @@
             async modify() {
                 const content = modifyEditor.getMarkdown();
                 const html = modifyEditor.getPreviewedHTML();
+                const tocHtml = document.querySelectorAll('.markdown-toc')[0].outerHTML;
                 if(!this.form.title || !this.form.tagList_new || !content) {
                     this.$store.dispatch('global/showMsg', '请将表单填写完整！');
                     return;
                 }
                 this.form.content = content;
                 this.form.html = html;
+                this.form.tocHTML = tocHtml;
                 const {data: {message, code, data}} = await api.post('backend/article/modify', this.form);
                 if(code === 200) {
                     this.$store.dispatch('global/showMsg', {
@@ -95,6 +98,17 @@
             }
         },
         mounted () {
+            $('#backmenu').addClass('hide');
+            $('#backmain').removeClass('main');
+            $('#backmain').removeClass('back-wrap');
+            $('#backmain').addClass('back-article');
+            $('#backbodywrap').removeClass('back-body-wrap');
+            $('body').everyTime('500ms', 'A', function() {
+                if($('.editormd-preview-close-btn').length >0){
+                    $('.editormd-preview-close-btn').hide();
+                    $('body').stopTime('A');
+                }
+            });
             if(this.tags.length <= 0 || !this.item.data) {
                 fetchInitialData(this.$store);
             } else {
@@ -113,10 +127,12 @@
                     path: '/static/editor.md/lib/',
                     toolbarIcons() {
                         return [
-                            "bold", "italic", "quote", "|",
+                            "undo", "redo", "|",
+                            "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|",
                             "list-ul", "list-ol", "hr", "|",
-                            "link", "reference-link", "image", "code", "table", "|",
-                            "watch", "preview", "fullscreen"
+                            "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "emoji", "html-entities", "pagebreak", "|",
+                            "goto-line", "watch", "preview", "fullscreen", "clear", "search", "|",
+                            "help", "info"
                         ];
                     },
                     watch: true,
@@ -126,7 +142,7 @@
                     sequenceDiagram: true,
                     taskList: true,
                     htmlDecode: true,
-                    tocm: true
+                    emoji: true
                 });
             }
         },
@@ -147,10 +163,12 @@
                     path: '/static/editor.md/lib/',
                     toolbarIcons() {
                         return [
-                            "bold", "italic", "quote", "|",
+                            "undo", "redo", "|",
+                            "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|",
                             "list-ul", "list-ol", "hr", "|",
-                            "link", "reference-link", "image", "code", "table", "|",
-                            "watch", "preview", "fullscreen"
+                            "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "emoji", "html-entities", "pagebreak", "|",
+                            "goto-line", "watch", "preview", "fullscreen", "clear", "search", "|",
+                            "help", "info"
                         ];
                     },
                     watch: true,
@@ -160,7 +178,7 @@
                     sequenceDiagram: true,
                     taskList: true,
                     htmlDecode: true,
-                    tocm: true
+                    emoji: true
                 });
             }
         },

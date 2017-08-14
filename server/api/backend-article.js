@@ -67,11 +67,13 @@ exports.insert = (req, res) => {
         //html = marked(content),
         html = req.body.html,
         title = req.body.title;
+        toc = req.body.tocHTML;
     let arr_tag = tagString.split("|");
     let data = {
         title,
         content,
         html,
+        toc,
         tags: arr_tag,
         visit: 0,
         create_date: moment().format('YYYY-MM-DD HH:mm:ss'),
@@ -163,6 +165,7 @@ exports.modify = (req, res) => {
         tagList_old = req.body.tagList_old,
         content = req.body.content,
         html = req.body.html,
+        toc = req.body.tocHTML;
         title = req.body.title;
         title_old = req.body.title_old;
     if (!tagList_new || !tagList_old || !content || !title || !title_old || !html) {
@@ -181,6 +184,7 @@ exports.modify = (req, res) => {
         $set: { tags: arr_tags },
         content,
         html,
+        toc,
         update_date: moment().format('YYYY-MM-DD HH:mm:ss')
     };
     

@@ -16,7 +16,7 @@
                 </div>
                 <div class="card card-answer">
                     <div class="answer-content">
-                        <div class="markdown-body editormd-preview-container" v-html="addTarget(article.data.html)"></div>
+                        <div class="markdown-body editormd-preview-container" v-html="addTarget(article.data.html.replace(article.data.toc, ''))"></div>
                     </div>
                 </div>
                 <div class="article-tag-index">
@@ -36,6 +36,16 @@
                 </div>
             </template>
         </div>
+        
+        <aside class="post-widget" id="post-toc">
+            <a @click="visible" href="javascript:;" class="toc-icon" id="toc-visible">
+                <i class="fa fa-lg fa-bars"></i>
+            </a>
+            <div id="toc-main">
+                <h4>TOC</h4>
+                <div class="markdown-body editormd-preview-container" v-html="addTarget(article.data.toc)"></div>
+            </div>           
+        </aside>
     </div>
 </template>
 
@@ -73,7 +83,16 @@
             addTarget(content) {
                 if(!content) return '';
                 return content.replace(/<a(.*?)href="http/g, '<a$1target="_blank" href="http');
-            }
+            },
+            visible() {
+                if($('#toc-main.hide').length >0 && $('#post-toc.hide').length >0){
+                    $('#toc-main').removeClass('hide');
+                    $('#post-toc').removeClass('hide');
+                } else {
+                    $('#toc-main').addClass('hide');
+                    $('#post-toc').addClass('hide');
+                }
+            },
         },
         mounted () {
             if(!this.article){

@@ -58,7 +58,8 @@
                     tag: '',
                     tagString: '',
                     content: '',
-                    html: ''
+                    html: '',
+                    tocHTML: '',
                 },
                 selectTheme: '',
                 selectPreviewTheme: '',
@@ -84,12 +85,14 @@
             async insert(){
                 const content = postEditor.getMarkdown();
                 const html = postEditor.getPreviewedHTML();
+                const tocHtml = document.querySelectorAll('.markdown-toc')[0].outerHTML;
                 if(!this.form.title || !this.form.tagString || !content){
                     this.$store.dispatch('global/showMsg', '请将表单填写完整！');
                     return;
                 }
                 this.form.content = content;
                 this.form.html = html;
+                this.form.tocHTML = tocHtml;
                 const {data: {message, code, data}} = await api.post('backend/article/insert', this.form);
                 if(code === 200) {
                     this.$store.dispatch('global/showMsg', {
@@ -160,8 +163,8 @@
                 flowChart: true,
                 sequenceDiagram: true,
                 taskList: true,
-                tocm: true,
-                htmlDecode: true
+                htmlDecode: 'style, script, iframe',
+                emoji: true
             });
         }
     }

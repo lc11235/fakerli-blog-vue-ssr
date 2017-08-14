@@ -15,7 +15,12 @@ const state = {
 };
 
 const actions = {
-    async ['getArticleList'] ({commit, rootState: {route: { path }}}, config) {
+    async ['getArticleList'] ({commit, rootState: {global, route: { fullPath }}}, config) {
+        const path = fullPath;
+        if(state.lists.data.length > 0 && path === state.lists.path && config.page === 1){
+            global.progress = 100;
+            return;
+        }
         const {data: {data, code}} = await api.get('backend/article/list', config);
         if(data && code === 200) {
             commit('receiveArticleList', {
@@ -25,7 +30,7 @@ const actions = {
             });
         }
     },
-    async ['getArticleItem'] ({commit, rootState: {route: {path, params: {title}}}}) {
+    async ['getArticleItem'] ({commit, rootState: {global, route: {path, params: {title}}}}) {
         if(path === state.item.path) {
             global.progress = 100;
             return;
