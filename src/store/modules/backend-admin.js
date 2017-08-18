@@ -25,8 +25,8 @@ const actions = {
             });
         }
     },
-    async ['getAdminItem'] ({commit, rootState: {route: {path, params: {id}}}}) {
-        const {data: {data, code}} = await api.get('backend/admin/item', {id});
+    async ['getAdminItem'] ({commit, rootState: {route: {path, params: {username}}}}) {
+        const {data: {data, code}} = await api.get('backend/admin/item', {username});
         if(data && code === 200){
             commit('receiveAdminItem', {
                 data,
@@ -62,12 +62,12 @@ const mutations = {
             state.lists.data.splice(index, 1, payload);
         }
     },
-    ['deleteAdmin'](state, id){
-        const obj = state.lists.data.find(ii => ii._id === id);
+    ['deleteAdmin'](state, username){
+        const obj = state.lists.data.find(ii => ii.username === username);
         if(obj) obj.is_delete = 1;
     },
-    ['recoverAdmin'](state, id){
-        const obj = state.lists.data.find(ii => ii._id === id);
+    ['recoverAdmin'](state, username){
+        const obj = state.lists.data.find(ii => ii.username === username);
         if(obj) obj.is_delete = 0;
     }
 };

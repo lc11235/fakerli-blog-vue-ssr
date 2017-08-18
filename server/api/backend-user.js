@@ -33,7 +33,7 @@ exports.getList = (req, res) => {
  */
 exports.getItem = (req, res) => {
     let username = req.query.username;
-    if (!id) {
+    if (!username) {
         res.json({
             code: -200,
             message: '参数错误'

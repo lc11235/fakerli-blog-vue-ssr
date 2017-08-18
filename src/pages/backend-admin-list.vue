@@ -1,22 +1,7 @@
 <template>
     <div class="settings-main card">
         <div class="settings-main-content">
-            <div class="list-section list-header">
-                <div class="list-username">用户名</div>
-                <div class="list-email">邮箱</div>
-                <div class="list-date">时间</div>
-                <div class="list-action">操作</div>
-            </div>
-            <div v-for="item in admin.data" :key="item.username" class="list-section">
-                <div class="list-username">{{ item.username }}</div>
-                <div class="list-email">{{ item.email }}</div>
-                <div class="list-date">{{ item.update_date | timeYmd }}</div>
-                <div class="list-action">
-                    <router-link :to="'/backend/admin/modify' + item._id" class="badge badge-success">编辑</router-link>
-                    <a v-if="item.is_delete" @click="recover(item._id)" href="javascript:;">恢复</a>
-                    <a v-else @click="deletes(item._id)" href="javascript:;">删除</a>
-                </div>
-            </div>
+            <Table border :columns="columns" :data="data"></Table>
         </div>
         <div v-if="admin.hasNext" class="settings-footer clearfix">
             <a @click="loadMore()" class="admin-load-more" href="javascript:;">加载更多</a>
@@ -33,6 +18,75 @@
 
     export default {
         name: 'backend-admin-list',
+        data () {
+            return {
+                columns: [
+                    {
+                        title: '用户名',
+                        key: 'username'
+                    },
+                    {
+                        title: '邮箱',
+                        key: 'email'
+                    },
+                    {
+                        title: '最后更新时间',
+                        key: 'update_date'
+                    },
+                    {
+                        title: '操作',
+                        key: 'action',
+                        width: 150,
+                        align: 'center',
+                        render: (h, params) => {
+                            let buttons = [];
+                            let modifyButton = h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        marginRight: '5px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.go(params.index);
+                                        }
+                                    }
+                                }, '编辑'),
+                                recoverButton =h('Button', {
+                                    props: {
+                                        type: 'error',
+                                        size: 'small'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.recover(params.index);
+                                        }
+                                    }
+                                }, '恢复') ,
+                                deleteButton = h('Button', {
+                                    props: {
+                                        type: 'error',
+                                        size: 'small'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.deletes(params.index);
+                                        }
+                                    }
+                                }, '删除');
+                            if(this.data[params.index].is_delete){
+                                return h('div', [modifyButton, recoverButton]);
+                            } else{
+                                return h('div', [modifyButton, deleteButton]);
+                            }
+                        }
+                    }
+                ],
+                data: []
+            };
+        },
         computed: {
             ...mapGetters({
                 admin: 'backend/admin/getAdminList'
@@ -42,30 +96,52 @@
             loadMore(page = this.admin.page + 1) {
                 fetchInitialData(this.$store, {page});
             },
-            async recover(id) {
-                const {data: {code, message}} = await api.get('backend/admin/recover', {id});
+            async recover(index) {
+                let username = this.data[index].username;
+                const {data: {code, message}} = await api.get('backend/admin/recover', {username});
                 if(code === 200) {
-                    this.$store.dispatch('global/showMsg', {
-                        type: 'success',
-                        content: message
+                    this.$Message.success({
+                        content: message,
+                        duration: 3
                     });
-                    this.$store.commit('backend/admin/recoverAdmin', id);
+                    this.$store.commit('backend/admin/recoverAdmin', username);
+                } else {
+                    this.$Message.error({
+                        content: message,
+                        duration: 3
+                    });
                 }
             },
-            async deletes(id) {
-                const {data: {code, message}} = await api.get('backend/admin/delete', {id});
+            async deletes(index) {
+                let username = this.data[index].username;
+                const {data: {code, message}} = await api.get('backend/admin/delete', {username});
                 if(code === 200) {
-                    this.$store.dispatch('global/showMsg', {
-                        type: 'success',
-                        content: message
+                    this.$Message.success({
+                        content: message,
+                        duration: 3
                     });
-                    this.$store.commit('backend/admin/deleteAdmin', id);
+                    this.$store.commit('backend/admin/deleteAdmin', username);
+                } else {
+                    this.$Message.error({
+                        content: message,
+                        duration: 3
+                    });
                 }
+            },
+            go(index) {
+                this.$router.push({name:'admin_modify', params: {username: this.data[index].username}});
             }
         },
         mounted() {
             if(this.admin.data.length <= 0) {
                 fetchInitialData(this.$store);
+            } else {
+                this.data = this.admin.data;
+            }
+        },
+        watch: {
+            admin(val) {
+                this.data = val.data;
             }
         }
     }

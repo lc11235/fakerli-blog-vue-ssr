@@ -35,11 +35,11 @@ const mutations = {
         state.item = data;
     },
     ['deleteTag'](state, tag_name) {
-        const obj = state.lists.data.find(ii => ii.tag_name === tag_name);
+        const obj = state.lists.find(ii => ii.tag_name === tag_name);
         if(obj) obj.is_delete = 1;
     },
     ['recoverTag'] (state, tag_name) {
-        const obj = state.lists.data.find(ii => ii.tag_name === tag_name);
+        const obj = state.lists.find(ii => ii.tag_name === tag_name);
         if(obj) obj.is_delete = 0;
     }
 };

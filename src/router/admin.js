@@ -60,7 +60,7 @@ const router = new VueRouter({
         {name: 'login', path: '/backend', component: login},
 
         {name: 'admin_list', path: '/backend/admin/list', component: adminList, meta: {scrollToTop: true}, beforeEnter: guardRoute},
-        {name: 'admin_modify', path: '/backend/admin/modify/:id', component: adminModify, meta: {scrollToTop: true}, beforeEnter: guardRoute},
+        {name: 'admin_modify', path: '/backend/admin/modify/:username', component: adminModify, meta: {scrollToTop: true}, beforeEnter: guardRoute},
 
         {name: 'article_list', path: '/backend/article/list', component: aritcleList, meta: {scrollToTop: true}, beforeEnter: guardRoute},
         {name: 'article_insert', path: '/backend/article/insert', component: articleInsert, meta: {scrollToTop: true}, beforeEnter: guardRoute},
