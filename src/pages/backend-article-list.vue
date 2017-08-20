@@ -1,7 +1,9 @@
 <template>
     <div class="settings-main card">
-        <div class="settings-main-content">
-            <div class="list-section list-header">
+        <div>
+            <Table border :columns="columns" :data="data"></Table>
+        </div>
+        <div class="list-section list-header">
                 <div class="list-title">标题</div>
                 <div class="list-tag">标签</div>
                 <div class="list-date">最后更新</div>
@@ -17,7 +19,6 @@
                     <a v-else @click="deletes(item.title, item.tags.join('|'))" href="javascript:;">删除</a>
                 </div>
             </div>
-        </div>
         <div v-if="topics.hasNext" class="settings-footer clearfix">
             <a @click="loadMore()" class="admin-load-more" href="javascript:;">加载更多</a>
         </div>
@@ -34,6 +35,78 @@
 
     export default {
         name: 'backend-article-list',
+        data () {
+            return {
+                columns: [
+                    {
+                        title: '标题',
+                        key: 'title'
+                    },
+                    {
+                        title: '标签',
+                        key: 'tags[0]'
+                    },
+                    {
+                        title: '最后更新日期',
+                        key: 'update_date',
+                        render: (h, params) => {
+                            return this.data[params.index].update_date | timeAgo;
+                        }
+                    },
+                    {
+                        title: '操作',
+                        key: 'action',
+                        width: 150,
+                        align: 'center',
+                        render: (h, params) => {
+                            let buttons = [];
+                            let modifyButton = h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        marginRight: '5px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.go(params.index);
+                                        }
+                                    }
+                                }, '编辑'),
+                                recoverButton =h('Button', {
+                                    props: {
+                                        type: 'error',
+                                        size: 'small'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.recover(params.index);
+                                        }
+                                    }
+                                }, '恢复') ,
+                                deleteButton = h('Button', {
+                                    props: {
+                                        type: 'error',
+                                        size: 'small'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.deletes(params.index);
+                                        }
+                                    }
+                                }, '删除');
+                            if(this.data[params.index].is_delete){
+                                return h('div', [modifyButton, recoverButton]);
+                            } else{
+                                return h('div', [modifyButton, deleteButton]);
+                            }
+                        }
+                    }
+                ],
+                data: []
+            }
+        },
         computed : {
             ...mapGetters({
                 topics: 'backend/article/getArticleList'
@@ -67,13 +140,14 @@
         mounted() {
             if(this.topics.data.length <= 0){
                 fetchInitialData(this.$store);
+            } else {
+                this.data = this.topics.data;
             }
         },
-        beforeRouteEnter(to, from, next){
-            //does NOT have access to `this` component instance
-            next(vm => {
-                fetchInitialData(vm.$store);
-            });
+        watch: {
+            topics(val) {
+                this.data = val.data;
+            }
         }
     }
 </script>

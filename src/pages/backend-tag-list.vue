@@ -1,6 +1,6 @@
 <template>
     <div class="settings-main card">
-        <div class="settings-main-content">
+        <div>
             <Table border :columns="columns" :data="data"></Table>
         </div>
     </div>
