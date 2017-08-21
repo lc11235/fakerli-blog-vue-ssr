@@ -2,40 +2,39 @@
     <div class="settings-main card">
         <div class="settings-main-content">
             <a-input title="标题">
-                <input type="text" v-model="form.title" placeholder="标题" class="base-input" name="title">
+                <input type="text" v-model="form.title" placeholder="标题" class="base-input" name="title" style="width: 70%">
                 <span class="input-info error">请输入标题</span>
             </a-input>
             <a-input title="标签" :classes="'select-item-wrap'">
                 <i class="icon icon-arrow-down"></i>
-                <select v-model="form.tag" class="select-item" name="tags">
-                    <option value="">请选择标签</option>
-                    <option v-for="tag in tags" :value="tag.tag_name" :key="tag.tag_name">{{ tag.tag_name }}</option>
-                </select>
-                <a @click="addTagList" href="javascript:;" class="btn btn-yellow">添加标签</a>
+                <Select v-model="form.tag" style="width: 70%">
+                    <Option v-for="tag in tags" :value="tag.tag_name" :key="tag.tag_name">{{ tag.tag_name }}</Option>
+                </Select>
+                <Button @click="addTagList" type="success" shape="circle">添加标签</Button>
                 <span class="input-info error">请输入标签</span>
             </a-input>
             <a-input title="已有标签" v-if="tagList.length > 0">
-                <ul class="tag-list">
-                    <li v-for="tagItem in tagList" v-text="tagItem" :key="tagItem"></li>
-                </ul>
-            </a-input>            
-            <div class="settings-section">
+                <Tag v-for="tagItem in tagList" :key="tagItem" type="dot" closable @on-close="closeTag" color="blue">{{ tagItem }}</Tag>
+            </a-input>
+            <div>
+                <Select class="select-item" name="theme" v-model="selectTheme" @on-change="themeChange(selectTheme, 'theme')" style="width: 30%">
+                    <Option v-for="theme in theme" :value="theme" :key="theme">{{ theme }}</Option>
+                </Select>
+                <Select class="select-item" name="previewTheme" v-model="selectPreviewTheme" @on-change="themeChange(selectPreviewTheme, 'previewtheme')" style="width: 30%">
+                    <Option v-for="theme in previewTheme" :value="theme" :key="theme">{{ theme }}</Option>
+                </Select>
+                <Select class="select-item" name="editorTheme" v-model="selectEditorTheme" @on-change="themeChange(selectEditorTheme, 'editortheme')" style="width: 30%">
+                    <Option v-for="theme in editorTheme" :value="theme" :key="theme">{{ theme }}</Option>
+                </Select>
+            </div>
+            <div class="settings-section" style="padding-bottom:0">
                 <div id="post-content" class="settings-item-content">
                     <textarea id="editor" name="content" class="form-control hidden" data-autosave="editor-content"></textarea>
                 </div>
             </div>
-            <select class="select-item" name="theme" v-model="selectTheme" @change="themeChange(selectTheme, 'theme')">
-                    <option v-for="theme in theme" :value="theme" :key="theme">{{ theme }}</option>
-            </select>
-            <select class="select-item" name="previewTheme" v-model="selectPreviewTheme" @change="themeChange(selectPreviewTheme, 'previewtheme')">
-                    <option v-for="theme in previewTheme" :value="theme" :key="theme">{{ theme }}</option>
-            </select>
-            <select class="select-item" name="editorTheme" v-model="selectEditorTheme" @change="themeChange(selectEditorTheme, 'editortheme')">
-                    <option v-for="theme in editorTheme" :value="theme" :key="theme">{{ theme }}</option>
-            </select>
         </div>
         <div class="settings-footer clearfix">
-            <a @click="insert" href="javascript:;" class="btn btn-yellow">添加文章</a>
+            <Button @click="insert" type="success" shape="circle">添加文章</Button>
         </div>
     </div>
 </template>
@@ -111,15 +110,16 @@
             },
             themeChange(themeTitle, source){
                 if(source === 'theme'){
-                    console.log(themeTitle);
                     postEditor.setTheme(themeTitle);
                 } else if(source === 'previewtheme'){
-                    console.log(themeTitle);
                     postEditor.setPreviewTheme(themeTitle);
                 } else if(source === 'editortheme'){
-                    console.log(themeTitle);
                     postEditor.setEditorTheme(themeTitle);
                 }
+            },
+            closeTag(event, name) {
+                const index = this.tagList.indexOf(name);
+                this.tagList.splice(index, 1);
             }
         },
         mounted() {
@@ -140,7 +140,7 @@
             // eslint-disable-next-line
             window.postEditor = editormd("post-content", {
                 width: "100%",
-                height: 500,
+                height: 600,
                 markdown: "",
                 placeholder: '请输入内容...',
                 path: '/static/editor.md/lib/',
