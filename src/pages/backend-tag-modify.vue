@@ -8,7 +8,7 @@
         </div>
         <div class="settings-footer clearfix">
             <router-link to="/backend/tag/list" class="btn btn-blur">返回</router-link>
-            <a @click="modify" href="javascript:;" class="btn btn-yellow">编辑标签</a>
+            <Button @click="modify" type="success" shape="circle">编辑标签</Button>
         </div>
     </div>
 </template>

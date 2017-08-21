@@ -7,7 +7,7 @@
             </a-input>
         </div>
         <div class="settings-footer clearfix">
-            <a @click="insert" href="javascript:;" class="btn btn-yellow">添加标签</a>
+            <Button @click="insert" type="success" shape="circle">添加标签</Button>
         </div>
     </div>
 </template>

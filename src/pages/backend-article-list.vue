@@ -3,22 +3,6 @@
         <div>
             <Table border :columns="columns" :data="data"></Table>
         </div>
-        <div class="list-section list-header">
-                <div class="list-title">标题</div>
-                <div class="list-tag">标签</div>
-                <div class="list-date">最后更新</div>
-                <div class="list-action">操作</div>
-            </div>
-            <div v-for="item in topics.data" :key="item.title" class="list-section">
-                <div class="list-title">{{ item.title }}</div>
-                <div class="list-tag">{{ item.tags[0] }}</div>
-                <div class="list-date">{{ item.update_date | timeAgo }}</div>
-                <div class="list-action">
-                    <router-link :to="'/backend/article/modify/' + item.title" class="badge badge-success">编辑</router-link>
-                    <a v-if="item.is_delete" @click="recover(item.title, item.tags.join('|'))" href="javascript:;">恢复</a>
-                    <a v-else @click="deletes(item.title, item.tags.join('|'))" href="javascript:;">删除</a>
-                </div>
-            </div>
         <div v-if="topics.hasNext" class="settings-footer clearfix">
             <a @click="loadMore()" class="admin-load-more" href="javascript:;">加载更多</a>
         </div>
@@ -27,6 +11,7 @@
 
 <script lang="babel">
     import api from '~api';
+    import {timeAgo} from '../filters';
     import { mapGetters } from 'vuex';
     const fetchInitialData = async (store, config = { page: 1}) => {
         const base = {...config, limit: 10};
@@ -40,17 +25,43 @@
                 columns: [
                     {
                         title: '标题',
-                        key: 'title'
+                        key: 'title',
+                        align: 'center'
                     },
                     {
                         title: '标签',
-                        key: 'tags[0]'
+                        key: 'tagName',
+                        align: 'center',
+                        render: (h, params) => {
+                            let _this = this;
+                            let buttons = this.data[params.index].tags.map(function (item) {
+                                return h('Button', {
+                                        props: {
+                                            type: 'primary',
+                                            size: 'small'
+                                        },
+                                        style: {
+                                            marginRight: '5px',
+                                            marginBottom: '2px'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                _this.goItem(item);
+                                            }
+                                        }
+                                }, item);
+                            });
+                            return h('div', buttons);
+                        }
                     },
                     {
                         title: '最后更新日期',
                         key: 'update_date',
+                        align: 'center',
                         render: (h, params) => {
-                            return this.data[params.index].update_date | timeAgo;
+                            return h('div', [
+                                h('span',  timeAgo(this.data[params.index].update_date))
+                            ]);
                         }
                     },
                     {
@@ -59,7 +70,6 @@
                         width: 150,
                         align: 'center',
                         render: (h, params) => {
-                            let buttons = [];
                             let modifyButton = h('Button', {
                                     props: {
                                         type: 'primary',
@@ -116,25 +126,45 @@
             loadMore(page = this.topics.page + 1) {
                 fetchInitialData(this.$store, {page});
             },
-            async recover(title, tagList) {
+            async recover(index) {
+                let title = this.data[index].title;
+                let tagList = this.data[index].tags.join('|');
                 const {data: {code, message}} = await api.get('backend/article/recover', {title, tagList});
                 if(code === 200) {
-                    this.$store.dispatch('global/showMsg', {
-                        type: 'success',
-                        content: message
+                    this.$Message.success({
+                        content: message,
+                        duration: 3
                     });
                     this.$store.commit('backend/article/recoverArticle', title);
+                } else {
+                    this.$Message.error({
+                        content: message,
+                        duration: 3
+                    });
                 }
             },
-            async deletes(title, tagList) {
+            async deletes(index) {
+                let title = this.data[index].title;
+                let tagList = this.data[index].tags.join('|');
                 const {data: {code, message}} = await api.get('backend/article/delete', {title, tagList});
                 if(code === 200) {
-                    this.$store.dispatch('global/showMsg', {
-                        type: 'success',
-                        content: message
+                    this.$Message.success({
+                        content: message,
+                        duration: 3
                     });
                     this.$store.commit('backend/article/deleteArticle', title);
+                } else {
+                    this.$Message.error({
+                        content: message,
+                        duration: 3
+                    });
                 }
+            },
+            goItem(item) {
+                this.$router.push({name:'tag_modify', params: {tag_name: item}});
+            },
+            go(index) {
+                this.$router.push({name:'article_modify', params: {title: this.data[index].title}});
             }
         },
         mounted() {

@@ -32,7 +32,6 @@
                         width: 150,
                         align: 'center',
                         render: (h, params) => {
-                            let buttons = [];
                             let modifyButton = h('Button', {
                                     props: {
                                         type: 'primary',
