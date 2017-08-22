@@ -15,6 +15,8 @@ marked.setOptions({
     breaks: true
 });
 
+const algolia = require('../utils/algoliaSearch.js');
+
 /**
  * 管理时，获取文章列表
  * @method
@@ -85,6 +87,11 @@ exports.insert = (req, res) => {
         return Tag.update({ tag_name: { '$in': arr_tag } }, 
                           { '$inc': { 'tag_num': 1 } }, 
                           {upsert: true, multi:true}).then(() => {
+            Article.findOne({ title: title }, 'title content tags').then(result => {
+                algolia.addArticle(result, true);
+            }).catch(err => {
+                console.log(err.toString());
+            });
             return res.json({
                 code: 200,
                 message: '发布成功',
