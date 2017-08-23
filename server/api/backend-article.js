@@ -18,21 +18,6 @@ marked.setOptions({
 const algolia = require('../utils/algoliaSearch.js');
 const multer = require('multer');
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, '/home/fakerli-blog-vue-ssr/article/md');
-    },
-    filename: (req, file, cb) => {
-        let fileFormat = file.originalname.split(".");
-        cb(null, file.fieldname + '-' + Date.now() + '.' + fileFormat[fileFormat.length - 1]);
-    }
-});
-
-
-const uploadMulter = multer({
-    storage: storage
-});
-
 /**
  * 管理时，获取文章列表
  * @method
@@ -251,7 +236,21 @@ exports.modify = (req, res) => {
  * @return {[type]}     [description]
  */
 exports.upload = (req, res) => {
-    let uploadFile = uploadMulter.single("file");
+    const storage = multer.diskStorage({
+        destination: (req, file, cb) => {
+            cb(null, '/home/fakerli-blog-vue-ssr/article/md');
+        },
+        filename: (req, file, cb) => {
+            let fileFormat = file.originalname.split('.');
+            cb(null, file.fieldname + '-' + Date.now() + '.' + fileFormat[fileFormat.length - 1]);
+        }
+    });
+
+    const uploadMulter = multer({
+        storage: storage
+    });
+    let uploadFile = uploadMulter.single('file');
+    console.log(req.files);
     uploadFile(req, res, err => {
         if(err){
             res.json({
