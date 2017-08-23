@@ -50,8 +50,12 @@
         <div class="article-upload" v-show="showUpload">
             <Upload
                 type="drag"
-                :before-upload="hanleUpload"
-                action="//jsonplaceholder.typicode.com/posts/">
+                with-credentials
+                :format="['md']"
+                :max-size="200"
+                :on-format-error="handleFormatError"
+                :on-exceeded-size="handleMaxSize"
+                action="//localhost:8080/api/backend/article/upload">
                 <div style="padding: 20px 0">
                     <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
                     <p>点击或将文件拖拽到这里上传</p>
@@ -162,11 +166,18 @@
                 this.opacity = false;
                 $('.article-select').addClass('left');
             },
-            hanleUpload(file){
-                this.file = file;
-                console.log(this.file);
-                return false;
-            }
+            handleFormatError (file) {
+                this.$Notice.warning({
+                    title: '文件格式不正确',
+                    desc: '文件 ' + file.name + ' 格式不正确，请上传 md格式的markdown文件。'
+                });
+            },
+            handleMaxSize (file) {
+                this.$Notice.warning({
+                    title: '超出文件大小限制',
+                    desc: '文件 ' + file.name + ' 太大，不能超过 2M。'
+                });
+            },
         },
         mounted() {
             $('#backmenu').addClass('hide');

@@ -33,6 +33,8 @@ router.get('/backend/article/delete', isAdmin, backendArticle.deletes);
 router.get('/backend/article/recover', isAdmin, backendArticle.recover);
 // 管理时，编辑文章
 router.post('/backend/article/modify', isAdmin, multipartMiddleware, backendArticle.modify);
+// 管理时，上传md文件
+router.post('/backend/article/upload', isAdmin, multipartMiddleware, backendArticle.upload);
 
 // ------- 标签 -------
 // 管理时, 获取标签列表

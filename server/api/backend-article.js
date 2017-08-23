@@ -16,6 +16,22 @@ marked.setOptions({
 });
 
 const algolia = require('../utils/algoliaSearch.js');
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, '/home/fakerli-blog-vue-ssr/article/md');
+    },
+    filename: (req, file, cb) => {
+        let fileFormat = file.originalname.split(".");
+        cb(null, file.fieldname + '-' + Date.now() + '.' + fileFormat[fileFormat.length - 1]);
+    }
+});
+
+
+const uploadMulter = multer({
+    storage: storage
+});
 
 /**
  * 管理时，获取文章列表
@@ -224,5 +240,29 @@ exports.modify = (req, res) => {
             code: -200,
             message: err.toString()
         })
+    });
+};
+
+/**
+ * 管理时，编辑文章
+ * @method
+ * @param  {[type]} req [description]
+ * @param  {[type]} res [description]
+ * @return {[type]}     [description]
+ */
+exports.upload = (req, res) => {
+    let uploadFile = uploadMulter.single("file");
+    uploadFile(req, res, err => {
+        if(err){
+            res.json({
+                code: -200,
+                message: err.toString()
+            });
+        } else {
+            res.json({
+                code: 200,
+                message: '更新成功'
+            });
+        }
     });
 };
