@@ -72,7 +72,9 @@
             async modify() {
                 const content = modifyEditor.getMarkdown();
                 const html = modifyEditor.getPreviewedHTML();
-                const tocHtml = document.querySelectorAll('.markdown-toc')[0].outerHTML;
+                if(document.querySelectorAll('.markdown-toc')[0]){
+                    tocHtml = document.querySelectorAll('.markdown-toc')[0].outerHTML;
+                }
                 if(!this.form.title || !this.form.tagList_new || !content) {
                     this.$store.dispatch('global/showMsg', '请将表单填写完整！');
                     return;

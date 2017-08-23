@@ -727,6 +727,7 @@ article .entry-content-archive .date{
 
 .back-article{
     width: 100%;
+    min-height: calc(100vh - 80px);
     background-color: #3f3f3f;
     color: #999999;
 }
@@ -793,6 +794,49 @@ article .entry-content-archive .date{
     height: 30px;
     text-align: center;
     color: #000;
+}
+
+.article-select{
+    position: fixed;
+    width: 20%;
+    height: 10%;
+    top: 30%;
+    left: 40%;
+    z-index: 9999;
+}
+
+.article-select.left{
+    left: 1%;
+    width: 10%;
+    -webkit-transition: .5s cubic-bezier(.18, .81, .3, .89);
+    transition: .5s cubic-bezier(.18, .81, .3, .89);
+}
+
+.article-opacity{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    zoom: 1;
+    background: #2f2e2e;
+    z-index: 999;
+    width:100%;
+    height:100%;
+    filter:alpha(opacity=50); /*IE滤镜，透明度50%*/
+    -moz-opacity:0.5; /*Firefox私有，透明度50%*/
+    opacity:0.5;/*其他，透明度50%*/
+}
+
+.article-button-list{
+    margin-bottom: 10px;
+}
+
+.article-upload{
+    position: absolute;
+    width: 20%;
+    height: 5%;
+    top: 30%;
+    left: 40%;
 }
 
 /*自己引入*/    

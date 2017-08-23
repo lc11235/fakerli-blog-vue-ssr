@@ -1,40 +1,62 @@
 <template>
-    <div class="settings-main card">
-        <div class="settings-main-content">
-            <a-input title="标题">
-                <input type="text" v-model="form.title" placeholder="标题" class="base-input" name="title" style="width: 70%">
-                <span class="input-info error">请输入标题</span>
-            </a-input>
-            <a-input title="标签" :classes="'select-item-wrap'">
-                <i class="icon icon-arrow-down"></i>
-                <Select v-model="form.tag" style="width: 70%">
-                    <Option v-for="tag in tags" :value="tag.tag_name" :key="tag.tag_name">{{ tag.tag_name }}</Option>
-                </Select>
-                <Button @click="addTagList" type="success" shape="circle">添加标签</Button>
-                <span class="input-info error">请输入标签</span>
-            </a-input>
-            <a-input title="已有标签" v-if="tagList.length > 0">
-                <Tag v-for="tagItem in tagList" :key="tagItem" type="dot" closable @on-close="closeTag" color="blue">{{ tagItem }}</Tag>
-            </a-input>
-            <div>
-                <Select class="select-item" name="theme" v-model="selectTheme" @on-change="themeChange(selectTheme, 'theme')" style="width: 30%">
-                    <Option v-for="theme in theme" :value="theme" :key="theme">{{ theme }}</Option>
-                </Select>
-                <Select class="select-item" name="previewTheme" v-model="selectPreviewTheme" @on-change="themeChange(selectPreviewTheme, 'previewtheme')" style="width: 30%">
-                    <Option v-for="theme in previewTheme" :value="theme" :key="theme">{{ theme }}</Option>
-                </Select>
-                <Select class="select-item" name="editorTheme" v-model="selectEditorTheme" @on-change="themeChange(selectEditorTheme, 'editortheme')" style="width: 30%">
-                    <Option v-for="theme in editorTheme" :value="theme" :key="theme">{{ theme }}</Option>
-                </Select>
+    <div>
+        <div class="article-select">
+            <div class="article-button-list">
+                <Button @click="writeArticle" type="success" shape="circle" size="large" long>写文章</Button>
             </div>
-            <div class="settings-section" style="padding-bottom:0">
-                <div id="post-content" class="settings-item-content">
-                    <textarea id="editor" name="content" class="form-control hidden" data-autosave="editor-content"></textarea>
-                </div>
+            <div>
+                <Button @click="uploadArticle" type="success" shape="circle" size="large" long>上传文章</Button>
             </div>
         </div>
-        <div class="settings-footer clearfix">
-            <Button @click="insert" type="success" shape="circle">添加文章</Button>
+        <div class="article-opacity" v-show="opacity"></div>
+        <div class="settings-main card" v-show="showWrite">
+            <div class="settings-main-content">
+                <a-input title="标题">
+                    <input type="text" v-model="form.title" placeholder="标题" class="base-input" name="title" style="width: 70%">
+                    <span class="input-info error">请输入标题</span>
+                </a-input>
+                <a-input title="标签" :classes="'select-item-wrap'">
+                    <i class="icon icon-arrow-down"></i>
+                    <Select v-model="form.tag" style="width: 70%">
+                        <Option v-for="tag in tags" :value="tag.tag_name" :key="tag.tag_name">{{ tag.tag_name }}</Option>
+                    </Select>
+                    <Button @click="addTagList" type="success" shape="circle">添加标签</Button>
+                    <span class="input-info error">请输入标签</span>
+                </a-input>
+                <a-input title="已有标签" v-if="tagList.length > 0">
+                    <Tag v-for="tagItem in tagList" :key="tagItem" type="dot" closable @on-close="closeTag" color="blue">{{ tagItem }}</Tag>
+                </a-input>
+                <div>
+                    <Select class="select-item" name="theme" v-model="selectTheme" @on-change="themeChange(selectTheme, 'theme')" style="width: 30%">
+                        <Option v-for="theme in theme" :value="theme" :key="theme">{{ theme }}</Option>
+                    </Select>
+                    <Select class="select-item" name="previewTheme" v-model="selectPreviewTheme" @on-change="themeChange(selectPreviewTheme, 'previewtheme')" style="width: 30%">
+                        <Option v-for="theme in previewTheme" :value="theme" :key="theme">{{ theme }}</Option>
+                    </Select>
+                    <Select class="select-item" name="editorTheme" v-model="selectEditorTheme" @on-change="themeChange(selectEditorTheme, 'editortheme')" style="width: 30%">
+                        <Option v-for="theme in editorTheme" :value="theme" :key="theme">{{ theme }}</Option>
+                    </Select>
+                </div>
+                <div class="settings-section" style="padding-bottom:0">
+                    <div id="post-content" class="settings-item-content">
+                        <textarea id="editor" name="content" class="form-control hidden" data-autosave="editor-content"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="settings-footer clearfix">
+                <Button @click="insert" type="success" shape="circle">添加文章</Button>
+            </div>
+        </div>
+        <div class="article-upload" v-show="showUpload">
+            <Upload
+                type="drag"
+                :before-upload="hanleUpload"
+                action="//jsonplaceholder.typicode.com/posts/">
+                <div style="padding: 20px 0">
+                    <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                    <p>点击或将文件拖拽到这里上传</p>
+                </div>
+            </Upload>
         </div>
     </div>
 </template>
@@ -69,7 +91,11 @@
                             'blackboard', 'cobalt', 'eclipse', 'elegant', 'erlang-dark', 'lesser-dark', 'mbo,mdn-like', 'midnight',
                             'monokai', 'neat,neo', 'night', 'paraiso-dark', 'paraiso-light', 'pastel-on-dark', 'rubyblue', 'solarized',
                             'the-matrix', 'tomorrow-night-eighties', 'twilight', 'vibrant-ink', 'xq-dark', 'xq-light'],
-                previewTheme: ['default', 'dark']
+                previewTheme: ['default', 'dark'],
+                showWrite: false,
+                showUpload: false,
+                file: null,
+                opacity: true
             }
         },
         components: {
@@ -84,7 +110,10 @@
             async insert(){
                 const content = postEditor.getMarkdown();
                 const html = postEditor.getPreviewedHTML();
-                const tocHtml = document.querySelectorAll('.markdown-toc')[0].outerHTML;
+                const tocHtml = '';
+                if(document.querySelectorAll('.markdown-toc')[0]){
+                    tocHtml = document.querySelectorAll('.markdown-toc')[0].outerHTML;
+                }
                 if(!this.form.title || !this.form.tagString || !content){
                     this.$store.dispatch('global/showMsg', '请将表单填写完整！');
                     return;
@@ -120,6 +149,23 @@
             closeTag(event, name) {
                 const index = this.tagList.indexOf(name);
                 this.tagList.splice(index, 1);
+            },
+            writeArticle(){
+                this.showWrite = true;
+                this.showUpload = false;
+                this.opacity = false;
+                $('.article-select').addClass('left');
+            },
+            uploadArticle(){
+                this.showWrite = false;
+                this.showUpload = true;
+                this.opacity = false;
+                $('.article-select').addClass('left');
+            },
+            hanleUpload(file){
+                this.file = file;
+                console.log(this.file);
+                return false;
             }
         },
         mounted() {
