@@ -250,7 +250,6 @@ exports.upload = (req, res) => {
         storage: storage
     });
     let uploadFile = uploadMulter.single('file');
-    console.log(req.files);
     uploadFile(req, res, err => {
         if(err){
             res.json({
