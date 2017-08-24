@@ -18,6 +18,20 @@ marked.setOptions({
 const algolia = require('../utils/algoliaSearch.js');
 const multer = require('multer');
 
+const storage = multer.diskStorage({
+    destination: '/home/fakerli-blog-vue-ssr/article/md',
+    filename: (req, file, cb) => {
+        let fileFormat = file.originalname.split('.');
+        cb(null, file.fieldname + '-' + Date.now() + '.' + fileFormat[fileFormat.length - 1]);
+    }
+});
+
+const uploadMulter = multer({
+    storage: storage
+});
+
+const uploadFile = uploadMulter.single('file');
+
 /**
  * 管理时，获取文章列表
  * @method
@@ -70,7 +84,7 @@ exports.insert = (req, res) => {
         //html = marked(content),
         html = req.body.html,
         title = req.body.title;
-        toc = req.body.tocHTML;
+    toc = req.body.tocHTML;
     let arr_tag = tagString.split("|");
     let data = {
         title,
@@ -85,20 +99,20 @@ exports.insert = (req, res) => {
         timestamp: moment().format('X')
     };
     Article.create(data).then(result => {
-        return Tag.update({ tag_name: { '$in': arr_tag } }, 
-                          { '$inc': { 'tag_num': 1 } }, 
-                          {upsert: true, multi:true}).then(() => {
-            Article.findOne({ title: title }, 'title content tags').then(result => {
-                algolia.addArticle(result, true);
-            }).catch(err => {
-                console.log(err.toString());
+        return Tag.update({ tag_name: { '$in': arr_tag } },
+            { '$inc': { 'tag_num': 1 } },
+            { upsert: true, multi: true }).then(() => {
+                Article.findOne({ title: title }, 'title content tags').then(result => {
+                    algolia.addArticle(result, true);
+                }).catch(err => {
+                    console.log(err.toString());
+                });
+                return res.json({
+                    code: 200,
+                    message: '发布成功',
+                    data: result
+                });
             });
-            return res.json({
-                code: 200,
-                message: '发布成功',
-                data: result
-            });
-        });
     }).catch(err => {
         res.json({
             code: -200,
@@ -119,7 +133,7 @@ exports.deletes = (req, res) => {
     let tagList = req.query.tagList;
     let arr_tag = tagList.split("|");
     Article.update({ title: title }, { is_delete: 1 }).then(() => {
-        return Tag.update({ tag_name: { '$in': arr_tag } }, { '$inc': { 'tag_num': -1 } }, {upsert: false,multi: true}).then(result => {
+        return Tag.update({ tag_name: { '$in': arr_tag } }, { '$inc': { 'tag_num': -1 } }, { upsert: false, multi: true }).then(result => {
             res.json({
                 code: 200,
                 message: '更新成功',
@@ -146,7 +160,7 @@ exports.recover = (req, res) => {
     let tagList = req.query.tagList;
     let arr_tag = tagList.split("|");
     Article.update({ title: title }, { is_delete: 0 }).then(() => {
-        return Tag.update({ tag_name: { '$in': arr_tag } }, { '$inc': { 'tag_num': 1 } }, {upsert: false,multi: true}).then(() => {
+        return Tag.update({ tag_name: { '$in': arr_tag } }, { '$inc': { 'tag_num': 1 } }, { upsert: false, multi: true }).then(() => {
             res.json({
                 code: 200,
                 message: '更新成功',
@@ -174,8 +188,8 @@ exports.modify = (req, res) => {
         content = req.body.content,
         html = req.body.html,
         toc = req.body.tocHTML;
-        title = req.body.title;
-        title_old = req.body.title_old;
+    title = req.body.title;
+    title_old = req.body.title_old;
     if (!tagList_new || !tagList_old || !content || !title || !title_old || !html) {
         res.json({
             code: -200,
@@ -195,12 +209,12 @@ exports.modify = (req, res) => {
         toc,
         update_date: moment().format('YYYY-MM-DD HH:mm:ss')
     };
-    
+
     Article.findOneAndUpdate({ title: title_old }, data, { new: true }).then(result => {
         if (tagList_new !== tagList_old) {
             Promise.all([
-                Tag.update({ tag_name: { '$in': arr_tags } }, { '$inc': { 'tag_num': 1 } }, {upsert: false,multi: true}),
-                Tag.update({ tag_name: { '$in': arr_tags_old } }, { '$inc': { 'tag_num': -1 } }, {upsert: false,multi: true})
+                Tag.update({ tag_name: { '$in': arr_tags } }, { '$inc': { 'tag_num': 1 } }, { upsert: false, multi: true }),
+                Tag.update({ tag_name: { '$in': arr_tags_old } }, { '$inc': { 'tag_num': -1 } }, { upsert: false, multi: true })
             ]).then(() => {
                 res.json({
                     code: 200,
@@ -236,20 +250,6 @@ exports.modify = (req, res) => {
  * @return {[type]}     [description]
  */
 exports.upload = (req, res) => {
-    const storage = multer.diskStorage({
-        destination: (req, file, cb) => {
-            cb(null, '/home/fakerli-blog-vue-ssr/article/md');
-        },
-        filename: (req, file, cb) => {
-            let fileFormat = file.originalname.split('.');
-            cb(null, file.fieldname + '-' + Date.now() + '.' + fileFormat[fileFormat.length - 1]);
-        }
-    });
-
-    const uploadMulter = multer({
-        storage: storage
-    });
-    let uploadFile = uploadMulter.single('file');
     uploadFile(req, res, err => {
         if(err){
             res.json({
