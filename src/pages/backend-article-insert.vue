@@ -52,9 +52,10 @@
                 type="drag"
                 with-credentials
                 :format="['md']"
-                :max-size="200"
+                :max-size="2048"
                 :on-format-error="handleFormatError"
                 :on-exceeded-size="handleMaxSize"
+                :before-upload="handleUpload"
                 action="//localhost:8080/api/backend/article/upload">
                 <div style="padding: 20px 0">
                     <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
@@ -178,6 +179,49 @@
                     desc: '文件 ' + file.name + ' 太大，不能超过 2M。'
                 });
             },
+            handleUpload (file) {
+                console.log(file);
+                let that = this;
+                let reader = new FileReader();
+                reader.readAsText(file);
+                reader.onload = function(f){
+                    console.log(this.result);
+                    that.showWrite = true;
+                    that.showUpload = false;
+                    that.opacity = false;
+                    $('.article-select').addClass('left');
+                    // eslint-disable-next-line
+            window.postEditor = editormd("post-content", {
+                width: "100%",
+                height: 600,
+                markdown: this.result,
+                placeholder: '请输入内容...',
+                path: '/static/editor.md/lib/',
+                theme: "default | dark",
+                previewTheme: "default | dark",
+                editorTheme: "default",
+                toolbarIcons() {
+                    return [
+                        "undo", "redo", "|",
+                        "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|",
+                        "list-ul", "list-ol", "hr", "|",
+                        "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "emoji", "html-entities", "pagebreak", "|",
+                        "goto-line", "watch", "preview", "fullscreen", "clear", "search", "|",
+                        "help", "info"
+                    ]
+                },
+                watch: true,
+                saveHTMLToTextarea: true,
+                tex: true,
+                flowChart: true,
+                sequenceDiagram: true,
+                taskList: true,
+                htmlDecode: 'style, script, iframe',
+                emoji: true
+            });
+                }
+                //return false;
+            }
         },
         mounted() {
             $('#backmenu').addClass('hide');
@@ -198,7 +242,7 @@
             window.postEditor = editormd("post-content", {
                 width: "100%",
                 height: 600,
-                markdown: "",
+                markdown: '',
                 placeholder: '请输入内容...',
                 path: '/static/editor.md/lib/',
                 theme: "default | dark",

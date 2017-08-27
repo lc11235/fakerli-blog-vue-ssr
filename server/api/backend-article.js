@@ -21,8 +21,9 @@ const multer = require('multer');
 const storage = multer.diskStorage({
     destination: '/home/fakerli-blog-vue-ssr/article/md',
     filename: (req, file, cb) => {
+        console.log(file);
         let fileFormat = file.originalname.split('.');
-        cb(null, file.fieldname + '-' + Date.now() + '.' + fileFormat[fileFormat.length - 1]);
+        cb(null, file.fieldname + '-' + moment().format('YYYY-MM-DD HH:mm:ss') + '.' + fileFormat[fileFormat.length - 1]);
     }
 });
 
