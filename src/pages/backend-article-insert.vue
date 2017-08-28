@@ -191,33 +191,39 @@
                     that.opacity = false;
                     $('.article-select').addClass('left');
                     // eslint-disable-next-line
-            window.postEditor = editormd("post-content", {
-                width: "100%",
-                height: 600,
-                markdown: this.result,
-                placeholder: '请输入内容...',
-                path: '/static/editor.md/lib/',
-                theme: "default | dark",
-                previewTheme: "default | dark",
-                editorTheme: "default",
-                toolbarIcons() {
-                    return [
-                        "undo", "redo", "|",
-                        "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|",
-                        "list-ul", "list-ol", "hr", "|",
-                        "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "emoji", "html-entities", "pagebreak", "|",
-                        "goto-line", "watch", "preview", "fullscreen", "clear", "search", "|",
-                        "help", "info"
-                    ]
-                },
-                watch: true,
-                saveHTMLToTextarea: true,
-                tex: true,
-                flowChart: true,
-                sequenceDiagram: true,
-                taskList: true,
-                htmlDecode: 'style, script, iframe',
-                emoji: true
+                    window.postEditor = editormd("post-content", {
+                        width: "100%",
+                        height: 600,
+                        markdown: this.result,
+                        placeholder: '请输入内容...',
+                        path: '/static/editor.md/lib/',
+                        theme: "default | dark",
+                        previewTheme: "default | dark",
+                        editorTheme: "default",
+                        toolbarIcons() {
+                            return [
+                                "undo", "redo", "|",
+                                "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|",
+                                "list-ul", "list-ol", "hr", "|",
+                                "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "emoji", "html-entities", "pagebreak", "|",
+                                "goto-line", "watch", "preview", "fullscreen", "clear", "search", "|",
+                                "help", "info"
+                            ]
+                        },
+                        watch: true,
+                        saveHTMLToTextarea: true,
+                        tex: true,
+                        flowChart: true,
+                        sequenceDiagram: true,
+                        taskList: true,
+                        htmlDecode: 'style, script, iframe',
+                        emoji: true
+                    });
+                    $('body').everyTime('100ms', 'A', function() {
+                        if($('.editormd-preview-close-btn').length >0){
+                        $('.editormd-preview-close-btn').hide();
+                        $('body').stopTime('A');
+                    }
             });
                 }
                 //return false;
@@ -229,7 +235,7 @@
             $('#backmain').removeClass('back-wrap');
             $('#backmain').addClass('back-article');
             $('#backbodywrap').removeClass('back-body-wrap');
-            $('body').everyTime('100ms', 'A', function() {
+            $('body').everyTime('500ms', 'A', function() {
                 if($('.editormd-preview-close-btn').length >0){
                     $('.editormd-preview-close-btn').hide();
                     $('body').stopTime('A');
