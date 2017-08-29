@@ -37,7 +37,7 @@
             </template>
         </div>
         
-        <aside class="post-widget" id="post-toc">
+        <aside class="post-widget" id="post-toc" v-show="isShow">
             <a @click="visible" href="javascript:;" class="toc-icon" id="toc-visible">
                 <i class="fa fa-lg fa-bars"></i>
             </a>
@@ -58,6 +58,11 @@
 
     export default {
         name: 'frontend-article',
+        data() {
+            return {
+                isShow: false
+            }
+        },
         prefetch: fetchInitialData,
         mixins: [metaMixin],
         beforeRouteEnter(to, from, next) {
@@ -100,6 +105,11 @@
             } else {
                 this.$store.dispatch('global/gProgress', 100);
             }
+            if(this.article.data.toc) {
+                this.isShow = true;
+            } else {
+                this.isShow = false;
+            }
         },
         metaInfo() {
             const title = this.article.data.title ? this.article.data.title + ' 学习是为了探索这个世界的本质' : '学习是为了探索这个世界的本质';
@@ -107,6 +117,15 @@
                 title,
                 meta: [{vmid: 'description', name: 'description', content: title}]
             };
+        },
+        watch: {
+            article(val){
+                if(val.data.toc) {
+                    this.isShow = true;
+                } else {
+                    this.isShow = false;
+                }
+            }
         }
     }
 </script>

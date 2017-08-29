@@ -9,7 +9,6 @@
                 <a href="javascript:;" class="header-icon" id="back">
                     <i class="fa fa-lg fa-chevron-left"></i>
                 </a>
-                <input type="text" id="key" class="search-input" autocomplete="off" placeholder="请输入关键字">
                 <a @click="searchVisible" href="javascript:;" class="header-icon" id="search">
                     <i class="fa fa-lg fa-search"></i>
                 </a>
@@ -18,19 +17,29 @@
                 <i class="fa fa-lg fa-share-alt"></i>
             </a>
         </div>
+        <algolia-search :show.sync="isShow" />
     </header>
 </template>
 
 <script lang="babel">
+    import algoliaSearch from  './algolia-search.vue';
     export default {
         name: 'top-header',
+        data() {
+            return {
+                isShow: false
+            }
+        },
         props: ["title"],
+        components: {
+            algoliaSearch
+        },
         methods: {
             visible() {
                 $('#menu').removeClass('hide');
             },
             searchVisible() {
-                $('#search-wrap').toggleClass('in');
+                this.isShow = true;
             },
             scrolling() {
                 if(window.scrollTime2) window.clearTimeout(window.scrollTime2);

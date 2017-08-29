@@ -498,35 +498,6 @@ body {
     min-width: 56px
 }
 
-.search-wrap.in .search-input {
-    width: 320px;
-    opacity: 1
-}
-
-.search-wrap.in #search {
-    color: #c5cae9
-}
-
-.search-wrap .search-input {
-    position: relative;
-    z-index: 2;
-    width: 0;
-    height: 36px;
-    margin: 10px 10px 0 0;
-    border: none;
-    background: transparent;
-    color: #fff;
-    border-bottom: 2px solid #fff;
-    border-radius: 0;
-    opacity: 0;
-    -webkit-transition: .2s ease-in-out;
-    transition: .2s ease-in-out
-}
-
-.search-wrap .search-input::-webkit-input-placeholder {
-    color: #c5cae9
-}
-
 .search-wrap .header-icon {
     position: absolute;
     top: 0;
@@ -838,6 +809,22 @@ article .entry-content-archive .date{
     top: 30%;
     left: 40%;
 }
+
+.search-opacity{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    zoom: 1;
+    background: #2f2e2e;
+    z-index: 999;
+    width:100%;
+    height:100%;
+    filter:alpha(opacity=50); /*IE滤镜，透明度50%*/
+    -moz-opacity:0.5; /*Firefox私有，透明度50%*/
+    opacity:0.5;/*其他，透明度50%*/
+}
+
 
 /*自己引入*/    
 nav ul, nav ol {

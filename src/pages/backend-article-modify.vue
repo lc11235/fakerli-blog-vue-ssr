@@ -72,6 +72,7 @@
             async modify() {
                 const content = modifyEditor.getMarkdown();
                 const html = modifyEditor.getPreviewedHTML();
+                let tocHtml = '';
                 if(document.querySelectorAll('.markdown-toc')[0]){
                     tocHtml = document.querySelectorAll('.markdown-toc')[0].outerHTML;
                 }

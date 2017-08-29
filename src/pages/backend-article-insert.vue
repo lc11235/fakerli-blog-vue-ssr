@@ -115,7 +115,7 @@
             async insert(){
                 const content = postEditor.getMarkdown();
                 const html = postEditor.getPreviewedHTML();
-                const tocHtml = '';
+                let tocHtml = '';
                 if(document.querySelectorAll('.markdown-toc')[0]){
                     tocHtml = document.querySelectorAll('.markdown-toc')[0].outerHTML;
                 }
