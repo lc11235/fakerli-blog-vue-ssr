@@ -1,6 +1,6 @@
 module.exports = {
     extends: [
-        'eslint-config-alloy/vue',
+        'eslint-config-alloy',
     ],
     globals: {
         $: true,
