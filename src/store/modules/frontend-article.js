@@ -17,7 +17,6 @@ const state = {
 const actions = {
     async 'getArticleList'({ commit, rootState: { global, route: { fullPath }}}, config) {
         const path = fullPath;
-        console.log(state);
         if (state.lists.data.length > 0 && path === state.lists.path && config.page === 1) {
             global.progress = 100;
             return;
