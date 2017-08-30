@@ -1,6 +1,7 @@
 <template>
-    <div class="search-results" v-show="show" @click="noShow">
-        <div class="search-opacity"></div>
+    <div class="search-results" >
+        <div class="search-opacity" v-show="show" @click="noShow"></div>
+        <div class="search-modal-wrap" v-show="show" @click="noShow"></div>
     </div>
 </template>
 
@@ -11,6 +12,7 @@
         methods: {
             noShow() {
                 this.$emit('update:show', false);
+                $('body').removeAttr('style');
             }
         }
     };

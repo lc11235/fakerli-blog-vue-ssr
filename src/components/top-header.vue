@@ -40,6 +40,7 @@
             },
             searchVisible() {
                 this.isShow = true;
+                $('body').css({ 'padding-right': '8px', 'overflow': 'hidden' });
             },
             scrolling() {
                 if (window.scrollTime2) window.clearTimeout(window.scrollTime2);
