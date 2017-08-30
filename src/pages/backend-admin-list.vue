@@ -12,13 +12,13 @@
 <script lang="babel">
     import api from '~api';
     import { mapGetters } from 'vuex';
-    const fetchInitialData = async (store, config = { page: 1}) => {
+    const fetchInitialData = async (store, config = { page: 1 }) => {
         await store.dispatch('backend/admin/getAdminList', config);
     };
 
     export default {
         name: 'backend-admin-list',
-        data () {
+        data() {
             return {
                 columns: [
                     {
@@ -40,44 +40,44 @@
                         align: 'center',
                         render: (h, params) => {
                             let modifyButton = h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.go(params.index);
-                                        }
+                                props: {
+                                    type: 'primary',
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginRight: '5px'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.go(params.index);
                                     }
-                                }, '编辑'),
-                                recoverButton =h('Button', {
-                                    props: {
-                                        type: 'error',
-                                        size: 'small'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.recover(params.index);
-                                        }
+                                }
+                            }, '编辑');
+                            let recoverButton = h('Button', {
+                                props: {
+                                    type: 'error',
+                                    size: 'small'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.recover(params.index);
                                     }
-                                }, '恢复') ,
-                                deleteButton = h('Button', {
-                                    props: {
-                                        type: 'error',
-                                        size: 'small'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.deletes(params.index);
-                                        }
+                                }
+                            }, '恢复');
+                            let deleteButton = h('Button', {
+                                props: {
+                                    type: 'error',
+                                    size: 'small'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.deletes(params.index);
                                     }
-                                }, '删除');
-                            if(this.data[params.index].is_delete){
+                                }
+                            }, '删除');
+                            if (this.data[params.index].is_delete) {
                                 return h('div', [modifyButton, recoverButton]);
-                            } else{
+                            } else {
                                 return h('div', [modifyButton, deleteButton]);
                             }
                         }
@@ -93,12 +93,12 @@
         },
         methods: {
             loadMore(page = this.admin.page + 1) {
-                fetchInitialData(this.$store, {page});
+                fetchInitialData(this.$store, { page });
             },
             async recover(index) {
                 let username = this.data[index].username;
-                const {data: {code, message}} = await api.get('backend/admin/recover', {username});
-                if(code === 200) {
+                const { data: { code, message }} = await api.get('backend/admin/recover', { username });
+                if (code === 200) {
                     this.$Message.success({
                         content: message,
                         duration: 3
@@ -113,8 +113,8 @@
             },
             async deletes(index) {
                 let username = this.data[index].username;
-                const {data: {code, message}} = await api.get('backend/admin/delete', {username});
-                if(code === 200) {
+                const { data: { code, message }} = await api.get('backend/admin/delete', { username });
+                if (code === 200) {
                     this.$Message.success({
                         content: message,
                         duration: 3
@@ -128,11 +128,11 @@
                 }
             },
             go(index) {
-                this.$router.push({name:'admin_modify', params: {username: this.data[index].username}});
+                this.$router.push({ name: 'admin_modify', params: { username: this.data[index].username }});
             }
         },
         mounted() {
-            if(this.admin.data.length <= 0) {
+            if (this.admin.data.length <= 0) {
                 fetchInitialData(this.$store);
             } else {
                 this.data = this.admin.data;
@@ -143,5 +143,5 @@
                 this.data = val.data;
             }
         }
-    }
+    };
 </script>

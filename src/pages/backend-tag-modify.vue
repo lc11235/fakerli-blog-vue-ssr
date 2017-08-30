@@ -30,7 +30,7 @@
                     tag_name_old: '',
                     tag_name: ''
                 }
-            }
+            };
         },
         components: {
             aInput
@@ -42,13 +42,13 @@
         },
         methods: {
             async modify() {
-                if(!this.form.tag_name) {
+                if (!this.form.tag_name) {
                     this.$store.dispatch('global/showMsg', '请将表单填写完整！');
                     return;
                 }
 
-                const {data: {message, code, data}} = await api.post('backend/tag/modify', this.form);
-                if(code === 200 && data) {
+                const { data: { message, code, data }} = await api.post('backend/tag/modify', this.form);
+                if (code === 200 && data) {
                     this.$store.dispatch('global/showMsg', {
                         type: 'success',
                         content: message
@@ -59,7 +59,7 @@
             }
         },
         mounted() {
-            if(!this.item._id || this.item.path !== this.$route.path) {
+            if (!this.item._id || this.item.path !== this.$route.path) {
                 fetchInitialData(this.$store);
             } else {
                 this.form.tag_name = this.item.tag_name;
@@ -72,5 +72,5 @@
                 this.form.tag_name_old = this.item.tag_name;
             }
         }
-    }
+    };
 </script>

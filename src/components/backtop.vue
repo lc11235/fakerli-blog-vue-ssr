@@ -9,11 +9,11 @@
         data() {
             return {
                 scrollTop: 0
-            }
+            };
         },
         methods: {
             scrolling() {
-                if(window.scrollTime) window.clearTimeout(window.scrollTime);
+                if (window.scrollTime) window.clearTimeout(window.scrollTime);
                 window.scrollTime = window.setTimeout(() => {
                     this.scrollTop = document.body.scrollTop;
                 }, 100);
@@ -24,8 +24,8 @@
                 let index = 30;
                 let i = 1;
                 let timer = setInterval(() => {
-                    top -= 100 + index *(i++);
-                    if(top <= 1){
+                    top -= 100 + index * (i++);
+                    if (top <= 1) {
                         top = 0;
                         clearInterval(timer);
                     }
@@ -39,5 +39,5 @@
         beforeDestroy() {
             window.removeEventListener('scroll', this.scrolling);
         }
-    }
+    };
 </script>

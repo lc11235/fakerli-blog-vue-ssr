@@ -7,11 +7,11 @@
 <script lang="babel">
     export default {
         name: 'algolia-search',
-        props: ["show"],
+        props: ['show'],
         methods: {
             noShow() {
                 this.$emit('update:show', false);
             }
         }
-    }
+    };
 </script>

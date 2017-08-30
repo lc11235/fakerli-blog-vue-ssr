@@ -9,10 +9,10 @@
 <script lang="babel">
     const prefixCls = 'ivu-affix';
     function getScroll(target, top) {
-        const prop = top ? 'pageYOffset': 'pageXOffset';
-        const method = top ? 'scrollTop': 'scrollLeft';
+        const prop = top ? 'pageYOffset' : 'pageXOffset';
+        const method = top ? 'scrollTop' : 'scrollLeft';
         let ret = target[prop];
-        if(typeof ret !== 'number'){
+        if (typeof ret !== 'number') {
             ret = window.document.documentElement[method];
         }
         return ret;
@@ -46,12 +46,12 @@
             return {
                 affix: false,
                 styles: {}
-            }
+            };
         },
         computed: {
-            offsetType(){
+            offsetType() {
                 let type = 'top';
-                if(this.offsetBottom >= 0){
+                if (this.offsetBottom >= 0) {
                     type = 'bottom';
                 }
                 return type;
@@ -61,26 +61,26 @@
                     {
                         [`${prefixCls}`]: this.affix
                     }
-                ]
+                ];
             }
         },
-        mounted () {
+        mounted() {
             window.addEventListener('scroll', this.handleScroll, false);
             window.addEventListener('resize', this.handleScroll, false);
         },
-        beforeDestroy () {
+        beforeDestroy() {
             window.removeEventListener('scroll', this.handleScroll, false);
             window.removeEventListener('resize', this.handleScroll, false);
         },
         methods: {
-            handleScroll(){
+            handleScroll() {
                 const affix = this.affix;
                 const scrollTop = getScroll(window, true);
                 const elOffset = getOffset(this.$el);
                 const windowHeight = window.innerHeight;
                 const elHeight = this.$el.getElementsByTagName('div')[0].offsetHeight;
                 // fixed Top
-                if(elOffset.top - this.offsetTop < scrollTop && this.offsetType === 'top' && !affix) {
+                if (elOffset.top - this.offsetTop < scrollTop && this.offsetType === 'top' && !affix) {
                     this.affix = true;
                     this.styles = {
                         top: `${this.offsetTop}px`,
@@ -88,14 +88,14 @@
                         width: `${this.$el.offsetWidth}px`
                     };
                     this.$emit('on-change', true);
-                } else if(elOffset.top - this.offsetTop > scrollTop && this.offsetType === 'top' && affix) {
+                } else if (elOffset.top - this.offsetTop > scrollTop && this.offsetType === 'top' && affix) {
                     this.affix = false;
                     this.styles = null;
                     this.$emit('on-change', false);
                 }
 
                 // fixed bottom
-                if(elOffset.top + this.offsetBottom + elHeight > scrollTop + windowHeight && this.offsetType === 'bottom' && !affix) {
+                if (elOffset.top + this.offsetBottom + elHeight > scrollTop + windowHeight && this.offsetType === 'bottom' && !affix) {
                     this.affix = true;
                     this.styles = {
                         bottom: `${this.offsetBottom}px`,
@@ -103,12 +103,12 @@
                         width: `${this.$el.offsetWidth}px`
                     };
                     this.$emit('on-change', true);
-                } else if(elOffset.top + this.offsetBottom + elHeight < scrollTop + windowHeight && this.offsetType === 'bottom' && affix) {
-                    this.affix = false
-                    this.styles = null
-                    this.$emit('on-change', false)
+                } else if (elOffset.top + this.offsetBottom + elHeight < scrollTop + windowHeight && this.offsetType === 'bottom' && affix) {
+                    this.affix = false;
+                    this.styles = null;
+                    this.$emit('on-change', false);
                 }
             }
         }
-    }
+    };
 </script>

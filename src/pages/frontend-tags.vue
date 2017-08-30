@@ -27,10 +27,10 @@
     import topicsItem from '../components/topics-item.vue';
     import topicsItemNone from '../components/topics-item-none.vue';
     import metaMixin from '~mixins';
-    const fetchInitialData = async (store, tag)=> {
+    const fetchInitialData = async (store, tag) => {
         await store.dispatch('global/tag/getTagList');
-        const base = {page: 1};
-        if(tag){
+        const base = { page: 1 };
+        if (tag) {
             base.tag = tag;
         }
         await store.dispatch('frontend/article/getArticleList', base);
@@ -44,10 +44,10 @@
             topicsItem, topicsItemNone
         },
         beforeRouteEnter(to, from, next) {
-            //does NOT have access to `this` component instance
+            // does NOT have access to `this` component instance
             next(vm => {
-                if(to.path.match(/\/tags\//g)){
-                    if(to.params.tag){
+                if (to.path.match(/\/tags\//g)) {
+                    if (to.params.tag) {
                         fetchInitialData(vm.$store, to.params.tag);
                     }
                 } else {
@@ -66,7 +66,7 @@
             })
         },
         mounted() {
-            if(this.tags.length <= 0){
+            if (this.tags.length <= 0) {
                 fetchInitialData(this.$store);
             } else {
                 this.$store.dispatch('global/gProgress', 100);
@@ -76,8 +76,8 @@
             const title = '学习是为了探索这个世界的本质';
             return {
                 title,
-                meta: [{vmid: 'description', name: 'description', content: title}]
+                meta: [{ vmid: 'description', name: 'description', content: title }]
             };
         }
-    }
+    };
 </script>

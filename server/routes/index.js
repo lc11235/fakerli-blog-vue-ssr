@@ -3,19 +3,19 @@ const router = express.Router();
 const multipart = require('connect-multiparty');
 const multipartMiddleware = multipart();
 
-const backendArticle = require('../api/backend-article'),
-      backendTag = require('../api/backend-tag'),
-      backendUser = require('../api/backend-user'),
-      frontendArticle = require('../api/frontend-article'),
-      frontendArchive = require('../api/frontend-archive'),
-      isAdmin = require('./is-admin');
+const backendArticle = require('../api/backend-article');
+const backendTag = require('../api/backend-tag');
+const backendUser = require('../api/backend-user');
+const frontendArticle = require('../api/frontend-article');
+const frontendArchive = require('../api/frontend-archive');
+const isAdmin = require('./is-admin');
 
 // 添加管理员
 router.get('/backend', (req, res) => {
-      res.render('admin-add.html', {title: '添加管理员', message: ''});
+    res.render('admin-add.html', { title: '添加管理员', message: '' });
 });
 router.post('/backend', (req, res) => {
-      backendUser.insert(req, res);
+    backendUser.insert(req, res);
 });
 
 // API
@@ -26,7 +26,7 @@ router.get('/backend/article/list', isAdmin, backendArticle.getList);
 // 管理时，获取单篇文章
 router.get('/backend/article/item', isAdmin, backendArticle.getItem);
 // 管理时，发布文章
-router.post('/backend/article/insert', isAdmin, multipartMiddleware, backendArticle.insert);  
+router.post('/backend/article/insert', isAdmin, multipartMiddleware, backendArticle.insert);
 // 管理时，删除文章
 router.get('/backend/article/delete', isAdmin, backendArticle.deletes);
 // 管理时，恢复文章
@@ -77,10 +77,10 @@ router.get('/frontend/archive/listTitle', frontendArchive.getListTitle);
 
 // ------ 404 ------
 router.get('*', (req, res) => {
-      res.json({
-            code: -200,
-            message: '没有找到该页面'
-      });
+    res.json({
+        code: -200,
+        message: '没有找到该页面'
+    });
 });
 
 module.exports = router;

@@ -22,11 +22,11 @@
     import { ssp } from '../utils';
     import metaMixin from '~mixins';
 
-    const fetchInitialData = async (store, config = {page:1}) => {
-        const {params: {title, by}, path} = store.state.route;
-        const base = {...config, limit: 10, title, by};
+    const fetchInitialData = async (store, config = { page: 1 }) => {
+        const { params: { title, by }, path } = store.state.route;
+        const base = { ...config, limit: 10, title, by };
         await store.dispatch('frontend/article/getArticleList', base);
-        if(config.page === 1) ssp(path);
+        if (config.page === 1) ssp(path);
     };
 
     export default {
@@ -43,21 +43,21 @@
         },
         methods: {
             loadMore(page = this.topics.page + 1) {
-                fetchInitialData(this.$store, {page});
+                fetchInitialData(this.$store, { page });
             }
         },
         mounted() {
-            fetchInitialData(this.$store, {page: 1});
+            fetchInitialData(this.$store, { page: 1 });
         },
         watch: {
             '$route'() {
-                fetchInitialData(this.$store, {page: 1});
+                fetchInitialData(this.$store, { page: 1 });
             }
         },
         beforeRouteLeave(to, from, next) {
             const scrollTop = document.body.scrollTop;
             const path = from.path;
-            if(scrollTop){
+            if (scrollTop) {
                 store2.set(path, scrollTop);
             } else {
                 store2.remove(path);
@@ -68,8 +68,8 @@
             let title = '学习是为了探索这个世界的本质';
             return {
                 title,
-                meta: [{vmid: 'description', name: 'description', content: title}]
+                meta: [{ vmid: 'description', name: 'description', content: title }]
             };
         }
-    }
+    };
 </script>

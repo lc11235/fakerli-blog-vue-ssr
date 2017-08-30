@@ -27,8 +27,8 @@
 
     export default {
         name: 'login',
-        beforeRouteEnter (to, from, next) {
-            if(cookies.get('b_user')){
+        beforeRouteEnter(to, from, next) {
+            if (cookies.get('b_user')) {
                 next('/backend/article/list');
             } else {
                 next();
@@ -40,22 +40,22 @@
                     username: '',
                     password: ''
                 }
-            }
+            };
         },
         components: {
             aInput
         },
         methods: {
             async login() {
-                if(!this.form.username || !this.form.password) {
+                if (!this.form.username || !this.form.password) {
                     this.$store.dispatch('global/showMsg', '请输入用户名和密码！');
                     return;
                 }
-                const {data: {data, code}} = await api.post('backend/admin/login', this.form);
-                if(data && code === 200) {
+                const { data: { data, code }} = await api.post('backend/admin/login', this.form);
+                if (data && code === 200) {
                     this.$router.replace('/backend/article/list');
                 }
             }
         }
-    }
+    };
 </script>

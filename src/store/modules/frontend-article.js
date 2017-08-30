@@ -15,15 +15,16 @@ const state = {
 };
 
 const actions = {
-    async ['getArticleList']({commit, state, rootState: {global, route: { fullPath }}}, config) {
+    async 'getArticleList'({ commit, rootState: { global, route: { fullPath }}}, config) {
         const path = fullPath;
-        if(state.lists.data.length > 0 && path === state.lists.path && config.page === 1) {
+        console.log(state);
+        if (state.lists.data.length > 0 && path === state.lists.path && config.page === 1) {
             global.progress = 100;
             return;
         }
 
-        const {data: {data, code}} = await api.get('frontend/article/list', {...config, cache: true});
-        if(data && code === 200) {
+        const { data: { data, code }} = await api.get('frontend/article/list', { ...config, cache: true });
+        if (data && code === 200) {
             commit('receiveArticleList', {
                 ...config,
                 ...data,
@@ -31,13 +32,13 @@ const actions = {
             });
         }
     },
-    async ['getArticleItem']({commit, state, rootState: {route: { path, params: { title }}}}) {
-        if(path === state.item.path) {
+    async 'getArticleItem'({ commit, rootState: { route: { path, params: { title }}}}) {
+        if (path === state.item.path) {
             global.progress = 100;
             return;
         }
-        const {data: {data, code}} = await api.get('frontend/article/item', {title, markdown: 1, cache: true});
-        if(data && code === 200) {
+        const { data: { data, code }} = await api.get('frontend/article/item', { title, markdown: 1, cache: true });
+        if (data && code === 200) {
             commit('receiveArticleItem', {
                 data,
                 path
@@ -47,30 +48,31 @@ const actions = {
 };
 
 const mutations = {
-    ['receiveArticleList'](state, {list, hasNext, hasPrev, page, path}) {
-        if(page === 1) {
-            list = [].concat(list);
+    'receiveArticleList'(states, { list, hasNext, hasPrev, page, path }) {
+        let tempList;
+        if (page === 1) {
+            tempList = [].concat(list);
         } else {
-            list = state.lists.data.concat(list);
+            tempList = states.lists.data.concat(list);
         }
 
-        state.lists = {
-            data: list, hasNext, hasPrev, page, path
+        states.lists = {
+            data: tempList, hasNext, hasPrev, page, path
         };
     },
-    ['receiveArticleItem'](state, {data, path}) {
-        state.item = {
+    'receiveArticleItem'(states, { data, path }) {
+        states.item = {
             data, path, isLoad: true
         };
     }
 };
 
 const getters = {
-    ['getArticleList'](state) {
-        return state.lists;
+    'getArticleList'(states) {
+        return states.lists;
     },
-    ['getArticleItem'](state) {
-        return state.item
+    'getArticleItem'(states) {
+        return states.item;
     }
 };
 

@@ -23,19 +23,19 @@
                 form: {
                     tag_name: ''
                 }
-            }
+            };
         },
         components: {
             aInput
         },
         methods: {
             async insert() {
-                if(!this.form.tag_name) {
+                if (!this.form.tag_name) {
                     this.$store.dispatch('global/showMsg', '请将表单填写完整！');
                     return;
                 }
-                const {data: {message, code, data}} = await api.post('backend/tag/insert', this.form);
-                if(code === 200) {
+                const { data: { message, code, data }} = await api.post('backend/tag/insert', this.form);
+                if (code === 200) {
                     this.$store.dispatch('global/showMsg', {
                         type: 'success',
                         content: message
@@ -48,5 +48,5 @@
                 }
             }
         }
-    }
+    };
 </script>

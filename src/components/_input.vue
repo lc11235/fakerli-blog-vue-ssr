@@ -14,5 +14,5 @@
 <script lang="babel">
     export default {
         props: ['title', 'classes']
-    }
+    };
 </script>

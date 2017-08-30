@@ -12,19 +12,19 @@ exports.getListTitle = (req, res) => {
     let sort = '-update_date';
     let data = {
         is_delete: 0
-    }
+    };
 
     let filds = 'title update_date';
 
 
-    Article.find(data, filds).sort(sort).exec().then(data => {
+    Article.find(data, filds).sort(sort).exec().then(result => {
         let items = [];
         let item = {};
         let titles = [];
         let timeMonth = '';
 
         let month = [];
-        for (let temp of data) {
+        for (let temp of result) {
             if (temp.update_date.substring(0, 7) !== timeMonth || timeMonth === '') {
                 timeMonth = temp.update_date.substring(0, 7);
                 month.push(timeMonth);
@@ -34,7 +34,7 @@ exports.getListTitle = (req, res) => {
         for (let m of month) {
             item = {};
             titles = [];
-            for (let temp of data) {
+            for (let temp of result) {
                 if (temp.update_date.substring(0, 7) === m) {
                     titles.push(temp);
                     item = {

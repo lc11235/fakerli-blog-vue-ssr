@@ -1,7 +1,7 @@
 const LRU = require('lru-cache');
 
 let api;
-if(process.__API__){
+if (process.__API__) {
     api = process.__API__;
 } else {
     api = process.__API__ = {
@@ -13,7 +13,7 @@ if(process.__API__){
             maxAge: 1000 * 60 * 15
         }),
         cachedItem: {}
-    }
+    };
 }
 
 module.exports = api;

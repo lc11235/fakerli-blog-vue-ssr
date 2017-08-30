@@ -61,18 +61,18 @@
         data() {
             return {
                 isShow: false
-            }
+            };
         },
         prefetch: fetchInitialData,
         mixins: [metaMixin],
         beforeRouteEnter(to, from, next) {
-            //does NOT have access to `this` component instance
+            // does NOT have access to `this` component instance
             next(vm => {
                 fetchInitialData(vm.$store);
             });
         },
         beforeRouteUpdate(to, from, next) {
-            if(to.path !== from.path) {
+            if (to.path !== from.path) {
                 fetchInitialData(this.$store);
             } else {
                 this.$store.dispatch('global/gProgress', 100);
@@ -86,11 +86,11 @@
         },
         methods: {
             addTarget(content) {
-                if(!content) return '';
+                if (!content) return '';
                 return content.replace(/<a(.*?)href="http/g, '<a$1target="_blank" href="http');
             },
             visible() {
-                if($('#toc-main.hide').length >0 && $('#post-toc.hide').length >0){
+                if ($('#toc-main.hide').length > 0 && $('#post-toc.hide').length > 0) {
                     $('#toc-main').removeClass('hide');
                     $('#post-toc').removeClass('hide');
                 } else {
@@ -99,13 +99,13 @@
                 }
             },
         },
-        mounted () {
-            if(!this.article){
+        mounted() {
+            if (!this.article) {
                 fetchInitialData(this.$store);
             } else {
                 this.$store.dispatch('global/gProgress', 100);
             }
-            if(this.article.data.toc) {
+            if (this.article.data.toc) {
                 this.isShow = true;
             } else {
                 this.isShow = false;
@@ -115,17 +115,17 @@
             const title = this.article.data.title ? this.article.data.title + ' 学习是为了探索这个世界的本质' : '学习是为了探索这个世界的本质';
             return {
                 title,
-                meta: [{vmid: 'description', name: 'description', content: title}]
+                meta: [{ vmid: 'description', name: 'description', content: title }]
             };
         },
         watch: {
-            article(val){
-                if(val.data.toc) {
+            article(val) {
+                if (val.data.toc) {
                     this.isShow = true;
                 } else {
                     this.isShow = false;
                 }
             }
         }
-    }
+    };
 </script>

@@ -2,7 +2,7 @@ const mongoose = require('../mongoose');
 const Schema = mongoose.Schema;
 const Promise = require('bluebird');
 
-const TagSchema = new Schema ({
+const TagSchema = new Schema({
     tag_name: String,
     tag_num: Number,
     create_date: String,

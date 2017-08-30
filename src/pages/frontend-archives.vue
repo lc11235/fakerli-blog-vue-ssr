@@ -20,7 +20,7 @@
 <script lang="babel">
     import { mapGetters } from 'vuex';
     import metaMixin from '~mixins';
-    const fetchInitialData = async store=> {
+    const fetchInitialData = async store => {
         await store.dispatch('frontend/archive/getArticleList');
     };
 
@@ -29,13 +29,13 @@
         prefetch: fetchInitialData,
         mixins: [metaMixin],
         beforeRouteEnter(to, from, next) {
-            //does NOT have access to `this` component instance
+            // does NOT have access to `this` component instance
             next(vm => {
                 fetchInitialData(vm.$store);
             });
         },
         beforeRouteUpdate(to, from, next) {
-            if(to.path !== from.path) {
+            if (to.path !== from.path) {
                 fetchInitialData(this.$store);
             } else {
                 this.$store.dispatch('global/gProgress', 100);
@@ -48,7 +48,7 @@
             })
         },
         mounted() {
-            if(this.items.length <= 0){
+            if (this.items.length <= 0) {
                 fetchInitialData(this.$store);
             }
             this.$store.dispatch('global/gProgress', 100);
@@ -57,8 +57,8 @@
             const title = '学习是为了探索这个世界的本质';
             return {
                 title,
-                meta: [{vmid: 'description', name: 'description', content: title}]
+                meta: [{ vmid: 'description', name: 'description', content: title }]
             };
         }
-    }
+    };
 </script>

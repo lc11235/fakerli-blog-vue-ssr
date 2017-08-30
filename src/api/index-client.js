@@ -3,9 +3,9 @@ import qs from 'qs';
 import store from '../store';
 import config from './config-client';
 
-axios.interceptors.request.use(config => {
+axios.interceptors.request.use(configAxios => {
     store.dispatch('global/gProgress', 50);
-    return config;
+    return configAxios;
 }, error => {
     return Promise.reject(error);
 });
@@ -14,7 +14,7 @@ axios.interceptors.response.use(response => response, error => Promise.resolve(e
 
 function checkStatus(response) {
     store.dispatch('global/gProgress', 100);
-    if(response.status === 200 || response.status === 304){
+    if (response.status === 200 || response.status === 304) {
         return response;
     }
     return {
@@ -27,18 +27,18 @@ function checkStatus(response) {
 }
 
 function checkCode(res) {
-    if(res.data.code === -500){
+    if (res.data.code === -500) {
         window.location.href = '/backend';
-    } else if(res.data.code === -400){
+    } else if (res.data.code === -400) {
         window.location.href = '/';
-    } else if(res.data.code !== 200){
-        store.dispatch('global/showMsg',res.data.message);
+    } else if (res.data.code !== 200) {
+        store.dispatch('global/showMsg', res.data.message);
     }
     return res;
 }
 
 export default {
-    post(url, data){
+    post(url, data) {
         return axios({
             method: 'post',
             url: config.api + url,

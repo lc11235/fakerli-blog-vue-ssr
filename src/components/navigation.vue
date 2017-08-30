@@ -67,12 +67,11 @@
 </template>
 
 <script lang="babel">
-    import cookies from 'js-cookie';
     export default {
         methods: {
             hide() {
                 $('#menu').addClass('hide');
             }
         }
-    }
+    };
 </script>

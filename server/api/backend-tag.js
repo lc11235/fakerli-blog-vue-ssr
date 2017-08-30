@@ -99,8 +99,8 @@ exports.recover = (req, res) => {
 };
 
 exports.modify = (req, res) => {
-    let tag_name = req.body.tag_name,
-        tag_name_old = req.body.tag_name_old;
+    let tag_name = req.body.tag_name;
+    let tag_name_old = req.body.tag_name_old;
     let data = {
         tag_name, update_date: moment().format('YYYY-MM-DD HH:mm:ss')
     };
@@ -116,5 +116,4 @@ exports.modify = (req, res) => {
             message: err.toString()
         });
     });
-    
 };

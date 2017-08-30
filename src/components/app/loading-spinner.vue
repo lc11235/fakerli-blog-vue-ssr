@@ -71,5 +71,5 @@
  <script lang="babel">
     export default {
         props: ['loading']
-    }
+    };
  </script>

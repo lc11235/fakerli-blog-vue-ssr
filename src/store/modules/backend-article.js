@@ -15,14 +15,14 @@ const state = {
 };
 
 const actions = {
-    async ['getArticleList'] ({commit, rootState: {global, route: { fullPath }}}, config) {
+    async 'getArticleList'({ commit, rootState: { global, route: { fullPath }}}, config) {
         const path = fullPath;
-        if(state.lists.data.length > 0 && path === state.lists.path && config.page === 1){
+        if (state.lists.data.length > 0 && path === state.lists.path && config.page === 1) {
             global.progress = 100;
             return;
         }
-        const {data: {data, code}} = await api.get('backend/article/list', config);
-        if(data && code === 200) {
+        const { data: { data, code }} = await api.get('backend/article/list', config);
+        if (data && code === 200) {
             commit('receiveArticleList', {
                 ...data,
                 path,
@@ -30,71 +30,72 @@ const actions = {
             });
         }
     },
-    async ['getArticleItem'] ({commit, rootState: {global, route: {path, params: {title}}}}) {
-        if(path === state.item.path) {
+    async 'getArticleItem'({ commit, rootState: { global, route: { path, params: { title }}}}) {
+        if (path === state.item.path) {
             global.progress = 100;
             return;
         }
-        const {data: {data, code}} = await api.get('backend/article/item', {title});
-        if(data && code === 200) {
+        const { data: { data, code }} = await api.get('backend/article/item', { title });
+        if (data && code === 200) {
             commit('receiveArticleItem', {
                 data,
                 path
             });
         }
     },
-    async ['deleteArticle'] ({commit}, config) {
-        const {data: {code}} = await api.get('backend/article/delete', config);
-        if(code === 200) {
+    async 'deleteArticle'({ commit }, config) {
+        const { data: { code }} = await api.get('backend/article/delete', config);
+        if (code === 200) {
             commit('deleteArticle', config.id);
         }
     },
-    async ['recoverArticle'] ({commit}, config) {
-        const {data: { code }} = await api.get('backend/article/recover', config);
-        if(code === 200) {
+    async 'recoverArticle'({ commit }, config) {
+        const { data: { code }} = await api.get('backend/article/recover', config);
+        if (code === 200) {
             commit('recoverArticle', config.id);
         }
     }
 };
 
 const mutations = {
-    ['receiveArticleList'](state, {list, path, hasNext, hasPrev, page}) {
-        if(page === 1) {
-            list = [].concat(list);
+    'receiveArticleList'(states, { list, path, hasNext, hasPrev, page }) {
+        let tempList;
+        if (page === 1) {
+            tempList = [].concat(list);
         } else {
-            list = state.lists.data.concat(list);
+            tempList = states.lists.data.concat(list);
         }
-        state.lists = {
-            data: list, path, hasNext, hasPrev, page
+        states.lists = {
+            data: tempList, path, hasNext, hasPrev, page
         };
     },
-    ['receiveArticleItem'] (state, {data, path}) {
-        state.item = {
+    'receiveArticleItem'(states, { data, path }) {
+        states.item = {
             data, path
         };
     },
-    ['insertArticleItem'](state, data) {
-        state.item.data = data;
+    'insertArticleItem'(states, data) {
+        states.item.data = data;
     },
-    ['updateArticleItem'](state, data) {
-        state.item.data = data;
+    'updateArticleItem'(states, data) {
+        states.item.data = data;
     },
-    ['deleteArticle'](state, title) {
-        const obj = state.lists.data.find(ii => ii.title === title);
-        if(obj) obj.is_delete = 1;
+    'deleteArticle'(states, title) {
+        const obj = states.lists.data.find(ii => ii.title === title);
+        if (obj) obj.is_delete = 1;
     },
-    ['recoverArticle'] (state, title) {
-        const obj = state.lists.data.find(ii => ii.title === title);
-        if(obj) obj.is_delete = 0;
+    'recoverArticle'(states, title) {
+        const obj = states.lists.data.find(ii => ii.title === title);
+        if (obj) obj.is_delete = 0;
     }
 };
 
 const getters = {
-    ['getArticleList'](state) {
-        return state.lists;
+    'getArticleList'(states) {
+        return states.lists;
     },
-    ['getArticleItem'](state) {
-        return state.item;
+    'getArticleItem'(states) {
+        return states.item;
     }
 };
 

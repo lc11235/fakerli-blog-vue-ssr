@@ -1,5 +1,5 @@
 import toastr from 'toastr';
-import {inBrowser} from '~utils';
+import { inBrowser } from '~utils';
 
 toastr.options.positionClass = 'toast-top-center';
 
@@ -10,40 +10,41 @@ const state = {
 };
 
 const actions = {
-    ['gProgress']({commit}, payload) {
+    'gProgress'({ commit }, payload) {
         commit('progress', payload);
     },
-    ['showMsg'](store, config) {
-        let content, type;
-        if(typeof config === 'string') {
+    'showMsg'(store, config) {
+        let content;
+        let type;
+        if (typeof config === 'string') {
             content = config;
             type = 'error';
         } else {
             content = config.content;
             type = config.type;
         }
-        if(inBrowser) toastr[type](content);
+        if (inBrowser) toastr[type](content);
     },
-    ['hideMsg']() {
+    'hideMsg'() {
         toastr.clear();
     },
-    ['changeTitle']({commit}, changeTitle) {
+    'changeTitle'({ commit }, changeTitle) {
         commit('title', changeTitle);
     }
 };
 
 const mutations = {
-    ['progress'](state, payload) {
-        state.progress = payload;
+    'progress'(states, payload) {
+        states.progress = payload;
     },
-    ['title'](state, changeTitle) {
-        state.title = changeTitle;
+    'title'(states, changeTitle) {
+        states.title = changeTitle;
     }
 };
 
 const getters = {
-    ['getGlobal'](state) {
-        return state;
+    'getGlobal'(states) {
+        return states;
     }
 };
 

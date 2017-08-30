@@ -20,10 +20,10 @@ Vue.use(VueRouter);
 
 const scrollBehavior = to => {
     const position = {};
-    if(to.hash) {
+    if (to.hash) {
         position.selector = to.hash;
     }
-    if(to.matched.some(mm => mm.meta.scrollToTop)) {
+    if (to.matched.some(mm => mm.meta.scrollToTop)) {
         position.x = 0;
         position.y = 0;
     }
@@ -32,10 +32,10 @@ const scrollBehavior = to => {
 
 const guardRoute = (to, from, next) => {
     const token = cookies.get('b_user') || !inBrowser;
-    if(!token) {
+    if (!token) {
         next('/');
     } else {
-        if(to.path === '/backend/article/insert' || to.path === '/backend/article/modify'){
+        if (to.path === '/backend/article/insert' || to.path === '/backend/article/modify') {
             $('#backmenu').addClass('hide');
             $('#backmain').removeClass('main');
             $('#backmain').removeClass('back-wrap');
@@ -57,20 +57,20 @@ const router = new VueRouter({
     base: __dirname,
     scrollBehavior,
     routes: [
-        {name: 'login', path: '/backend', component: login},
+        { name: 'login', path: '/backend', component: login },
 
-        {name: 'admin_list', path: '/backend/admin/list', component: adminList, meta: {scrollToTop: true}, beforeEnter: guardRoute},
-        {name: 'admin_modify', path: '/backend/admin/modify/:username', component: adminModify, meta: {scrollToTop: true}, beforeEnter: guardRoute},
+        { name: 'admin_list', path: '/backend/admin/list', component: adminList, meta: { scrollToTop: true }, beforeEnter: guardRoute },
+        { name: 'admin_modify', path: '/backend/admin/modify/:username', component: adminModify, meta: { scrollToTop: true }, beforeEnter: guardRoute },
 
-        {name: 'article_list', path: '/backend/article/list', component: aritcleList, meta: {scrollToTop: true}, beforeEnter: guardRoute},
-        {name: 'article_insert', path: '/backend/article/insert', component: articleInsert, meta: {scrollToTop: true}, beforeEnter: guardRoute},
-        {name: 'article_modify', path: '/backend/article/modify/:title', component: articleModify, meta: {scrollToTop: true}, beforeEnter: guardRoute},
+        { name: 'article_list', path: '/backend/article/list', component: aritcleList, meta: { scrollToTop: true }, beforeEnter: guardRoute },
+        { name: 'article_insert', path: '/backend/article/insert', component: articleInsert, meta: { scrollToTop: true }, beforeEnter: guardRoute },
+        { name: 'article_modify', path: '/backend/article/modify/:title', component: articleModify, meta: { scrollToTop: true }, beforeEnter: guardRoute },
 
-        {name: 'tag_list', path: '/backend/tag/list', component: tagList, meta: {scrollToTop: true}, beforeEnter: guardRoute},
-        {name: 'tag_insert', path: '/backend/tag/insert', component: tagInsert, meta: {scrollToTop: true}, beforeEnter: guardRoute},
-        {name: 'tag_modify', path: '/backend/tag/modify/:tag_name', component: tagModify, meta: {scrollToTop: true}, beforeEnter: guardRoute},
+        { name: 'tag_list', path: '/backend/tag/list', component: tagList, meta: { scrollToTop: true }, beforeEnter: guardRoute },
+        { name: 'tag_insert', path: '/backend/tag/insert', component: tagInsert, meta: { scrollToTop: true }, beforeEnter: guardRoute },
+        { name: 'tag_modify', path: '/backend/tag/modify/:tag_name', component: tagModify, meta: { scrollToTop: true }, beforeEnter: guardRoute },
 
-        {path: '*', redirect: { name: 'login'}}
+        { path: '*', redirect: { name: 'login' }}
     ]
 });
 

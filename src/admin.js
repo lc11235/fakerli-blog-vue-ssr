@@ -6,12 +6,12 @@ import { sync } from 'vuex-router-sync';
 import * as filters from './filters';
 import iView from 'iview';
 
-import "./assets/css/hljs/googlecode.css";
-import "./assets/css/style.css";
-import "./assets/css/font-awesome.css";
-import "./assets/less/backend.less";
-import "toastr/build/toastr.css";
-import "nprogress/nprogress.css";
+import './assets/css/hljs/googlecode.css';
+import './assets/css/style.css';
+import './assets/css/font-awesome.css';
+import './assets/less/backend.less';
+import 'toastr/build/toastr.css';
+import 'nprogress/nprogress.css';
 import 'iview/dist/styles/iview.css';
 
 Vue.use(iView);

@@ -42,5 +42,5 @@
                 return date.substring(0, 10);
             }
         }
-    }
+    };
 </script>

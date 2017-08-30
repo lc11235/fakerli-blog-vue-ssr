@@ -43,20 +43,19 @@
 </template>
 
 <script lang="babel">
-    import { mapGetters } from 'vuex';
     import metaMixin from '~mixins';
 
     export default {
         name: 'frontend-index',
         mixins: [metaMixin],
-        mounted () {
+        mounted() {
             this.$store.dispatch('global/gProgress', 100);
         },
-        metaInfo () {
+        metaInfo() {
             return {
                 title: '学习是为了探索这个世界的本质',
-                meta: [{vmid: 'description', name: 'description', content: 'fakerli的博客'}]
+                meta: [{ vmid: 'description', name: 'description', content: 'fakerli的博客' }]
             };
         }
-    }
+    };
 </script>

@@ -8,16 +8,16 @@
  * @return {[type]}         [description]
  */
 exports.list = (req, res, mongoDB, sort) => {
-    sort = sort || '-_id';
-    let limit = req.body.limit || req.query.limit,
-        page = req.body.page || req.query.page;
+    let sortlist = sort || '-_id';
+    let limit = req.body.limit || req.query.limit;
+    let page = req.body.page || req.query.page;
     page = parseInt(page, 10);
     limit = parseInt(limit, 10);
     if (!page) page = 1;
     if (!limit) limit = 10;
     let skip = (page - 1) * limit;
     Promise.all([
-        mongoDB.find().sort(sort).skip(skip).limit(limit).exec(),
+        mongoDB.find().sort(sortlist).skip(skip).limit(limit).exec(),
         mongoDB.count()
     ]).then(result => {
         let total = result[1];

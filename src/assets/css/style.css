@@ -27,8 +27,6 @@ body, button, input, select, textarea {
     outline: none;
 	font: normal 1em Roboto,"Helvetica Neue",Helvetica,Arial,"Microsoft Yahei",sans-serif;
 	line-height: 1.6;
-	-moz-font-feature-settings: 'kern' 1;
-	-o-font-feature-settings: 'kern' 1;
 	-webkit-font-smoothing: antialiased;
 }
 
@@ -662,7 +660,6 @@ article .entry-content-archive .date{
     color: #fff;
     height: 18px;
     line-height: 18px;
-    float: left;
     padding: 0 5px 0 10px;
     position: relative;
     border-radius: 0 5px 5px 0;
@@ -1003,11 +1000,6 @@ a {
     padding: 0 14px;
     background: #f4f7f7;
     border-radius: 4px;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    -ms-appearance: none;
-    -o-appearance: none;
-    appearance: none;
     box-sizing: border-box;
     border: none;
     font-size: 15px;
@@ -2170,11 +2162,6 @@ a:hover .icon-arrow-right {
     width: 80%;
     line-height: 44px;
     cursor: pointer;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    -ms-appearance: none;
-    -o-appearance: none;
-    appearance: none;
     border: 1px solid #e2e9e9;
     border-radius: 4px;
     box-sizing: border-box;

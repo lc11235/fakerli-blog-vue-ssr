@@ -38,7 +38,7 @@
     export default {
         name: 'backend-menu',
         serverCacheKey: () => {
-            return `backend::menu`
+            return `backend::menu`;
         }
-    }
+    };
 </script>

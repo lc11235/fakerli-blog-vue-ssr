@@ -1,14 +1,14 @@
 const algoliasearch = require('algoliasearch');
 
-const client = algoliasearch("8RJ1CFIKV0", "704359425e7c16b4db6acbcd2faba6ad");
-const indexTag = client.initIndex("fakerli_tag"),
-      indexArtcile = client.initIndex("fakerli_article");
+const client = algoliasearch('8RJ1CFIKV0', '704359425e7c16b4db6acbcd2faba6ad');
+const indexTag = client.initIndex('fakerli_tag');
+const indexArtcile = client.initIndex('fakerli_article');
 
 const idToObjectID = (json) => {
     let tempJson = JSON.stringify(json);
     tempJson = tempJson.replace('_id', 'objectID');
     return JSON.parse(tempJson);
-}
+};
 
 /**
  * 添加tag的资料，用singleFlag来标识是添加一笔还是多笔资料
@@ -20,16 +20,16 @@ const idToObjectID = (json) => {
 exports.addTag = (tagJSON, singleFlag) => {
     // 注意到此处，将json资料中的一个key:_id更换为objectID。
     // 这是algolia的特殊要求，每个资料都要有唯一标识符
-    tagJSON = idToObjectID(tagJSON);
-    if(singleFlag){
-        indexTag.addObject(tagJSON, (err, content) => {
-            if(err){
+    let tempTagJSON = idToObjectID(tagJSON);
+    if (singleFlag) {
+        indexTag.addObject(tempTagJSON, (err, content) => {
+            if (err) {
                 console.log(err);
             }
         });
     } else {
-        indexTag.addObjects(tagJSON, (err, content) => {
-            if(err){
+        indexTag.addObjects(tempTagJSON, (err, content) => {
+            if (err) {
                 console.log(err);
             }
         });
@@ -45,21 +45,24 @@ exports.addTag = (tagJSON, singleFlag) => {
  * @return {[type]}             [description]
  */
 exports.updateTag = (tagJSON, singleFlag) => {
-    tagJSON = idToObjectID(tagJSON);
-    if(singleFlag){
-        indexTag.saveObject(tagJSON, (err, content) => {
-            indexTag.waitTask(content.taskID, function(err) {
+    let tempTagJSON = idToObjectID(tagJSON);
+    if (singleFlag) {
+        indexTag.saveObject(tempTagJSON, (err, content) => {
+            if (err) {
+                console.log(err);
+            }
+            indexTag.waitTask(content.taskID, function (err) {
                 if (!err) {
-                  console.log('object ' + content.objectID + ' indexed');
+                    console.log('object ' + content.objectID + ' indexed');
                 }
             });
         });
     } else {
-        indexTag.saveObjects(tagJSON, (err, content) => {
-            if(err){
+        indexTag.saveObjects(tempTagJSON, (err, content) => {
+            if (err) {
                 console.log(err);
             }
-        })
+        });
     }
 };
 
@@ -75,19 +78,19 @@ exports.updateTag = (tagJSON, singleFlag) => {
  */
 
 exports.partialUpdateTag = (tagJSON, singleFlag) => {
-    tagJSON = idToObjectID(tagJSON);
-    if(singleFlag){
-        indexTag.partialUpdateObject(tagJSON, (err, content) => {
-            if(err){
+    let tempTagJSON = idToObjectID(tagJSON);
+    if (singleFlag) {
+        indexTag.partialUpdateObject(tempTagJSON, (err, content) => {
+            if (err) {
                 console.log(err);
             }
         });
     } else {
-        indexTag.partialUpdateObjects(tagJSON, (err, content) => {
-            if(err){
+        indexTag.partialUpdateObjects(tempTagJSON, (err, content) => {
+            if (err) {
                 console.log(err);
             }
-        })
+        });
     }
 };
 
@@ -100,20 +103,20 @@ exports.partialUpdateTag = (tagJSON, singleFlag) => {
  * @return {[type]}             [description]
  */
 exports.deleteTag = (objectID, singleFlag) => {
-    if(singleFlag){
+    if (singleFlag) {
         indexTag.deleteObject(objectID, (err, content) => {
-            if(err){
+            if (err) {
                 console.log(err);
             }
         });
     } else {
         indexTag.deleteObjects(objectID, (err, content) => {
-            if(err){
+            if (err) {
                 console.log(err);
             }
         });
     }
-}
+};
 
 /**
  * 删除tag的资料，通过查询来删除，algolia会删除所有符合查询条件的资料
@@ -124,21 +127,21 @@ exports.deleteTag = (objectID, singleFlag) => {
  */
 exports.deleteTag = (query) => {
     indexTag.deleteByQuery(query, (err, content) => {
-        if(err){
+        if (err) {
             console.log(err);
         }
     });
-}
+};
 
 exports.addArticle = (articleJSON, singleFlag) => {
-    articleJSON = idToObjectID(articleJSON);
-    if(singleFlag){
-        indexArtcile.addObject(articleJSON, (err, content) => {
-            if(err) console.log(err);
+    let tempArticleJSON = idToObjectID(articleJSON);
+    if (singleFlag) {
+        indexArtcile.addObject(tempArticleJSON, (err, content) => {
+            if (err) console.log(err);
             console.log(content);
-            indexArtcile.waitTask(content.taskID, function(err) {
+            indexArtcile.waitTask(content.taskID, function (err) {
                 if (!err) {
-                  console.log('object ' + content.objectID + ' indexed');
+                    console.log('object ' + content.objectID + ' indexed');
                 } else {
                     console.log(err);
                 }
@@ -146,7 +149,7 @@ exports.addArticle = (articleJSON, singleFlag) => {
         });
     } else {
         indexArtcile.addObjects(articleJSON, (err, content) => {
-            if(err){
+            if (err) {
                 console.log(err);
             }
         });

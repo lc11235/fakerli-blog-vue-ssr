@@ -79,13 +79,13 @@ exports.getItem = (req, res) => {
  * @return {[type]}     [description]
  */
 exports.insert = (req, res) => {
-    let tagString = req.body.tagString,
-        content = req.body.content,
-        //html = marked(content),
-        html = req.body.html,
-        title = req.body.title;
-    toc = req.body.tocHTML;
-    let arr_tag = tagString.split("|");
+    let tagString = req.body.tagString;
+    let content = req.body.content;
+    // html = marked(content)
+    let html = req.body.html;
+    let title = req.body.title;
+    let toc = req.body.tocHTML;
+    let arr_tag = tagString.split('|');
     let data = {
         title,
         content,
@@ -99,20 +99,20 @@ exports.insert = (req, res) => {
         timestamp: moment().format('X')
     };
     Article.create(data).then(result => {
-        return Tag.update({ tag_name: { '$in': arr_tag } },
-            { '$inc': { 'tag_num': 1 } },
+        return Tag.update({ tag_name: { '$in': arr_tag }},
+            { '$inc': { 'tag_num': 1 }},
             { upsert: true, multi: true }).then(() => {
-                Article.findOne({ title: title }, 'title content tags').then(result => {
-                    algolia.addArticle(result, true);
-                }).catch(err => {
-                    console.log(err.toString());
-                });
-                return res.json({
-                    code: 200,
-                    message: '发布成功',
-                    data: result
-                });
+            Article.findOne({ title: title }, 'title content tags').then(resultArticle => {
+                algolia.addArticle(resultArticle, true);
+            }).catch(err => {
+                console.log(err.toString());
             });
+            return res.json({
+                code: 200,
+                message: '发布成功',
+                data: result
+            });
+        });
     }).catch(err => {
         res.json({
             code: -200,
@@ -131,9 +131,9 @@ exports.insert = (req, res) => {
 exports.deletes = (req, res) => {
     let title = req.query.title;
     let tagList = req.query.tagList;
-    let arr_tag = tagList.split("|");
+    let arr_tag = tagList.split('|');
     Article.update({ title: title }, { is_delete: 1 }).then(() => {
-        return Tag.update({ tag_name: { '$in': arr_tag } }, { '$inc': { 'tag_num': -1 } }, { upsert: false, multi: true }).then(result => {
+        return Tag.update({ tag_name: { '$in': arr_tag }}, { '$inc': { 'tag_num': -1 }}, { upsert: false, multi: true }).then(result => {
             res.json({
                 code: 200,
                 message: '更新成功',
@@ -158,9 +158,9 @@ exports.deletes = (req, res) => {
 exports.recover = (req, res) => {
     let title = req.query.title;
     let tagList = req.query.tagList;
-    let arr_tag = tagList.split("|");
+    let arr_tag = tagList.split('|');
     Article.update({ title: title }, { is_delete: 0 }).then(() => {
-        return Tag.update({ tag_name: { '$in': arr_tag } }, { '$inc': { 'tag_num': 1 } }, { upsert: false, multi: true }).then(() => {
+        return Tag.update({ tag_name: { '$in': arr_tag }}, { '$inc': { 'tag_num': 1 }}, { upsert: false, multi: true }).then(() => {
             res.json({
                 code: 200,
                 message: '更新成功',
@@ -183,13 +183,13 @@ exports.recover = (req, res) => {
  * @return {[type]}     [description]
  */
 exports.modify = (req, res) => {
-    let tagList_new = req.body.tagList_new,
-        tagList_old = req.body.tagList_old,
-        content = req.body.content,
-        html = req.body.html,
-        toc = req.body.tocHTML;
-    title = req.body.title;
-    title_old = req.body.title_old;
+    let tagList_new = req.body.tagList_new;
+    let tagList_old = req.body.tagList_old;
+    let content = req.body.content;
+    let html = req.body.html;
+    let toc = req.body.tocHTML;
+    let title = req.body.title;
+    let title_old = req.body.title_old;
     if (!tagList_new || !tagList_old || !content || !title || !title_old || !html) {
         res.json({
             code: -200,
@@ -198,7 +198,7 @@ exports.modify = (req, res) => {
         return;
     }
 
-    //let html = marked(content);
+    // let html = marked(content);
     let arr_tags = tagList_new.split('|');
     let arr_tags_old = tagList_old.split('|');
     let data = {
@@ -213,8 +213,8 @@ exports.modify = (req, res) => {
     Article.findOneAndUpdate({ title: title_old }, data, { new: true }).then(result => {
         if (tagList_new !== tagList_old) {
             Promise.all([
-                Tag.update({ tag_name: { '$in': arr_tags } }, { '$inc': { 'tag_num': 1 } }, { upsert: false, multi: true }),
-                Tag.update({ tag_name: { '$in': arr_tags_old } }, { '$inc': { 'tag_num': -1 } }, { upsert: false, multi: true })
+                Tag.update({ tag_name: { '$in': arr_tags }}, { '$inc': { 'tag_num': 1 }}, { upsert: false, multi: true }),
+                Tag.update({ tag_name: { '$in': arr_tags_old }}, { '$inc': { 'tag_num': -1 }}, { upsert: false, multi: true })
             ]).then(() => {
                 res.json({
                     code: 200,
@@ -238,7 +238,7 @@ exports.modify = (req, res) => {
         res.json({
             code: -200,
             message: err.toString()
-        })
+        });
     });
 };
 
@@ -251,7 +251,7 @@ exports.modify = (req, res) => {
  */
 exports.upload = (req, res) => {
     uploadFile(req, res, err => {
-        if(err){
+        if (err) {
             res.json({
                 code: -200,
                 message: err.toString()

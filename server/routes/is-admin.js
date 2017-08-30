@@ -3,9 +3,9 @@ const config = require('../config');
 const secret = config.secretServer;
 
 module.exports = (req, res, next) => {
-    let token = req.cookies.b_user,
-        userid = req.cookies.b_userid,
-        username = req.cookies.b_username;
+    let token = req.cookies.b_user;
+    let userid = req.cookies.b_userid;
+    let username = req.cookies.b_username;
     if (token) {
         jwt.verify(token, secret, (err, decoded) => {
             if (!err && decoded.id === userid && decoded.username === username) {

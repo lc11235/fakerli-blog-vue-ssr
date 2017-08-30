@@ -1,8 +1,8 @@
 const fs = require('fs');
 const fsExistsSync = path => {
-    try{
+    try {
         fs.accessSync(path, fs.F_OK);
-    } catch(e){
+    } catch (e) {
         return false;
     }
     return true;
@@ -11,12 +11,12 @@ const fsExistsSync = path => {
 exports.fsExistsSync = fsExistsSync;
 
 exports.strlen = str => {
-    let charCode = -1,
-        len = str.length,
-        realLength = 0;
-    for(let i = 0; i < len; i++){
+    let charCode = -1;
+    let len = str.length;
+    let realLength = 0;
+    for (let i = 0; i < len; i++) {
         charCode = str.charCodeAt(i);
-        if(charCode >= 0 && charCode <= 128){
+        if (charCode >= 0 && charCode <= 128) {
             realLength += 1;
         } else {
             realLength += 2;
@@ -26,7 +26,7 @@ exports.strlen = str => {
 };
 
 exports.createSecret = () => {
-    if(!fsExistsSync('./server/config/secret.js')){
+    if (!fsExistsSync('./server/config/secret.js')) {
         const secretServer = Math.random() * 1000000;
         const secretClient = Math.random() * 1000000;
         const secret = `

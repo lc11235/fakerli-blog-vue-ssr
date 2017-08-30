@@ -28,9 +28,9 @@
         data() {
             return {
                 isShow: false
-            }
+            };
         },
-        props: ["title"],
+        props: ['title'],
         components: {
             algoliaSearch
         },
@@ -42,14 +42,14 @@
                 this.isShow = true;
             },
             scrolling() {
-                if(window.scrollTime2) window.clearTimeout(window.scrollTime2);
+                if (window.scrollTime2) window.clearTimeout(window.scrollTime2);
                 window.scrollTime2 = window.setTimeout(() => {
-                    if(document.body.scrollTop > 56){
+                    if (document.body.scrollTop > 56) {
                         $('#header').addClass('fixed');
-                    }else {
+                    } else {
                         $('#header').removeClass('fixed');
                     }
-                    if(document.body.scrollTop >= 200){
+                    if (document.body.scrollTop >= 200) {
                         $('#post-toc').addClass('fixed');
                     } else {
                         $('#post-toc').removeClass('fixed');
@@ -63,5 +63,5 @@
         beforeDestroy() {
             window.removeEventListener('scroll', this.scrolling);
         }
-    }
+    };
 </script>

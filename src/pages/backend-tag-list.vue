@@ -15,7 +15,7 @@
 
     export default {
         name: 'backend-tag-list',
-        data () {
+        data() {
             return {
                 columns: [
                     {
@@ -33,51 +33,51 @@
                         align: 'center',
                         render: (h, params) => {
                             let modifyButton = h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.go(params.index);
-                                        }
+                                props: {
+                                    type: 'primary',
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginRight: '5px'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.go(params.index);
                                     }
-                                }, '编辑'),
-                                recoverButton =h('Button', {
-                                    props: {
-                                        type: 'error',
-                                        size: 'small'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.recover(params.index);
-                                        }
+                                }
+                            }, '编辑');
+                            let recoverButton = h('Button', {
+                                props: {
+                                    type: 'error',
+                                    size: 'small'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.recover(params.index);
                                     }
-                                }, '恢复') ,
-                                deleteButton = h('Button', {
-                                    props: {
-                                        type: 'error',
-                                        size: 'small'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.deletes(params.index);
-                                        }
+                                }
+                            }, '恢复');
+                            let deleteButton = h('Button', {
+                                props: {
+                                    type: 'error',
+                                    size: 'small'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.deletes(params.index);
                                     }
-                                }, '删除');
-                            if(this.data[params.index].is_delete){
+                                }
+                            }, '删除');
+                            if (this.data[params.index].is_delete) {
                                 return h('div', [modifyButton, recoverButton]);
-                            } else{
+                            } else {
                                 return h('div', [modifyButton, deleteButton]);
                             }
                         }
                     }
                 ],
                 data: []
-            }
+            };
         },
         computed: {
             ...mapGetters({
@@ -87,8 +87,8 @@
         methods: {
             async recover(index) {
                 let tag_name = this.data[index].tag_name;
-                const {data: {code, message}} = await api.get('backend/tag/recover', {tag_name});
-                if(code === 200) {
+                const { data: { code, message }} = await api.get('backend/tag/recover', { tag_name });
+                if (code === 200) {
                     this.$Message.success({
                         content: message,
                         duration: 3
@@ -103,8 +103,8 @@
             },
             async deletes(index) {
                 let tag_name = this.data[index].tag_name;
-                const {data: {code, message}} = await api.get('backend/tag/delete', {tag_name});
-                if(code === 200) {
+                const { data: { code, message }} = await api.get('backend/tag/delete', { tag_name });
+                if (code === 200) {
                     this.$Message.success({
                         content: message,
                         duration: 3
@@ -117,12 +117,12 @@
                     });
                 }
             },
-            go(index){
-                this.$router.push({name:'tag_modify', params: {tag_name: this.data[index].tag_name}});
+            go(index) {
+                this.$router.push({ name: 'tag_modify', params: { tag_name: this.data[index].tag_name }});
             }
         },
         mounted() {
-            if(this.tags.length <= 0) {
+            if (this.tags.length <= 0) {
                 fetchInitialData(this.$store);
             } else {
                 this.data = this.tags;
@@ -133,5 +133,5 @@
                 this.data = val;
             }
         }
-    }
+    };
 </script>

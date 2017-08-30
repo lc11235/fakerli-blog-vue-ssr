@@ -52,12 +52,12 @@
         },
         methods: {
             async modify() {
-                if(!this.form.username || !this.form.email) {
+                if (!this.form.username || !this.form.email) {
                     this.$store.dispatch('global/showMsg', '请将表单填写完整！');
                     return;
                 }
-                const { data: {message, code, data}} = await api.post('backend/admin/modify', this.form);
-                if(code === 200) {
+                const { data: { message, code, data }} = await api.post('backend/admin/modify', this.form);
+                if (code === 200) {
                     this.$store.dispatch('global/showMsg', {
                         type: 'success',
                         content: message
@@ -68,7 +68,7 @@
             }
         },
         mounted() {
-            if(this.item.path !== this.$route.path) {
+            if (this.item.path !== this.$route.path) {
                 fetchInitialData(this.$store);
             } else {
                 this.form.username = this.item.data.username;
@@ -81,5 +81,5 @@
                 this.form.email = val.data.email;
             }
         }
-    }
+    };
 </script>

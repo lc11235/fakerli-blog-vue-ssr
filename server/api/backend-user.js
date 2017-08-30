@@ -60,10 +60,10 @@ exports.getItem = (req, res) => {
  * @return {[type]}       [description]
  */
 exports.login = (req, res) => {
-    let json = {},
-        password = req.body.password,
-        username = req.body.username;
-    if(username === '' || password === ''){
+    let json = {};
+    let password = req.body.password;
+    let username = req.body.username;
+    if (username === '' || password === '') {
         json = {
             code: -200,
             message: '请输入用户名和密码'
@@ -75,14 +75,14 @@ exports.login = (req, res) => {
         password: md5(md5Pre + password),
         is_delete: 0
     }).then(result => {
-        if(result){
-            let id = result._id,
-                remember_me = 2592000000;
+        if (result) {
+            let id = result._id;
+            let remember_me = 2592000000;
             username = encodeURI(username);
-            let token = jwt.sign({id, username}, secret, {expiresIn: 60*60*24*30});
-            res.cookie('b_user', token, {maxAge: remember_me});
-            res.cookie('b_userid', id, {maxAge: remember_me});
-            res.cookie('b_username', username, {maxAge: remember_me});
+            let token = jwt.sign({ id, username }, secret, { expiresIn: 60 * 60 * 24 * 30 });
+            res.cookie('b_user', token, { maxAge: remember_me });
+            res.cookie('b_userid', id, { maxAge: remember_me });
+            res.cookie('b_username', username, { maxAge: remember_me });
             return res.json({
                 code: 200,
                 message: '登录成功',
@@ -110,17 +110,17 @@ exports.login = (req, res) => {
  * @return {json}         [description]
  */
 exports.insert = (req, res, next) => {
-    let email = req.body.email,
-        password = req.body.password,
-        username =req.body.username;
-    if(fsExistsSync('./admin.lock')){
-        return res.render('admin-add.html', {message: '请先把 admin.lock 删除'});
+    let email = req.body.email;
+    let password = req.body.password;
+    let username = req.body.username;
+    if (fsExistsSync('./admin.lock')) {
+        return res.render('admin-add.html', { message: '请先把 admin.lock 删除' });
     }
-    if(!username || !password || !email){
-        return res.render('admin-add.html', {message: '请将表单填写完整'});
+    if (!username || !password || !email) {
+        return res.render('admin-add.html', { message: '请将表单填写完整' });
     }
-    Admin.findOne({username}).then(result => {
-        if(result){
+    Admin.findOne({ username }).then(result => {
+        if (result) {
             return '该用户已经存在';
         }
         return Admin.create({
@@ -133,15 +133,15 @@ exports.insert = (req, res, next) => {
             timestamp: moment().format('X')
         }).then(() => {
             fs.writeFile('./admin.lock', username, (err) => {
-                if(err){
+                if (err) {
                     throw err;
                 } else {
-                    return '添加用户成功：'+ username + '，密码：' + password;
+                    return '添加用户成功：' + username + '，密码：' + password;
                 }
             });
         });
     }).then(message => {
-        res.render('admin-add.html', {message});
+        res.render('admin-add.html', { message });
     }).catch(err => console.log(err));
 };
 
@@ -153,13 +153,13 @@ exports.insert = (req, res, next) => {
  * @return {[type]}        [description]
  */
 exports.modify = (req, res) => {
-    let email = req.body.email,
-        password = req.body.password,
-        username = req.body.username;
+    let email = req.body.email;
+    let password = req.body.password;
+    let username = req.body.username;
     let data = {
         email, username, update_date: moment().format('YYYY-MM-DD HH:mm:ss')
-    }
-    if(password) data.password = md5(md5Pre = password);
+    };
+    if (password) data.password = md5(md5Pre + password);
     Admin.findOneAndUpdate({ username: username }, data, { new: true }).then(result => {
         res.json({
             code: 200,

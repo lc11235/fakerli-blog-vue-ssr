@@ -4,7 +4,7 @@
 </template>
 <script lang="babel">
     export default{
-        mounted(){
+        mounted() {
             const canvas = document.getElementById('canvas');
             const ctx = canvas.getContext('2d');
             let width = window.innerWidth;
@@ -28,11 +28,12 @@
                 node.period = 60 + Math.random() * 60;
             };
 
-            const createNodes = (i) => {
+            const createNodes = i => {
                 nodes = [];
                 lines = [];
+                let n = i;
 
-                while (i--){
+                while (n--) {
                     let node = {
                         x: Math.random() * width,
                         y: Math.random() * height,
@@ -55,10 +56,10 @@
 
             const frame = () => {
                 nodes.forEach(node => {
-                    if(node.x > width || node.x < 0){
+                    if (node.x > width || node.x < 0) {
                         node.vx = -node.vx;
                     }
-                    if(node.y > height || node.y <0){
+                    if (node.y > height || node.y < 0) {
                         node.vy = -node.vy;
                     }
 
@@ -72,11 +73,11 @@
 
                 ctx.clearRect(0, 0, width, height);
 
-                lines.forEach(({from, to}) => {
+                lines.forEach(({ from, to }) => {
                     const lineLength = Math.pow((from.x - to.x), 2) + Math.pow((from.y - to.y), 2);
                     const limit = 100000;
                     const factor = 1 - lineLength / limit;
-                    if(lineLength > limit){
+                    if (lineLength > limit) {
                         return;
                     }
 
@@ -88,7 +89,7 @@
                     ctx.stroke();
                 });
 
-                nodes.forEach(({x, y, radius, color}) => {
+                nodes.forEach(({ x, y, radius, color }) => {
                     ctx.fillStyle = color;
                     ctx.beginPath();
                     ctx.arc(x, y, radius, 0, 2 * Math.PI);
@@ -111,7 +112,7 @@
                 const y = event.clientY;
                 const offsetX = x - mouse.x;
                 const offsetY = y - mouse.y;
-                if(Math.pow(offsetX, 2) + Math.pow(offsetY, 2) > 100) {
+                if (Math.pow(offsetX, 2) + Math.pow(offsetY, 2) > 100) {
                     mouse.x = x;
                     mouse.y = y;
                 }
@@ -127,10 +128,10 @@
                 canvas.height = height;
             });
 
-            if(width > 450){
+            if (width > 450) {
                 createNodes(Math.floor(width / 20));
                 frame();
             }
         }
-    }
+    };
 </script>

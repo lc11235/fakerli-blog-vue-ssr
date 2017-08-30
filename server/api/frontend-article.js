@@ -9,18 +9,18 @@ const Article = mongoose.model('Article');
  * @return {[type]}     [description]
  */
 exports.getList = (req, res) => {
-    let by = req.query.by,
-        tag = req.query.tag,
-        limit = req.query.limit,
-        page = req.query.page;
+    let by = req.query.by;
+    let tag = req.query.tag;
+    let limit = req.query.limit;
+    let page = req.query.page;
     page = parseInt(page, 10);
     limit = parseInt(limit, 10);
     if (!page) page = 1;
     if (!limit) limit = 10;
     let data = {
         is_delete: 0
-    },
-        skip = (page - 1) * limit;
+    };
+    let skip = (page - 1) * limit;
     if (tag) {
         data.tags = tag;
     }
@@ -34,16 +34,16 @@ exports.getList = (req, res) => {
     Promise.all([
         Article.find(data, filds).sort(sort).skip(skip).limit(limit).exec(),
         Article.count(data)
-    ]).then(([data, total]) => {
+    ]).then(([result, total]) => {
         let totalPage = Math.ceil(total / limit);
-        data = data.map(item => {
+        let resultData = result.map(item => {
             item.content = item.content.substring(0, 150);
             return item;
         });
         let json = {
             code: 200,
             data: {
-                list: data,
+                list: resultData,
                 total,
                 hasNext: totalPage > page ? 1 : 0,
                 hasPrev: page > 1
@@ -73,7 +73,6 @@ exports.getItem = (req, res) => {
             message: '参数错误'
         });
     }
-   
     Article.findOne({ title: title }, { is_delete: 0 }).then(value => {
         let json;
         if (!value) {
@@ -85,7 +84,7 @@ exports.getItem = (req, res) => {
             json = {
                 code: 200,
                 data: value
-            }
+            };
         }
         res.json(json);
     }).catch(err => {

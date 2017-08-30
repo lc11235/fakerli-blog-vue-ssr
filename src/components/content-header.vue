@@ -10,6 +10,6 @@
 <script lang="babel">
     export default {
         name: 'content-header',
-        props: ["title"]
-    }
+        props: ['title']
+    };
 </script>

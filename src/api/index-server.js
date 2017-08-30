@@ -6,19 +6,19 @@ import config from './config-server';
 const SSR = global.__VUE_SSR_CONTEXT__;
 const cookies = SSR.cookies || {};
 const username = cookies.username || '';
-const parseCookie = cookies => {
+const parseCookie = cookieString => {
     let cookie = '';
-    Object.keys(cookies).forEach(item => {
-        cookie += item + '=' + cookies[item] + '; '
+    Object.keys(cookieString).forEach(item => {
+        cookie += item + '=' + cookieString[item] + '; ';
     });
     return cookie;
 };
 
 export default {
-    async post(url, data){
+    async post(url, data) {
         const cookie = parseCookie(cookies);
         const key = md5(url + JSON.stringify(data) + username);
-        if(config.cached && config.cached.has(key)) {
+        if (config.cached && config.cached.has(key)) {
             return Promise.resolve(config.cached.get(key));
         }
         const res = await axios({
@@ -32,13 +32,13 @@ export default {
                 cookie
             }
         });
-        if(config.cached && data.cache) config.cached.set(key, res);
+        if (config.cached && data.cache) config.cached.set(key, res);
         return res;
     },
-    async get(url, params){
+    async get(url, params) {
         const cookie = parseCookie(cookies);
         const key = md5(url + JSON.stringify(params) + username);
-        if(config.cached && config.cached.has(key)){
+        if (config.cached && config.cached.has(key)) {
             return Promise.resolve(config.cached.get(key));
         }
         const res = await axios({
@@ -51,7 +51,7 @@ export default {
                 cookie
             }
         });
-        if(config.cached && params.cache) config.cached.set(key, res);
+        if (config.cached && params.cache) config.cached.set(key, res);
         return res;
     }
 };
