@@ -37,8 +37,8 @@ module.exports = {
         }),
         new webpack.optimize.CommonsChunkPlugin({ name: 'manifest', chunks: ['vendor'] }),
         new webpack.optimize.UglifyJsPlugin({
-            compressor: {
-                warning: false
+            compress: {
+                warnings: false
             },
             output: {
                 comments: false

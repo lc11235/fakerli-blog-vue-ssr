@@ -4,7 +4,7 @@
             "presets": [
                 ["env", {
                     "targets": {
-                        "browsers": ["last 2 version", "ie10"]
+                        "browsers": ["last 2 version", "> 1%"]
                     },
                     "modules": false,
                     "debug": true

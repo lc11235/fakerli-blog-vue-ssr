@@ -46,7 +46,7 @@ let renderer;
 if (isProd) {
     // 生产模式：从fs创建服务器HTML渲染器和索引
     const bundle = require('./dist/vue-ssr-bundle.json');
-    frontend = fs.readFileSync(resolve('./dist/server.html', 'utf-8'));
+    frontend = fs.readFileSync(resolve('./dist/server.html'), 'utf-8');
     renderer = createRenderer(bundle, frontend);
 } else {
     // 开发模式：设置带有热重新加载的dev服务器，并在文件更改时更新渲染器和索引 HTML

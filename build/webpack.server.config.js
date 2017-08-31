@@ -4,7 +4,7 @@ const merge = require('webpack-merge');
 const VueSSRPlugin = require('vue-ssr-webpack-plugin');
 const base = require('./webpack.base.config');
 
-const query = {};
+let query = {};
 if(process.env.NODE_ENV === 'production') {
     query = {
         limit: 10000,
