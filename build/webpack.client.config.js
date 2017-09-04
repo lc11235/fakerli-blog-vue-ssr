@@ -37,7 +37,8 @@ let config = merge(baseConfig, {
         new webpack.ProgressPlugin({
             $: 'jquery',
             jQuery: 'jquery',
-            'window.jQuery': 'jquery'
+            'window.jQuery': 'jquery',
+            algolia: 'algoliasearch'
         })
     ]
 });

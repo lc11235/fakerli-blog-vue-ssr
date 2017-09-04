@@ -12,7 +12,9 @@
                     </div>
                     <div class="search-modal-body" v-show="searchShow">
                         <div class="search-card-title"></div>
-                        <div class="search-card-block"></div>
+                        <div class="search-card-block">
+                            <ul class="results"></ul>
+                        </div>
                     </div>
                     <div class="search-modal-footer">
                         <span class="power-by">Powered by</span>
@@ -25,12 +27,15 @@
 </template>
 
 <script lang="babel">
+    import algolia from 'algoliasearch';
     export default {
         name: 'algolia-search',
         data() {
             return {
                 searchShow: false,
-                search_input_string: ''
+                search_input_string: '',
+                old_input: '',
+                article_index: {}
             };
         },
         props: ['show'],
@@ -48,15 +53,40 @@
                 $('body').removeAttr('style');
             },
             showSearch(event) {
-                let client = algoliasearch('8RJ1CFIKV0', 'c1071e95978a460f2e7df4dfe9b65488');
-                let article_index = client.initIndex('fakerli_article');
                 this.searchShow = true;
                 if ($(event.target).val() !== '') {
                     this.search_input_string = $(event.target).val();
+                    let _this = this;
+                    setTimeout(function () {
+                        if (_this.search_input_string !== _this.old_input) {
+                            if (_this.search_input_string !== _this.old_input) {
+                                $('ul.results').empty();
+                                _this.article_index.search(_this.search_input_string, (err, articles) => {
+                                    if (err) {
+                                        console.log(err);
+                                    }
+                                    for (let i = 0; i < articles.hits.length; i++) {
+                                        let indexCount = articles.hits[i].content.indexOf(_this.search_input_string);
+                                        let start = indexCount - 10 < 0 ? 0 : indexCount - 10;
+                                        let end = indexCount + 10 > articles.hits[i].content.length ? articles.hits[i].content.length : indexCount + 10;
+                                        let content = articles.hits[i].content.substring(start, end);
+                                        let customer = '<a href="/article/' + articles.hits[i].title + '" class="list-group-item">' +
+                                        articles.hits[i].tags[0] + ' ' + content + '</a>';
+                                        $('ul.results').append(customer);
+                                    }
+                                });
+                                _this.old_input = _this.search_input_string;
+                            }
+                        }
+                    }, 2000);
                 } else {
                     this.searchShow = false;
                 }
             }
+        },
+        mounted() {
+            let client = algolia('8RJ1CFIKV0', 'c1071e95978a460f2e7df4dfe9b65488');
+            this.article_index = client.initIndex('fakerli_article');
         }
     };
 </script>
