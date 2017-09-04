@@ -2,7 +2,7 @@
     <div id="app" class="g-doc">
         <Navigation />
         <main id="main">
-            <top-header :title="global.title" />
+            <top-header :title="global.title" :show.sync="isShow" />
             <content-header :title="global.title" />
             <transition name="fade" mode="out-in">
                 <router-view :key="key" class="router"></router-view>
@@ -10,6 +10,7 @@
             <back-top />
             <footer-item />
         </main>
+        <algolia-search :show.sync="isShow" />
     </div>
 </template>
 
@@ -21,9 +22,15 @@
     import topHeader from './components/top-header.vue';
     import contentHeader from './components/content-header.vue';
     import footerItem from './components/footer.vue';
+    import algoliaSearch from './components/algolia-search.vue';
 
     export default {
         name: 'app',
+        data() {
+            return {
+                isShow: false
+            };
+        },
         computed: {
             ...mapGetters({
                 global: 'global/getGlobal'
@@ -37,7 +44,8 @@
             topHeader,
             contentHeader,
             backTop,
-            footerItem
+            footerItem,
+            algoliaSearch
         },
         watch: {
             'global.progress'(val) {

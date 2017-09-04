@@ -825,10 +825,87 @@ article .entry-content-archive .date{
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: 1000;
+    z-index: 1001;
     outline: 0;
     margin: 0;
     padding: 0;
+}
+
+.search-modal-wrap * {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent
+}
+
+.search-modal{
+    width: 600px;
+    margin: 0 auto;
+    position: relative;
+    outline: 0;
+    top: 100px;
+}
+
+.search-modal-content{
+    position: relative;
+    background-color: #fff;
+    border: 0;
+    border-radius: 6px;
+    background-clip: padding-box;
+}
+
+.search-modal-close{
+    font-size: 12px;
+    position: absolute;
+    right: 16px;
+    top: 8px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.search-modal-header{
+    border-bottom: 1px solid #e9eaec;
+    padding: 14px 16px;
+    line-height: 1;
+}
+
+.search-modal-body{
+    padding: 16px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.search-modal-footer{
+    border-top: 1px solid #e9eaec;
+    padding: 12px 18px;
+    text-align: right;
+}
+
+.power-by{
+    margin-top: 12.5px;
+    width: 120px;
+    display: inline-block;
+    text-align: center;
+}
+
+.algolia-logo{
+    vertical-align: top;
+    width: 80px;
+    height: 50px;
+    display: inline-block;
+}
+
+.search-input{
+    display: block;
+    width: 95%;
+    padding: .5rem .75rem;
+    font-size: 1rem;
+    line-height: 1.25;
+    color: #464a4c;
+    background-color: #fff;
+    background-image: none;
+    background-clip: padding-box;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: .25rem;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
 
 

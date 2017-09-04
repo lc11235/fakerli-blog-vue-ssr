@@ -17,29 +17,19 @@
                 <i class="fa fa-lg fa-share-alt"></i>
             </a>
         </div>
-        <algolia-search :show.sync="isShow" />
     </header>
 </template>
 
 <script lang="babel">
-    import algoliaSearch from  './algolia-search.vue';
     export default {
         name: 'top-header',
-        data() {
-            return {
-                isShow: false
-            };
-        },
-        props: ['title'],
-        components: {
-            algoliaSearch
-        },
+        props: ['title', 'show'],
         methods: {
             visible() {
                 $('#menu').removeClass('hide');
             },
             searchVisible() {
-                this.isShow = true;
+                this.$emit('update:show', true);
                 $('body').css({ 'padding-right': '8px', 'overflow': 'hidden' });
             },
             scrolling() {

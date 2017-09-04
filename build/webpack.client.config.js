@@ -11,7 +11,8 @@ const projectRoot = path.resolve(__dirname, '../');
 
 let config = merge(baseConfig, {
     externals: {
-        'jquery': 'jQuery'
+        'jquery': 'jQuery',
+        'algoliasearch': 'algoliasearch'
     },
     module: {
         rules: [{
