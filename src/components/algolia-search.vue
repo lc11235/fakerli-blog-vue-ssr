@@ -5,10 +5,15 @@
             <div class="search-modal">
                 <div class="search-modal-content">
                     <a @click="noShowClick" class="search-modal-close" href="javascript:;">
-                        <i class="fa fa-lg fa-remove"></i>
+                        <i class="fa fa-times-circle"></i>
                     </a>
                     <div class="search-modal-header">
-                        <input @input="showSearch" class="search-input" type="text" placeholder="Search">
+                        <div class="algolia-search-input-icon">
+                            <i class="fa fa-search"></i>
+                        </div>
+                        <div class="algolia-search-input">
+                            <input @input="showSearch" class="search-input" type="text" placeholder="Search" spellcheck="false">
+                        </div>
                     </div>
                     <div class="search-modal-body" v-show="searchShow">
                         <div class="search-card-title"></div>
@@ -65,6 +70,7 @@
                                     if (err) {
                                         console.log(err);
                                     }
+                                    console.log(articles);
                                     for (let i = 0; i < articles.hits.length; i++) {
                                         let indexCount = articles.hits[i].content.indexOf(_this.search_input_string);
                                         let start = indexCount - 10 < 0 ? 0 : indexCount - 10;

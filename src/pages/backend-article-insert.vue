@@ -1,64 +1,64 @@
 <template>
     <div>
-        <div class='article-select'>
-            <div class='article-button-list'>
-                <Button @click='writeArticle' type='success' shape='circle' size='large' long>写文章</Button>
+        <div class="article-select">
+            <div class="article-button-list">
+                <Button @click="writeArticle" type="success" shape="circle" size="large" long>写文章</Button>
             </div>
             <div>
-                <Button @click='uploadArticle' type='success' shape='circle' size='large' long>上传文章</Button>
+                <Button @click="uploadArticle" type="success" shape="circle" size="large" long>上传文章</Button>
             </div>
         </div>
-        <div class='article-opacity' v-show='opacity'></div>
-        <div class='settings-main card' v-show='showWrite'>
-            <div class='settings-main-content'>
-                <a-input title='标题'>
-                    <input type='text' v-model='form.title' placeholder='标题' class='base-input' name='title' style='width: 70%'>
-                    <span class='input-info error'>请输入标题</span>
+        <div class="article-opacity" v-show="opacity"></div>
+        <div class="settings-main card" v-show="showWrite">
+            <div class="settings-main-content">
+                <a-input title="标题">
+                    <input type="text" v-model="form.title" placeholder="标题" class="base-input" name="title" style="width: 70%">
+                    <span class="input-info error">请输入标题</span>
                 </a-input>
-                <a-input title='标签' :classes=''select-item-wrap''>
-                    <i class='icon icon-arrow-down'></i>
-                    <Select v-model='form.tag' style='width: 70%'>
-                        <Option v-for='tag in tags' :value='tag.tag_name' :key='tag.tag_name'>{{ tag.tag_name }}</Option>
+                <a-input title="标签" class="select-item-wrap">
+                    <i class="icon icon-arrow-down"></i>
+                    <Select v-model="form.tag" style="width: 70%">
+                        <Option v-for="tag in tags" :value="tag.tag_name" :key="tag.tag_name">{{ tag.tag_name }}</Option>
                     </Select>
-                    <Button @click='addTagList' type='success' shape='circle'>添加标签</Button>
-                    <span class='input-info error'>请输入标签</span>
+                    <Button @click="addTagList" type="success" shape="circle">添加标签</Button>
+                    <span class="input-info error">请输入标签</span>
                 </a-input>
-                <a-input title='已有标签' v-if='tagList.length > 0'>
-                    <Tag v-for='tagItem in tagList' :key='tagItem' type='dot' closable @on-close='closeTag' color='blue'>{{ tagItem }}</Tag>
+                <a-input title="已有标签" v-if="tagList.length > 0">
+                    <Tag v-for="tagItem in tagList" :key="tagItem" type="dot" closable @on-close="closeTag" color="blue">{{ tagItem }}</Tag>
                 </a-input>
                 <div>
-                    <Select class='select-item' name='theme' v-model='selectTheme' @on-change='themeChange(selectTheme, 'theme')' style='width: 30%'>
-                        <Option v-for='theme in theme' :value='theme' :key='theme'>{{ theme }}</Option>
+                    <Select class="select-item" name="theme" v-model="selectTheme" @on-change="themeChange(selectTheme, 'theme')" style="width: 30%">
+                        <Option v-for="theme in theme" :value="theme" :key="theme">{{ theme }}</Option>
                     </Select>
-                    <Select class='select-item' name='previewTheme' v-model='selectPreviewTheme' @on-change='themeChange(selectPreviewTheme, 'previewtheme')' style='width: 30%'>
-                        <Option v-for='theme in previewTheme' :value='theme' :key='theme'>{{ theme }}</Option>
+                    <Select class="select-item" name="previewTheme" v-model="selectPreviewTheme" @on-change="themeChange(selectPreviewTheme, 'previewtheme')" style="width: 30%">
+                        <Option v-for="theme in previewTheme" :value="theme" :key="theme">{{ theme }}</Option>
                     </Select>
-                    <Select class='select-item' name='editorTheme' v-model='selectEditorTheme' @on-change='themeChange(selectEditorTheme, 'editortheme')' style='width: 30%'>
-                        <Option v-for='theme in editorTheme' :value='theme' :key='theme'>{{ theme }}</Option>
+                    <Select class="select-item" name="editorTheme" v-model="selectEditorTheme" @on-change="themeChange(selectEditorTheme, 'editortheme')" style="width: 30%">
+                        <Option v-for="theme in editorTheme" :value="theme" :key="theme">{{ theme }}</Option>
                     </Select>
                 </div>
-                <div class='settings-section' style='padding-bottom:0'>
-                    <div id='post-content' class='settings-item-content'>
-                        <textarea id='editor' name='content' class='form-control hidden' data-autosave='editor-content'></textarea>
+                <div class="settings-section" style="padding-bottom:0">
+                    <div id="post-content" class="settings-item-content">
+                        <textarea id="editor" name="content" class="form-control hidden" data-autosave="editor-content"></textarea>
                     </div>
                 </div>
             </div>
-            <div class='settings-footer clearfix'>
-                <Button @click='insert' type='success' shape='circle'>添加文章</Button>
+            <div class="settings-footer clearfix">
+                <Button @click="insert" type="success" shape="circle">添加文章</Button>
             </div>
         </div>
-        <div class='article-upload' v-show='showUpload'>
+        <div class="article-upload" v-show="showUpload">
             <Upload
-                type='drag'
+                type="drag"
                 with-credentials
-                :format='['md']'
-                :max-size='2048'
-                :on-format-error='handleFormatError'
-                :on-exceeded-size='handleMaxSize'
-                :before-upload='handleUpload'
-                action='//localhost:8080/api/backend/article/upload'>
-                <div style='padding: 20px 0'>
-                    <Icon type='ios-cloud-upload' size='52' style='color: #3399ff'></Icon>
+                :format="['md']"
+                :max-size="2048"
+                :on-format-error="handleFormatError"
+                :on-exceeded-size="handleMaxSize"
+                :before-upload="handleUpload"
+                action="//localhost:8080/api/backend/article/upload">
+                <div style="padding: 20px 0">
+                    <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
                     <p>点击或将文件拖拽到这里上传</p>
                 </div>
             </Upload>
@@ -66,7 +66,7 @@
     </div>
 </template>
 
-<script lang='babel'>
+<script lang="babel">
     /* global postEditor */
     import api from '~api';
     import { mapGetters } from 'vuex';
@@ -180,12 +180,11 @@
                 });
             },
             handleUpload(file) {
-                console.log(file);
                 let that = this;
                 let reader = new FileReader();
                 reader.readAsText(file);
-                reader.onload = () => {
-                    console.log(this.result);
+                reader.onload = function () {
+                    // 此处不可使用箭头函数，因为箭头函数的this绑定为定义时的this，跟运行时的this不一样。
                     that.showWrite = true;
                     that.showUpload = false;
                     that.opacity = false;

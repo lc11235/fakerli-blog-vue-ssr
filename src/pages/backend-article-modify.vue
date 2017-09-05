@@ -1,33 +1,33 @@
 <template>
-    <div class='settings-main card'>
-        <div class='settings-main-content'>
-            <a-input title='标题'>
-                <input type='text' v-model='form.title' placeholder='标题' class='base-input' name='title'>
-                <span class='input-info error'>请输入标题</span>
+    <div class="settings-main card">
+        <div class="settings-main-content">
+            <a-input title="标题">
+                <input type="text" v-model="form.title" placeholder="标题" class="base-input" name="title">
+                <span class="input-info error">请输入标题</span>
             </a-input>
-            <a-input title='标签' :classes=''select-item-wrap''>
-                <i class='icon icon-arrow-down'></i>
-                <select v-model='form.tag' class='select-item' name='tags'>
-                    <option value=''>请选择标签</option>
-                    <option v-for='tag in tags' :value='tag.tag_name' :key='tag.tag_name'>{{ tag.tag_name }}</option>
+            <a-input title="标签" class="select-item-wrap">
+                <i class="icon icon-arrow-down"></i>
+                <select v-model="form.tag" class="select-item" name="tags">
+                    <option value="">请选择标签</option>
+                    <option v-for="tag in tags" :value="tag.tag_name" :key="tag.tag_name">{{ tag.tag_name }}</option>
                 </select>
-                <a @click='addTagList' href='javascript:;' class='btn btn-yellow'>添加标签</a>
-                <span class='input-info error'>请输入标签</span>
+                <a @click="addTagList" href="javascript:;" class="btn btn-yellow">添加标签</a>
+                <span class="input-info error">请输入标签</span>
             </a-input>
-            <a-input title='已有标签' v-if='tagList.length > 0'>
-                <ul class='tag-list'>
-                    <li v-for='tagItem in tagList' v-text='tagItem' :key='tagItem'></li>
+            <a-input title="已有标签" v-if="tagList.length > 0">
+                <ul class="tag-list">
+                    <li v-for="tagItem in tagList" v-text="tagItem" :key="tagItem"></li>
                 </ul>
             </a-input>
-            <div class='settings-section'>
-                <div id='modify-content' class='settings-item-content'>
-                    <textarea id='editor' name='content' class='form-control hidden' data-autosave='editor-content'></textarea>
+            <div class="settings-section">
+                <div id="modify-content" class="settings-item-content">
+                    <textarea id="editor" name="content" class="form-control hidden" data-autosave="editor-content"></textarea>
                 </div>
             </div>
         </div>
-        <div class='settings-footer clearfix'>
-            <router-link to='/backend/aticle/list' class='btn btn-blue'>返回</router-link>
-            <a @click='modify' href='javascript:;' class='btn btn-yellow'>编辑文章</a>
+        <div class="settings-footer clearfix">
+            <router-link to="/backend/aticle/list" class="btn btn-blue">返回</router-link>
+            <a @click="modify" href="javascript:;" class="btn btn-yellow">编辑文章</a>
         </div>
     </div>
 </template>

@@ -837,11 +837,11 @@ article .entry-content-archive .date{
 }
 
 .search-modal{
-    width: 600px;
+    width: 700px;
     margin: 0 auto;
     position: relative;
     outline: 0;
-    top: 100px;
+    top: 10%;
 }
 
 .search-modal-content{
@@ -853,24 +853,27 @@ article .entry-content-archive .date{
 }
 
 .search-modal-close{
-    font-size: 12px;
+    font-size: 16px;
     position: absolute;
     right: 16px;
-    top: 8px;
+    top: 17px;
     overflow: hidden;
     cursor: pointer;
 }
 
 .search-modal-header{
-    border-bottom: 1px solid #e9eaec;
-    padding: 14px 16px;
-    line-height: 1;
+    border-bottom: 1px solid #ccc;
+    padding: 8px 15px 10px;
+    max-height: 50px;
+    background: #f5f5f5;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
 
 .search-modal-body{
     padding: 16px;
-    font-size: 12px;
-    line-height: 1.5;
+    font-size: 16px;
+    line-height: 1.7;
 }
 
 .search-modal-footer{
@@ -895,17 +898,24 @@ article .entry-content-archive .date{
 
 .search-input{
     display: block;
-    width: 95%;
-    padding: .5rem .75rem;
+    width: 100%;
+    padding: 5px 0;
+    border: 0;
     font-size: 1rem;
     line-height: 1.25;
     color: #464a4c;
-    background-color: #fff;
-    background-image: none;
+    background: 0 0;
     background-clip: padding-box;
-    border: 1px solid rgba(0,0,0,.15);
-    border-radius: .25rem;
-    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+.algolia-search-input-icon{
+    display: inline-block;
+    width: 20px;
+}
+
+.algolia-search-input{
+    display: inline-block;
+    width: calc(90% - 20px);
 }
 
 
