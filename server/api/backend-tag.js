@@ -44,11 +44,18 @@ exports.getItem = (req, res) => {
 exports.insert = (req, res) => {
     let tag_name = req.body.tag_name;
     if (!tag_name) {
-        res.json({
+        return res.json({
             code: -200,
             message: '请填写标签名称'
         });
-    } else {
+    }
+    Tag.findOne({ tag_name }).then(result => {
+        if(result) {
+            return res.json({
+                code: -200,
+                messgae: '这个标签已经存在'
+            });
+        }
         return Tag.create({
             tag_name,
             tag_num: 0,
@@ -56,14 +63,19 @@ exports.insert = (req, res) => {
             update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
             is_delete: 0,
             timestamp: moment().format('X')
-        }).then(result => {
+        }).then(resultTag => {
             res.json({
                 code: 200,
                 message: '添加成功',
-                data: result._id
+                data: resultTag._id
             });
         });
-    }
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    })
 };
 
 exports.deletes = (req, res) => {
