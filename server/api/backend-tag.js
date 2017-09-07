@@ -53,7 +53,7 @@ exports.insert = (req, res) => {
         if(result) {
             return res.json({
                 code: -200,
-                messgae: '这个标签已经存在'
+                message: '这个标签已经存在'
             });
         }
         return Tag.create({

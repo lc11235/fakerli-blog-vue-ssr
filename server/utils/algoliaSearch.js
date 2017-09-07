@@ -137,15 +137,17 @@ exports.addArticle = (articleJSON, singleFlag) => {
     let tempArticleJSON = idToObjectID(articleJSON);
     if (singleFlag) {
         indexArtcile.addObject(tempArticleJSON, (err, content) => {
-            if (err) console.log(err);
-            console.log(content);
-            indexArtcile.waitTask(content.taskID, function (err) {
-                if (!err) {
-                    console.log('object ' + content.objectID + ' indexed');
-                } else {
-                    console.log(err);
-                }
-            });
+            if (err) {
+                console.log(err);
+            } else {
+                indexArtcile.waitTask(content.taskID, function (err) {
+                    if (!err) {
+                        console.log('object ' + content.objectID + ' indexed');
+                    } else {
+                        console.log(err);
+                    }
+                });
+            }
         });
     } else {
         indexArtcile.addObjects(articleJSON, (err, content) => {
