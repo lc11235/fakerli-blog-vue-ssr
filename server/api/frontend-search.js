@@ -1,4 +1,4 @@
-const elasticClient = require('../utils/searchIndex.js');
+const elasticClient = require('../utils/elasticsearch.js');
 
 /**
  * 前台浏览时，搜索文章
@@ -8,8 +8,8 @@ const elasticClient = require('../utils/searchIndex.js');
  * @return {[json]}       [回复json]
  */
 exports.search = (req, res) => {
-    let qString = req.search;
-    if(qString){
+    let qString = req.query.search;
+    if (!qString) {
         return res.json({
             code: -200,
             message: '查询条件为空！'
@@ -28,7 +28,7 @@ exports.search = (req, res) => {
         res.json({
             code: -200,
             message: err.toString()
-        })
+        });
     });
 };
 

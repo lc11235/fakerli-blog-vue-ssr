@@ -1,17 +1,18 @@
 const elasticClient = require('./elasticsearch.js');
 
 exports.addArticleIndex = (articleJSON) => {
-    let tempArticleJSON = JSON.stringify(articleJSON);
+    // let tempArticleJSON = JSON.stringify(articleJSON);
+    console.log(articleJSON.content);
     elasticClient.index({
         index: 'blog',
         type: 'article',
-        id: tempArticleJSON._id,
+        id: articleJSON._id,
         body: {
-            title: tempArticleJSON.title,
+            title: articleJSON.title,
             slug: '',
-            tags: tempArticleJSON.tags,
-            content: tempArticleJSON.content,
-            update_date: tempArticleJSON.update_date,
+            tags: articleJSON.tags,
+            content: articleJSON.content,
+            update_date: articleJSON.update_date,
         }
     }).then(value => {
         console.log(value);

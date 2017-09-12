@@ -65,7 +65,7 @@
                         if (_this.search_input_string !== _this.old_input) {
                             if (_this.search_input_string !== _this.old_input) {
                                 $('ul.results').empty();
-                                const { data: { message, code, data }} = await api.get('frontend/search', _this.search_input_string);
+                                const { data: { message, code, data }} = await api.get('frontend/search', { search: _this.search_input_string });
                                 if (code === -200) {
                                     console.log(message);
                                     return;
