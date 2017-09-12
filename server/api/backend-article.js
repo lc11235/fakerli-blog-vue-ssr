@@ -15,7 +15,7 @@ marked.setOptions({
     breaks: true
 });
 
-const algolia = require('../utils/algoliaSearch.js');
+const elastic = require('../utils/searchIndex.js');
 const multer = require('multer');
 
 const storage = multer.diskStorage({
@@ -103,9 +103,12 @@ exports.insert = (req, res) => {
             { '$inc': { 'tag_num': 1 }},
             { upsert: true, multi: true }).then(() => {
             Article.findOne({ title: title }, 'title content tags').then(resultArticle => {
-                algolia.addArticle(resultArticle, true);
+                elastic.addArticleIndex(resultArticle);
             }).catch(err => {
-                console.log(err.toString());
+                return res.json({
+                    code: -200,
+                    message: err.toString()
+                });
             });
             return res.json({
                 code: 200,

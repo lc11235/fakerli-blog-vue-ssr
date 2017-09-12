@@ -1,5 +1,5 @@
 <template>
-    <div class="search-results" >
+    <div class="search-results">
         <div class="search-opacity" v-show="show"></div>
         <div class="search-modal-wrap" v-show="show" @click="noShow">
             <div class="search-modal">
@@ -32,15 +32,14 @@
 </template>
 
 <script lang="babel">
-    import algolia from 'algoliasearch';
+    import api from '~api';
     export default {
-        name: 'algolia-search',
+        name: 'search',
         data() {
             return {
                 searchShow: false,
                 search_input_string: '',
                 old_input: '',
-                article_index: {}
             };
         },
         props: ['show'],
@@ -62,25 +61,18 @@
                 if ($(event.target).val() !== '') {
                     this.search_input_string = $(event.target).val();
                     let _this = this;
-                    setTimeout(function () {
+                    setTimeout(async function () {
                         if (_this.search_input_string !== _this.old_input) {
                             if (_this.search_input_string !== _this.old_input) {
                                 $('ul.results').empty();
-                                _this.article_index.search(_this.search_input_string, (err, articles) => {
-                                    if (err) {
-                                        console.log(err);
-                                    }
-                                    console.log(articles);
-                                    for (let i = 0; i < articles.hits.length; i++) {
-                                        let indexCount = articles.hits[i].content.indexOf(_this.search_input_string);
-                                        let start = indexCount - 10 < 0 ? 0 : indexCount - 10;
-                                        let end = indexCount + 10 > articles.hits[i].content.length ? articles.hits[i].content.length : indexCount + 10;
-                                        let content = articles.hits[i].content.substring(start, end);
-                                        let customer = '<a href="/article/' + articles.hits[i].title + '" class="list-group-item">' +
-                                        articles.hits[i].tags[0] + ' ' + content + '</a>';
-                                        $('ul.results').append(customer);
-                                    }
-                                });
+                                const { data: { message, code, data }} = await api.get('frontend/search', _this.search_input_string);
+                                if (code === -200) {
+                                    console.log(message);
+                                    return;
+                                }
+                                if (code === 200) {
+                                    console.log(data);
+                                }
                                 _this.old_input = _this.search_input_string;
                             }
                         }
@@ -89,10 +81,6 @@
                     this.searchShow = false;
                 }
             }
-        },
-        mounted() {
-            let client = algolia('8RJ1CFIKV0', 'c1071e95978a460f2e7df4dfe9b65488');
-            this.article_index = client.initIndex('fakerli_article');
         }
     };
 </script>

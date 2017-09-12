@@ -10,7 +10,7 @@
             <back-top />
             <footer-item />
         </main>
-        <algolia-search :show.sync="isShow" />
+        <search :show.sync="isShow" />
     </div>
 </template>
 
@@ -22,7 +22,7 @@
     import topHeader from './components/top-header.vue';
     import contentHeader from './components/content-header.vue';
     import footerItem from './components/footer.vue';
-    import algoliaSearch from './components/algolia-search.vue';
+    import search from './components/search.vue';
 
     export default {
         name: 'app',
@@ -45,7 +45,7 @@
             contentHeader,
             backTop,
             footerItem,
-            algoliaSearch
+            search
         },
         watch: {
             'global.progress'(val) {

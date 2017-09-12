@@ -8,6 +8,7 @@ const backendTag = require('../api/backend-tag');
 const backendUser = require('../api/backend-user');
 const frontendArticle = require('../api/frontend-article');
 const frontendArchive = require('../api/frontend-archive');
+const frontendSearch = require('../api/frontend-search');
 const isAdmin = require('./is-admin');
 
 // 添加管理员
@@ -74,6 +75,10 @@ router.get('/frontend/article/item', frontendArticle.getItem);
 // ------ 归档 ------
 // 归档列表
 router.get('/frontend/archive/listTitle', frontendArchive.getListTitle);
+
+// ======= 搜索 =========
+// 前台搜索
+router.get('/frontend/search', frontendSearch.search);
 
 // ------ 404 ------
 router.get('*', (req, res) => {

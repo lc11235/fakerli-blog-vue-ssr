@@ -11,8 +11,7 @@ const projectRoot = path.resolve(__dirname, '../');
 
 let config = merge(baseConfig, {
     externals: {
-        'jquery': 'jQuery',
-        'algoliasearch': 'algoliasearch'
+        'jquery': 'jQuery'
     },
     module: {
         rules: [{
@@ -37,8 +36,7 @@ let config = merge(baseConfig, {
         new webpack.ProgressPlugin({
             $: 'jquery',
             jQuery: 'jquery',
-            'window.jQuery': 'jquery',
-            algolia: 'algoliasearch'
+            'window.jQuery': 'jquery'
         })
     ]
 });
