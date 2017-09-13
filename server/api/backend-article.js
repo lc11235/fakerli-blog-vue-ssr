@@ -102,18 +102,18 @@ exports.insert = (req, res) => {
         return Tag.update({ tag_name: { '$in': arr_tag }},
             { '$inc': { 'tag_num': 1 }},
             { upsert: true, multi: true }).then(() => {
-            Article.findOne({ title: title }, 'title content tags').then(resultArticle => {
+            Article.findOne({ title: title }, 'title content html tags update_date').then(resultArticle => {
                 elastic.addArticleIndex(resultArticle);
+                return res.json({
+                    code: 200,
+                    message: '发布成功',
+                    data: result
+                });
             }).catch(err => {
                 return res.json({
                     code: -200,
                     message: err.toString()
                 });
-            });
-            return res.json({
-                code: 200,
-                message: '发布成功',
-                data: result
             });
         });
     }).catch(err => {

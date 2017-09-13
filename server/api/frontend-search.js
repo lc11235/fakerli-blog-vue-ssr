@@ -1,4 +1,4 @@
-const elasticClient = require('../utils/elasticsearch.js');
+const elasticClient = require('../utils/elasticClient.js');
 
 /**
  * 前台浏览时，搜索文章
@@ -15,10 +15,64 @@ exports.search = (req, res) => {
             message: '查询条件为空！'
         });
     }
+    let keyword = qString;
     elasticClient.search({
         index: 'blog',
         type: 'article',
-        q: qString,
+        from: 0,
+        body: {
+            query: {
+                dis_max: {
+                    queries: [
+                        {
+                            match: {
+                                title: {
+                                    query: keyword,
+                                    minimum_should_match: '50%',
+                                    boost: 4,
+                                }
+                            }
+                        }, 
+                        {
+                            match: {
+                                content: {
+                                    query: keyword,
+                                    minimum_should_match: '75%',
+                                    boost: 4,
+                                }
+                            }
+                        }, 
+                        {
+                            match: {
+                                tags: {
+                                    query: keyword,
+                                    minimum_should_match: '100%',
+                                    boost: 2,
+                                }
+                            }
+                        }, 
+                        {
+                            match: {
+                                slug: {
+                                    query: keyword,
+                                    minimum_should_match: '100%',
+                                    boost: 1,
+                                }
+                            }
+                        }
+                    ],
+                    tie_breaker: 0.3
+                }
+            },
+            highlight: {
+                pre_tags: ['<b>'],
+                post_tags: ['</b>'],
+                fields: {
+                    title: {},
+                    content: {},
+                }
+            }
+        }
     }).then(value => {
         return res.json({
             code: 200,

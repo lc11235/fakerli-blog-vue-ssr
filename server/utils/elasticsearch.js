@@ -1,16 +1,17 @@
-const elastic = require('elasticsearch');
+const client = require('./elasticClient.js');
 
-const client = new elastic.Client({
-    host: '127.0.0.1:9200',
-    log: 'trace'
-});
-
-client.indices.exists({
+exports.init = () => client.indices.exists({
     index: 'blog'
 }).then(value => {
-    console.log(value + 'test11');
+    console.log(value);
 }, reason => {
     client.indices.create({ index: 'blog' });
+    client.indices.analyze({
+        tokenizer: 'ik_max_word',
+        filter: ['lowercase'],
+        charFilter: ['html_strip'],
+        index: 'blog',
+    });
     client.indices.putMapping({
         index: 'blog',
         type: 'article',
@@ -47,5 +48,3 @@ client.indices.exists({
 }).catch(err => {
     console.log(err);
 });
-
-module.exports = client;
