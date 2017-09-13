@@ -136,7 +136,34 @@ exports.deletes = (req, res) => {
     let tagList = req.query.tagList;
     let arr_tag = tagList.split('|');
     Article.update({ title: title }, { is_delete: 1 }).then(() => {
-        return Tag.update({ tag_name: { '$in': arr_tag }}, { '$inc': { 'tag_num': -1 }}, { upsert: false, multi: true }).then(result => {
+        return Tag.update({ tag_name: { '$in': arr_tag }, tag_num: { '$gt': 0 }}, { '$inc': { 'tag_num': -1 }}, { upsert: false, multi: true }).then(result => {
+            res.json({
+                code: 200,
+                message: '更新成功',
+                data: result
+            });
+        });
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
+};
+
+/**
+ * 管理时，删除文章
+ * @method
+ * @param  {[type]} req [description]
+ * @param  {[type]} res [description]
+ * @return {[type]}     [description]
+ */
+exports.deleteCompletely = (req, res) => {
+    let title = req.query.title;
+    let tagList = req.query.tagList;
+    let arr_tag = tagList.split('|');
+    Article.remove({ title: title }).then(() => {
+        return Tag.update({ tag_name: { '$in': arr_tag }, tag_num: { '$gt': 0 }}, { '$inc': { 'tag_num': -1 }}, { upsert: false, multi: true }).then(result => {
             res.json({
                 code: 200,
                 message: '更新成功',
@@ -162,6 +189,7 @@ exports.recover = (req, res) => {
     let title = req.query.title;
     let tagList = req.query.tagList;
     let arr_tag = tagList.split('|');
+    // todo: 在标签被删除的时候，文章不可以恢复
     Article.update({ title: title }, { is_delete: 0 }).then(() => {
         return Tag.update({ tag_name: { '$in': arr_tag }}, { '$inc': { 'tag_num': 1 }}, { upsert: false, multi: true }).then(() => {
             res.json({

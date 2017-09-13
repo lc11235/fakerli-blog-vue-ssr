@@ -1,6 +1,7 @@
 const moment = require('moment');
 const mongoose = require('../mongoose');
 const Tag = mongoose.model('Tag');
+const Article = mongoose.model('Article');
 
 /**
  * 管理时, 获取标签列表
@@ -50,7 +51,7 @@ exports.insert = (req, res) => {
         });
     }
     Tag.findOne({ tag_name }).then(result => {
-        if(result) {
+        if (result) {
             return res.json({
                 code: -200,
                 message: '这个标签已经存在'
@@ -75,16 +76,48 @@ exports.insert = (req, res) => {
             code: -200,
             message: err.toString()
         });
-    })
+    });
 };
 
 exports.deletes = (req, res) => {
     let tag_name = req.query.tag_name;
-    Tag.update({ tag_name: tag_name }, { is_delete: 1 }).then(() => {
+    Article.find({ tags: tag_name, is_delete: 0 }).then(reason => {
+        if (reason) {
+            return Tag.update({ tag_name: tag_name }, { is_delete: 1 }).then(() => {
+                res.json({
+                    code: 200,
+                    message: '删除成功！',
+                    data: 'success'
+                });
+            });
+        }
         res.json({
-            code: 200,
-            message: '更新成功',
-            data: 'success'
+            code: -200,
+            message: '标签还在使用！'
+        });
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
+};
+
+exports.deleteCompletely = (req, res) => {
+    let tag_name = req.query.tag_name;
+    Article.find({ tags: tag_name, is_delete: 0 }).then(reason => {
+        if (reason) {
+            return Tag.remove({ tag_name: tag_name }).then(() => {
+                res.json({
+                    code: 200,
+                    message: '彻底删除成功！',
+                    data: 'success'
+                });
+            });
+        }
+        res.json({
+            code: -200,
+            message: '标签还在使用！'
         });
     }).catch(err => {
         res.json({

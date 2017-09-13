@@ -32,7 +32,7 @@ exports.search = (req, res) => {
                                     boost: 4,
                                 }
                             }
-                        }, 
+                        },
                         {
                             match: {
                                 content: {
@@ -41,7 +41,7 @@ exports.search = (req, res) => {
                                     boost: 4,
                                 }
                             }
-                        }, 
+                        },
                         {
                             match: {
                                 tags: {
@@ -50,7 +50,7 @@ exports.search = (req, res) => {
                                     boost: 2,
                                 }
                             }
-                        }, 
+                        },
                         {
                             match: {
                                 slug: {

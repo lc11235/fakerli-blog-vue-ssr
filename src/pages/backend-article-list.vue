@@ -67,7 +67,7 @@
                     {
                         title: '操作',
                         key: 'action',
-                        width: 150,
+                        width: 250,
                         align: 'center',
                         render: (h, params) => {
                             let modifyButton = h('Button', {
@@ -89,6 +89,9 @@
                                     type: 'error',
                                     size: 'small'
                                 },
+                                style: {
+                                    marginRight: '5px'
+                                },
                                 on: {
                                     click: () => {
                                         this.recover(params.index);
@@ -100,16 +103,30 @@
                                     type: 'error',
                                     size: 'small'
                                 },
+                                style: {
+                                    marginRight: '5px'
+                                },
                                 on: {
                                     click: () => {
                                         this.deletes(params.index);
                                     }
                                 }
                             }, '删除');
+                            let deteleCompletelyButton = h('Button', {
+                                props: {
+                                    type: 'error',
+                                    size: 'small'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.deleteCompletely(params.index);
+                                    }
+                                }
+                            }, '彻底删除');
                             if (this.data[params.index].is_delete) {
-                                return h('div', [modifyButton, recoverButton]);
+                                return h('div', [modifyButton, recoverButton, deteleCompletelyButton]);
                             } else {
-                                return h('div', [modifyButton, deleteButton]);
+                                return h('div', [modifyButton, deleteButton, deteleCompletelyButton]);
                             }
                         }
                     }
@@ -153,6 +170,23 @@
                         duration: 3
                     });
                     this.$store.commit('backend/article/deleteArticle', title);
+                } else {
+                    this.$Message.error({
+                        content: message,
+                        duration: 3
+                    });
+                }
+            },
+            async deleteCompletely(index) {
+                let title = this.data[index].title;
+                let tagList = this.data[index].tags.join('|');
+                const { data: { code, message }} = await api.get('backend/article/deleteCompletely', { title, tagList });
+                if (code === 200) {
+                    this.$Message.success({
+                        content: message,
+                        duration: 3
+                    });
+                    this.$store.commit('backend/article/deleteArticleCompletely', title);
                 } else {
                     this.$Message.error({
                         content: message,

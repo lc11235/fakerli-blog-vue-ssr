@@ -38,6 +38,10 @@ const mutations = {
         const obj = states.lists.find(ii => ii.tag_name === tag_name);
         if (obj) obj.is_delete = 1;
     },
+    'deleteTagCompletely'(states, tag_name) {
+        const obj = states.lists.findIndex(ii => ii.tag_name === tag_name);
+        if (obj > -1) states.lists.splice(obj, 1);
+    },
     'recoverTag'(states, tag_name) {
         const obj = states.lists.find(ii => ii.tag_name === tag_name);
         if (obj) obj.is_delete = 0;

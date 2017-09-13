@@ -30,6 +30,8 @@ router.get('/backend/article/item', isAdmin, backendArticle.getItem);
 router.post('/backend/article/insert', isAdmin, multipartMiddleware, backendArticle.insert);
 // 管理时，删除文章
 router.get('/backend/article/delete', isAdmin, backendArticle.deletes);
+// 管理时，彻底删除文章
+router.get('/backend/article/deleteCompletely', isAdmin, backendArticle.deleteCompletely);
 // 管理时，恢复文章
 router.get('/backend/article/recover', isAdmin, backendArticle.recover);
 // 管理时，编辑文章
@@ -46,6 +48,8 @@ router.get('/backend/tag/item', backendTag.getItem);
 router.post('/backend/tag/insert', multipartMiddleware, isAdmin, backendTag.insert);
 // 管理时, 删除标签
 router.get('/backend/tag/delete', isAdmin, backendTag.deletes);
+// 管理时，彻底删除标签
+router.get('/backend/tag/deleteCompletely', isAdmin, backendTag.deleteCompletely);
 // 管理时, 恢复标签
 router.get('/backend/tag/recover', isAdmin, backendTag.recover);
 // 管理时, 编辑标签

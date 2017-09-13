@@ -84,6 +84,10 @@ const mutations = {
         const obj = states.lists.data.find(ii => ii.title === title);
         if (obj) obj.is_delete = 1;
     },
+    'deleteArticleCompletely'(states, title) {
+        const obj = states.lists.data.findIndex(ii => ii.title === title);
+        if (obj > -1) states.lists.data.splice(obj, 1);
+    },
     'recoverArticle'(states, title) {
         const obj = states.lists.data.find(ii => ii.title === title);
         if (obj) obj.is_delete = 0;

@@ -31,7 +31,7 @@ function checkCode(res) {
         window.location.href = '/backend';
     } else if (res.data.code === -400) {
         window.location.href = '/';
-    } else if (res.data.code !== 200) {
+    } else if (res.data.code !== -200 && res.data.code !== 200) {
         store.dispatch('global/showMsg', res.data.message);
     }
     return res;
