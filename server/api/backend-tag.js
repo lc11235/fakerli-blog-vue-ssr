@@ -82,7 +82,7 @@ exports.insert = (req, res) => {
 exports.deletes = (req, res) => {
     let tag_name = req.query.tag_name;
     Article.find({ tags: tag_name, is_delete: 0 }).then(reason => {
-        if (reason) {
+        if (reason.length === 0) {
             return Tag.update({ tag_name: tag_name }, { is_delete: 1 }).then(() => {
                 res.json({
                     code: 200,
@@ -106,7 +106,7 @@ exports.deletes = (req, res) => {
 exports.deleteCompletely = (req, res) => {
     let tag_name = req.query.tag_name;
     Article.find({ tags: tag_name, is_delete: 0 }).then(reason => {
-        if (reason) {
+        if (reason.length === 0) {
             return Tag.remove({ tag_name: tag_name }).then(() => {
                 res.json({
                     code: 200,

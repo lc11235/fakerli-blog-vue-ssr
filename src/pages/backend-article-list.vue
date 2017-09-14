@@ -208,6 +208,13 @@
                 this.data = this.topics.data;
             }
         },
+        beforeRouteEnter(to, from, next) {
+            next(vm => {
+                if (from.path === '/backend/article/insert') {
+                    fetchInitialData(vm.$store);
+                }
+            });
+        },
         watch: {
             topics(val) {
                 this.data = val.data;

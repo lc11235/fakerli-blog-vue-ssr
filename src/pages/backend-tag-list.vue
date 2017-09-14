@@ -161,6 +161,14 @@
                 this.data = this.tags;
             }
         },
+        beforeRouteEnter(to, from, next) {
+            next(vm => {
+                if (from.path === '/backend/tag/insert') {
+                    console.log(to, from);
+                    fetchInitialData(vm.$store);
+                }
+            });
+        },
         watch: {
             tags(val) {
                 this.data = val;

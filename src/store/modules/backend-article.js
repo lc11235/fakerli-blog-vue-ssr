@@ -16,16 +16,16 @@ const state = {
 
 const actions = {
     async 'getArticleList'({ commit, rootState: { global, route: { fullPath }}}, config) {
-        const path = fullPath;
-        if (state.lists.data.length > 0 && path === state.lists.path && config.page === 1) {
-            global.progress = 100;
-            return;
-        }
+        // const path = fullPath;
+        // if (state.lists.data.length > 0 && path === state.lists.path && config.page === 1) {
+        //     global.progress = 100;
+        //     return;
+        // }
         const { data: { data, code }} = await api.get('backend/article/list', config);
         if (data && code === 200) {
             commit('receiveArticleList', {
                 ...data,
-                path,
+                fullPath,
                 page: config.page
             });
         }
