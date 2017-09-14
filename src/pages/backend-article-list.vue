@@ -210,7 +210,7 @@
         },
         beforeRouteEnter(to, from, next) {
             next(vm => {
-                if (from.path === '/backend/article/insert') {
+                if (from.path !== '/') {
                     fetchInitialData(vm.$store);
                 }
             });
