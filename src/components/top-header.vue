@@ -35,12 +35,14 @@
             scrolling() {
                 if (window.scrollTime2) window.clearTimeout(window.scrollTime2);
                 window.scrollTime2 = window.setTimeout(() => {
-                    if (document.body.scrollTop > 56) {
+                    // 修复chrome61的bug，在这个版本中，document.body.scrollTop没有值，一直返回0
+                    let scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+                    if (scrollTop > 56) {
                         $('#header').addClass('fixed');
                     } else {
                         $('#header').removeClass('fixed');
                     }
-                    if (document.body.scrollTop >= 200) {
+                    if (scrollTop >= 200) {
                         $('#post-toc').addClass('fixed');
                     } else {
                         $('#post-toc').removeClass('fixed');

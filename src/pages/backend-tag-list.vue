@@ -164,7 +164,6 @@
         beforeRouteEnter(to, from, next) {
             next(vm => {
                 if (from.path !== '/') {
-                    console.log(to, from);
                     fetchInitialData(vm.$store);
                 }
             });

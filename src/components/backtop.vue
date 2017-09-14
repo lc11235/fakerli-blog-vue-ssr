@@ -15,7 +15,8 @@
             scrolling() {
                 if (window.scrollTime) window.clearTimeout(window.scrollTime);
                 window.scrollTime = window.setTimeout(() => {
-                    this.scrollTop = document.body.scrollTop;
+                    // 修复chrome61的bug，在这个版本中，document.body.scrollTop没有值，一直返回0
+                    this.scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
                 }, 100);
             },
             handleBackTop() {
@@ -29,7 +30,11 @@
                         top = 0;
                         clearInterval(timer);
                     }
-                    document.body.scrollTop = top;
+                    if (document.body.scrollTop) {
+                        document.body.scrollTop = top;
+                    } else {
+                        document.documentElement.scrollTop = top;
+                    }
                 }, 20);
             }
         },
