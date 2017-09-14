@@ -883,16 +883,16 @@ article .entry-content-archive .date{
 }
 
 .power-by{
-    margin-top: 12.5px;
-    width: 120px;
+    margin-top: 10px;
+    width: 100px;
     display: inline-block;
     text-align: center;
 }
 
-.algolia-logo{
-    vertical-align: top;
-    width: 80px;
-    height: 50px;
+.elastic-logo{
+    margin-top: 10px;
+    margin-right: 5px;
+    width: 100px;
     display: inline-block;
 }
 
@@ -908,12 +908,12 @@ article .entry-content-archive .date{
     background-clip: padding-box;
 }
 
-.algolia-search-input-icon{
+.elastic-search-input-icon{
     display: inline-block;
     width: 20px;
 }
 
-.algolia-search-input{
+.elastic-search-input{
     display: inline-block;
     width: calc(90% - 20px);
 }

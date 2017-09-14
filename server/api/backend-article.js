@@ -189,13 +189,20 @@ exports.recover = (req, res) => {
     let title = req.query.title;
     let tagList = req.query.tagList;
     let arr_tag = tagList.split('|');
-    // todo: 在标签被删除的时候，文章不可以恢复
-    Article.update({ title: title }, { is_delete: 0 }).then(() => {
-        return Tag.update({ tag_name: { '$in': arr_tag }}, { '$inc': { 'tag_num': 1 }}, { upsert: false, multi: true }).then(() => {
-            res.json({
-                code: 200,
-                message: '更新成功',
-                data: 'success'
+    Tag.find({ tag_name: { '$in': arr_tag }, is_delete: 1 }).then(reason => {
+        if (reason.length > 0) {
+            return res.json({
+                code: -200,
+                message: '有标签被删除，不可恢复文章！'
+            });
+        }
+        Article.update({ title: title }, { is_delete: 0 }).then(() => {
+            return Tag.update({ tag_name: { '$in': arr_tag }}, { '$inc': { 'tag_num': 1 }}, { upsert: false, multi: true }).then(() => {
+                res.json({
+                    code: 200,
+                    message: '更新成功',
+                    data: 'success'
+                });
             });
         });
     }).catch(err => {
