@@ -918,6 +918,30 @@ article .entry-content-archive .date{
     width: calc(90% - 20px);
 }
 
+.page-navi {
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #ddd;
+    line-height: 20px;
+    overflow: hidden;
+    padding: 20px 0;
+    position: relative;
+    width: 100%;
+}
+
+.page-navi .prev {
+    float: left;
+}
+
+.page-navi .next {
+    float: right;
+}
+
+.page-navi .page-center {
+    margin: auto;
+    text-align: center;
+    width: 80px;
+}
+
 
 /*自己引入*/    
 nav ul, nav ol {
@@ -1055,7 +1079,6 @@ a {
 
 .main {
     margin-top: 50px;
-    margin-bottom: 50px;
 }
 
 .main .main-left {

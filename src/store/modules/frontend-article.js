@@ -48,15 +48,8 @@ const actions = {
 
 const mutations = {
     'receiveArticleList'(states, { list, hasNext, hasPrev, page, path }) {
-        let tempList;
-        if (page === 1) {
-            tempList = [].concat(list);
-        } else {
-            tempList = states.lists.data.concat(list);
-        }
-
         states.lists = {
-            data: tempList, hasNext, hasPrev, page, path
+            data: list, hasNext, hasPrev, page, path
         };
     },
     'receiveArticleItem'(states, { data, path }) {

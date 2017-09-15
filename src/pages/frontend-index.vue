@@ -3,12 +3,15 @@
         <topics-item-none v-if="!topics.path">加载中，请稍等...</topics-item-none>
         <template v-else-if="topics.data.length > 0">
             <topics-item v-for="item in topics.data" :item="item" :key="item._id"></topics-item>
-            <div class="load-more-wrap">
-                <a v-if="topics.hasNext" @click="loadMore()" href="javascript:;" class="load-more">
-                    更多
-                    <i class="icon icon-cicle-loading"></i>
-                </a>
-            </div>
+            <nav class="page-navi">
+                <router-link :to="{ path: '/', query: { pn: pn - 1}}" v-show="topics.hasPrev" class="prev">上一页</router-link>
+                <router-link :to="{ path: '/', query: { pn: pn + 1 }}" v-show="topics.hasNext" class="next">下一页</router-link>
+                <div class="page-center">
+                    <router-link to="/archives" >
+                        博客归档
+                    </router-link>
+                </div>
+            </nav>
         </template>
         <topics-item-none v-else>当前标签还没有文章...</topics-item-none>
     </div>
@@ -23,14 +26,19 @@
     import metaMixin from '~mixins';
 
     const fetchInitialData = async (store, config = { page: 1 }) => {
-        const { params: { title, by }, path } = store.state.route;
-        const base = { ...config, limit: 10, title, by };
+        const { path } = store.state.route;
+        const base = { ...config, limit: 10 };
         await store.dispatch('frontend/article/getArticleList', base);
         if (config.page === 1) ssp(path);
     };
 
     export default {
         name: 'frontend-index',
+        data() {
+            return {
+                pn: 1
+            };
+        },
         prefetch: fetchInitialData,
         mixins: [metaMixin],
         components: {
@@ -41,21 +49,20 @@
                 topics: 'frontend/article/getArticleList'
             })
         },
-        methods: {
-            loadMore(page = this.topics.page + 1) {
-                fetchInitialData(this.$store, { page });
-            }
-        },
         mounted() {
-            fetchInitialData(this.$store, { page: 1 });
+            let page = this.$route.query.pn || 1;
+            this.pn = page;
+            fetchInitialData(this.$store, { page });
         },
         watch: {
             '$route'() {
-                fetchInitialData(this.$store, { page: 1 });
+                let page = this.$route.query.pn || 1;
+                this.pn = page;
+                fetchInitialData(this.$store, { page });
             }
         },
         beforeRouteLeave(to, from, next) {
-            const scrollTop = document.body.scrollTop;
+            const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
             const path = from.path;
             if (scrollTop) {
                 store2.set(path, scrollTop);

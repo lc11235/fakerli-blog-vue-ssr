@@ -23,7 +23,7 @@ export const ssp = path => {
     if (scrollTop) {
         Vue.nextTick().then(() => {
             if (document.body.clientHeight >= scrollTop + clientHeight) {
-                window.scrollTo(0, screenTop);
+                window.scrollTo(0, scrollTop);
             }
             store2.remove(path);
         });
