@@ -73,6 +73,7 @@
         },
         beforeRouteUpdate(to, from, next) {
             if (to.path !== from.path) {
+                this.$route.params.title = to.params.title;
                 fetchInitialData(this.$store);
             } else {
                 this.$store.dispatch('global/gProgress', 100);

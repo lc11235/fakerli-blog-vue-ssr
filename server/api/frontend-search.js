@@ -1,4 +1,5 @@
 const elasticClient = require('../utils/elasticClient.js');
+const result = require('../utils/searchResult.js');
 
 /**
  * 前台浏览时，搜索文章
@@ -74,10 +75,18 @@ exports.search = (req, res) => {
             }
         }
     }).then(value => {
-        return res.json({
-            code: 200,
-            data: value,
-        });
+        let key = result.filterSearchResult(value, keyword);
+        if (key.result) {
+            return res.json({
+                code: 200,
+                data: key.article,
+            });
+        } else {
+            res.json({
+                code: -200,
+                message: '无结果！'
+            });
+        }
     }).catch(err => {
         res.json({
             code: -200,

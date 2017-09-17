@@ -897,15 +897,35 @@ article .entry-content-archive .date{
 }
 
 .search-input{
-    display: block;
-    width: 100%;
+    display: inline-block;
+    width: 84%;
     padding: 5px 0;
     border: 0;
     font-size: 1rem;
-    line-height: 1.25;
+    line-height: 1.6;
     color: #464a4c;
     background: 0 0;
     background-clip: padding-box;
+}
+
+.search-button{
+    display: inline-block;
+    width: 15%;
+    border: 0;
+    vertical-align: middle;
+    color: rgb(255, 255, 255);
+    background-color: rgb(233, 104, 107);
+    text-align: center;
+    cursor: pointer;
+    white-space: nowrap;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 2px 6px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+    font-family: 微软雅黑;
+    outline: 0px;
+    padding: 5px 9px;
+    overflow: hidden;
+    text-decoration: none;
+    transition: 0.2s ease-out;
+    border-radius: 2px;
 }
 
 .elastic-search-input-icon{
