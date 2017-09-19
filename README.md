@@ -5,7 +5,7 @@ fakerli blog based on ssr
 ## TODO
 
 1. ~~去掉algoliasearch支持（主要是免费额度太少）。进度：100%~~
-1. 添加elasticsearch的支持（增加elasticsearch的服务，增加node中elasticsearch搜索的支持）。进度：70%
+1. ~~添加elasticsearch的支持（增加elasticsearch的服务，增加node中elasticsearch搜索的支持）。进度：100%~~
 1. 前端界面根据后端elasticsearch的数据改善搜索界面。进度：50%
 1. 增加github评论支持。进度：0%
 1. 增加一个定时器node-schedule，从bing搜索中取得每日的图片作为blog的header图。进度：0%
