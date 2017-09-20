@@ -258,7 +258,7 @@ body {
     width: 100%;
     color: #fff;
     height: 56px;
-    background: #3f51b5;
+    background-color: transparent;
     -webkit-transition: padding-left .6s ease-in-out,background-color .3s cubic-bezier(.4, 0, .2, 1),box-shadow .15s linear;
     transition: padding-left .6s ease-in-out,background-color .3s cubic-bezier(.4, 0, .2, 1),box-shadow .15s linear;
     z-index: 30;
@@ -333,7 +333,7 @@ body {
     margin-left: -250px;
     padding: 104px 16px 48px 256px;
     color: #fff;
-    background: #3f51b5;
+    background: url('../../../headerImage/1.jpg');
     text-shadow: 0 1px 1px rgba(0,0,0,0.2);
     box-sizing: border-box;
 }
@@ -960,6 +960,15 @@ article .entry-content-archive .date{
     margin: auto;
     text-align: center;
     width: 80px;
+}
+
+.tooltip-box {
+    position: absolute;
+    display: block;
+    width: 300px;
+    height: 50px;
+    top: 180px;
+    right: 20px;
 }
 
 

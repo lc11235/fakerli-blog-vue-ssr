@@ -16,8 +16,10 @@ schedule.scheduleJob('30 * * * * *', () => {
             });
             res.on('end', () => {
                 let collection = html.match(/<Url>?.+?<\/Url>/ig);
+                let collectionCopy = html.match(/<copyright>?.+?<\/copyright>/ig);
                 if (collection.length > 0) {
                     let imgUrl = 'http://www.bing.com' + collection[0].replace(/<\/?url>/g, '').replace('1366x768', '1920x1080');
+                    let copyright = collectionCopy[0].replace(/<\/?copyright>/g, '');
                     http.get(imgUrl, res => {
                         if (res.statusCode === 200) {
                             let image = '';
