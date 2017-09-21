@@ -5,7 +5,7 @@ const path = require('path');
 
 const dir = path.join(__dirname + '/headerImage');
 
-schedule.scheduleJob('30 * * * * *', () => {
+schedule.scheduleJob('* * 8 * * *', () => {
     let url = 'http://cn.bing.com/HPImageArchive.aspx?idx=0&n=1';
     http.get(url, res => {
         if (res.statusCode === 200) {

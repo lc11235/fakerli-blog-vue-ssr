@@ -37,6 +37,11 @@
                 window.scrollTime2 = window.setTimeout(() => {
                     // 修复chrome61的bug，在这个版本中，document.body.scrollTop没有值，一直返回0
                     let scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+                    if (scrollTop > 0) {
+                        $('.top-header').css('background-color', '#3f51b5');
+                    } else {
+                        $('.top-header').css('background-color', 'transparent');
+                    }
                     if (scrollTop > 56) {
                         $('#header').addClass('fixed');
                     } else {

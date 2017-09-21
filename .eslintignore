@@ -1,1 +1,3 @@
 build/*.js
+node_modeles/
+static/
