@@ -36,6 +36,7 @@
                 </div>
             </template>
         </div>
+        <comment />
         
         <aside class="post-widget" id="post-toc" v-show="isShow">
             <a @click="visible" href="javascript:;" class="toc-icon" id="toc-visible">
@@ -52,6 +53,7 @@
 <script lang="babel">
     import { mapGetters } from 'vuex';
     import metaMixin from '~mixins';
+    import comment from '../components/comment.vue';
     const fetchInitialData = async store => {
         await store.dispatch('frontend/article/getArticleItem');
     };
@@ -65,6 +67,7 @@
         },
         prefetch: fetchInitialData,
         mixins: [metaMixin],
+        components: { comment },
         beforeRouteEnter(to, from, next) {
             // does NOT have access to `this` component instance
             next(vm => {
