@@ -14,3 +14,4 @@ fakerli blog based on ssr
 1. ~~增加https支持。进度：99%~~(1.需要增加DNS CAA记录，但是这个需要DNS支持；2.支持TLS1.3； 3.支持CSP对引用文件的验证；4.HSTS Preload已经申请(等待通过即可))
 1. 增加下拉加载的支持。进度: 0%
 1. 给归档页面增加一个按照年份的列表，参照[ququ的博客](https://imququ.com/post/archives.html)。进度：稍等，不急。
+1. 参考[这个页面](http://herozhou.coding.me/vue-framework-wz/#/login)。
