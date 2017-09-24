@@ -6,7 +6,6 @@ import './assets/css/font-awesome.css';
 import './assets/less/frontend.less';
 import 'toastr/build/toastr.css';
 import 'nprogress/nprogress.css';
-import 'gitalk/dist/gitalk.css';
 
 router.beforeEach((route, redirect, next) => {
     store.dispatch('global/gProgress', 0);

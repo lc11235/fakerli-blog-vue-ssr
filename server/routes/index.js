@@ -12,10 +12,10 @@ const frontendSearch = require('../api/frontend-search');
 const isAdmin = require('./is-admin');
 
 // 添加管理员
-router.get('/backend', (req, res) => {
+router.get('/register', (req, res) => {
     res.render('admin-add.html', { title: '添加管理员', message: '' });
 });
-router.post('/backend', (req, res) => {
+router.post('/register', (req, res) => {
     backendUser.insert(req, res);
 });
 

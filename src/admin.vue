@@ -1,10 +1,10 @@
 <template>
     <div id="app" class="g-doc">
         <backend-menu v-if="!isLogin"></backend-menu>
-        <div id="backmain" class="main back-wrap">
+        <div id="backmain" class="back-wrap">
             <div id="backbodywrap" class="back-body-wrap">
                 <transition name="fade" mode="out-in">
-                    <router-view :key="key" class="router"></router-view>
+                    <router-view :key="key"></router-view>
                 </transition>
             </div>
         </div>
@@ -31,7 +31,7 @@
                 return this.$route.path.indexOf('backend') >= 0;
             },
             isLogin() {
-                return this.$route.path === '/backend';
+                return this.$route.path === '/backend/login' || this.$route.path === '/backend/register';
             }
         },
         components: {

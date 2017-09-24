@@ -1,10 +1,15 @@
 <template>
     <div>
-        <canvas-line />
+        <a-canvas />
         <Form ref="formInline" :model="formInline" :rules="ruleInline" class="backend-login">
             <FormItem prop="username">
                 <Input type="text" size="large" v-model="formInline.username" placeholder="Username">
                     <Icon type="ios-person-outline" slot="prepend"></Icon>
+                </Input>
+            </FormItem>
+            <FormItem prop="email">
+                <Input type="text" size="large" v-model="formInline.email" placeholder="email">
+                    <Icon type="ios-locked-outline" slot="prepend"></Icon>
                 </Input>
             </FormItem>
             <FormItem prop="password">
@@ -22,10 +27,10 @@
 <script lang="babel">
     import cookies from 'js-cookie';
     import api from '~api';
-    import canvasLine from '~components/canvas-line.vue';
+    import aCanvas from '~components/canvas.vue';
 
     export default {
-        name: 'login',
+        name: 'register',
         beforeRouteEnter(to, from, next) {
             if (cookies.get('b_user')) {
                 next('/backend/article/list');
@@ -37,11 +42,16 @@
             return {
                 formInline: {
                     username: '',
+                    email: '',
                     password: ''
                 },
                 ruleInline: {
                     username: [
                         { required: true, message: '请填写用户名', trigger: 'blur' }
+                    ],
+                    email: [
+                        { required: true, message: '请填写邮件地址', trigger: 'blur' },
+                        { type: 'email', message: '邮箱格式不正确', trigger: 'blur' }
                     ],
                     password: [
                         { required: true, message: '请填写密码', trigger: 'blur' },
@@ -51,7 +61,7 @@
             };
         },
         components: {
-            canvasLine
+            aCanvas
         },
         methods: {
             handleSubmit(name) {

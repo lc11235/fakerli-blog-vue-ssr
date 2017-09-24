@@ -5,6 +5,8 @@ import cookies from 'js-cookie';
 import { inBrowser } from '../utils';
 
 const login = r => require.ensure([], () => r(require('../pages/backend-login.vue')), 'chunk-backend-login');
+const register = r => require.ensure([], () => r(require('../pages/backend-register.vue')), 'chunk-backend-register');
+
 const aritcleList = r => require.ensure([], () => r(require('../pages/backend-article-list.vue')), 'chunk-backend-article');
 const articleInsert = r => require.ensure([], () => r(require('../pages/backend-article-insert.vue')), 'chunk-backend-article');
 const articleModify = r => require.ensure([], () => r(require('../pages/backend-article-modify.vue')), 'chunk-backend-article');
@@ -33,7 +35,7 @@ const scrollBehavior = to => {
 const guardRoute = (to, from, next) => {
     const token = cookies.get('b_user') || !inBrowser;
     if (!token) {
-        next('/');
+        next('/backend/login');
     } else {
         if (to.path === '/backend/article/insert' || to.path === '/backend/article/modify') {
             $('#backmenu').addClass('hide');
@@ -57,7 +59,8 @@ const router = new VueRouter({
     base: __dirname,
     scrollBehavior,
     routes: [
-        { name: 'login', path: '/backend', component: login },
+        { name: 'login', path: '/backend/login', component: login },
+        { name: 'register', path: '/backend/register', component: register },
 
         { name: 'admin_list', path: '/backend/admin/list', component: adminList, meta: { scrollToTop: true }, beforeEnter: guardRoute },
         { name: 'admin_modify', path: '/backend/admin/modify/:username', component: adminModify, meta: { scrollToTop: true }, beforeEnter: guardRoute },

@@ -8,6 +8,7 @@ import * as filters from './filters';
 sync(store, router);
 
 router.beforeEach((to, from, next) => {
+
     if (to.path === '/tags') {
         store.dispatch('global/changeTitle', `Tags`);
     } else if (to.path === '/') {

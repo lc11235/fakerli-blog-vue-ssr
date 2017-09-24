@@ -1,6 +1,7 @@
 <template>
-    <canvas id="canvas" class="canvas">
-    </canvas>
+    <div id="canvascontainer">
+        <canvas id="canvas" class="canvas"></canvas>
+    </div>
 </template>
 <script lang="babel">
     export default{

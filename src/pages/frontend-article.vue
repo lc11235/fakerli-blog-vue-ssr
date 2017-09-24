@@ -36,7 +36,7 @@
                 </div>
             </template>
         </div>
-        <comment />
+        <div id="gitalk-container"></div>
         
         <aside class="post-widget" id="post-toc" v-show="isShow">
             <a @click="visible" href="javascript:;" class="toc-icon" id="toc-visible">
@@ -53,7 +53,6 @@
 <script lang="babel">
     import { mapGetters } from 'vuex';
     import metaMixin from '~mixins';
-    import comment from '../components/comment.vue';
     const fetchInitialData = async store => {
         await store.dispatch('frontend/article/getArticleItem');
     };
@@ -67,7 +66,6 @@
         },
         prefetch: fetchInitialData,
         mixins: [metaMixin],
-        components: { comment },
         beforeRouteEnter(to, from, next) {
             // does NOT have access to `this` component instance
             next(vm => {
@@ -114,6 +112,10 @@
             } else {
                 this.isShow = false;
             }
+            if (this.$route.path.match(/\/article\//g)) {
+                let script = $('<script id="gitalk">var gitalk = new Gitalk({clientID: "2effbaeca8853aeb7ec1",clientSecret: "69455714d1912e8a704e364b8253c852a469d57b",repo: "fakerli-blog-vue-ssr",owner: "lc11235",admin: ["lc11235"],id: "comment",distractionFreeMode: true});gitalk.render("gitalk-container");<\/script>');
+                $('body').append(script);
+            }
         },
         metaInfo() {
             const title = this.article.data.title ? this.article.data.title + ' 学习是为了探索这个世界的本质' : '学习是为了探索这个世界的本质';
@@ -130,6 +132,9 @@
                     this.isShow = false;
                 }
             }
+        },
+        beforeDestroy() {
+            $('#gitalk').remove();
         }
     };
 </script>
