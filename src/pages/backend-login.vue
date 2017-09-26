@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="login-container">
         <canvas-line />
         <Form ref="formInline" :model="formInline" :rules="ruleInline" class="backend-login">
             <FormItem prop="username">
@@ -45,7 +45,7 @@
                     ],
                     password: [
                         { required: true, message: '请填写密码', trigger: 'blur' },
-                        { type: 'string', min: 8, message: '密码长度不能小于8位', trigger: 'blur' }
+                        { type: 'string', min: 6, message: '密码长度不能小于6位', trigger: 'blur' }
                     ]
                 }
             };
@@ -66,7 +66,7 @@
             async login() {
                 const { data: { data, code }} = await api.post('backend/admin/login', this.formInline);
                 if (data && code === 200) {
-                    this.$Message.error('登录成功!');
+                    this.$Message.success('登录成功!');
                     this.$router.replace('/backend/article/list');
                 } else {
                     this.$Message.error('登录失败!');

@@ -1,14 +1,14 @@
 <template>
     <div id="app" class="g-doc">
         <backend-menu v-if="!isLogin"></backend-menu>
-        <div id="backmain" class="back-wrap">
-            <div id="backbodywrap" class="back-body-wrap">
+        <div class="back-wrap" :class="{'back-left': !isLogin}">
+            <div :class="{'back-body-wrap': !isLogin}">
                 <transition name="fade" mode="out-in">
                     <router-view :key="key"></router-view>
                 </transition>
             </div>
         </div>
-        <footer-item />
+        <footer-item v-if="!isLogin" />
     </div>
 </template>
 

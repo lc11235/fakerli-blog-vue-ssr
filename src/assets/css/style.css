@@ -698,9 +698,13 @@ article .entry-content-archive .date{
 }
 
 .back-wrap{
-    width: 1350px;
-    margin-left: 250px;
     position: relative;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.back-left {
+    margin-left: 250px;
 }
 
 .back-body-wrap {
@@ -713,11 +717,6 @@ article .entry-content-archive .date{
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     position: relative;
     display: block;
-}
-
-#backbodywrap{
-    width: 1200px;
-    margin: 0 auto;
 }
 
 .post-widget{
@@ -973,7 +972,7 @@ article .entry-content-archive .date{
 #canvascontainer {
     position: absolute;
     top: 0px;
-    left: -250px;
+    left: 0px;
 }
 
 .backend-login {
