@@ -1,12 +1,13 @@
 <template>
     <div id="canvascontainer">
-        <canvas id="canvas" class="canvas"></canvas>
     </div>
 </template>
 
 <script lang="babel">
-    import THREE from 'THREE';
-    export default{
+    const THREE = require('THREE');
+    const Stats = require('Stats');
+    export default {
+        name: 'canvsThree',
         mounted() {
             let SEPARATION = 100;
             let AMOUNTX = 50;
@@ -26,8 +27,8 @@
             init();
             animate();
             function init() {
-                container = document.createElement('div');
-                document.body.appendChild(container);
+                container = document.getElementById('canvascontainer');
+                // document.body.appendChild(container);
                 camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
                 camera.position.z = 1000;
                 scene = new THREE.Scene();
@@ -44,7 +45,8 @@
                 let i = 0;
                 for (let ix = 0; ix < AMOUNTX; ix++) {
                     for (let iy = 0; iy < AMOUNTY; iy++) {
-                        particle = particles[i++] = new THREE.Sprite(material);
+                        particle = new THREE.Sprite(material);
+                        particles[i++] = particle;
                         particle.position.x = ix * SEPARATION - ((AMOUNTX * SEPARATION) / 2);
                         particle.position.z = iy * SEPARATION - ((AMOUNTY * SEPARATION) / 2);
                         scene.add(particle);
@@ -54,7 +56,8 @@
                 renderer.setPixelRatio(window.devicePixelRatio);
                 renderer.setSize(window.innerWidth, window.innerHeight);
                 container.appendChild(renderer.domElement);
-                stats = new THREE.Stats();
+                // three.js的性能监控插件，正式上线前将其屏蔽掉
+                stats = new Stats();
                 container.appendChild(stats.dom);
                 document.addEventListener('mousemove', onDocumentMouseMove, false);
                 document.addEventListener('touchstart', onDocumentTouchStart, false);

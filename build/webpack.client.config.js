@@ -12,7 +12,8 @@ const projectRoot = path.resolve(__dirname, '../');
 let config = merge(baseConfig, {
     externals: {
         'jquery': 'jQuery',
-        'THREE': 'THREE'
+        'THREE': 'THREE',
+        'Stats': 'Stats',
     },
     module: {
         rules: [{
@@ -38,7 +39,6 @@ let config = merge(baseConfig, {
             $: 'jquery',
             jQuery: 'jquery',
             'window.jQuery': 'jquery',
-            THREE: 'THREE'
         })
     ]
 });

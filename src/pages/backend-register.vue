@@ -1,6 +1,6 @@
 <template>
     <div>
-        <canvas-3d />
+        <canvas-three />
         <Form ref="formInline" :model="formInline" :rules="ruleInline" class="backend-login">
             <FormItem prop="username">
                 <Input type="text" size="large" v-model="formInline.username" placeholder="Username">
@@ -27,7 +27,7 @@
 <script lang="babel">
     import cookies from 'js-cookie';
     import api from '~api';
-    import canvasLine from '~components/canvas-3d.vue';
+    import canvasThree from '~components/canvas-three.vue';
 
     export default {
         name: 'register',
@@ -61,7 +61,7 @@
             };
         },
         components: {
-            canvasLine
+            canvasThree
         },
         methods: {
             handleSubmit(name) {
