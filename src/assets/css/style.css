@@ -711,6 +711,10 @@ article .entry-content-archive .date{
     min-height: calc(100vh - 80px);
 }
 
+.back-three {
+    background-color: #141a48;
+}
+
 .card-question-head {
     background: white;
     border-radius: 4px;

@@ -1,5 +1,5 @@
 <template>
-    <div id="canvascontainer">
+    <div id="canvascontainer" class="back-three">
     </div>
 </template>
 
@@ -35,7 +35,7 @@
                 particles = [];
                 let PI2 = Math.PI * 2;
                 let material = new THREE.SpriteCanvasMaterial({
-                    color: 0xffffff,
+                    color: 0x0078de,
                     program: function (context) {
                         context.beginPath();
                         context.arc(0, 0, 0.5, 0, PI2, true);
