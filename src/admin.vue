@@ -1,7 +1,7 @@
 <template>
     <div id="app" class="g-doc">
         <backend-menu v-if="!isLogin"></backend-menu>
-        <div class="back-wrap" :class="{'back-left': !isLogin}">
+        <div class="back-wrap" :class="{'back-left': !isLogin, 'back-height': isLogin}">
             <div :class="{'back-body-wrap': !isLogin}">
                 <transition name="fade" mode="out-in">
                     <router-view :key="key"></router-view>

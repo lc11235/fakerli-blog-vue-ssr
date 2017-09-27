@@ -699,20 +699,20 @@ article .entry-content-archive .date{
 
 .back-wrap{
     position: relative;
-    height: 100vh;
     overflow: hidden;
 }
 
+.back-height {
+    height: 100vh;
+}
+
 .back-left {
-    margin-left: 250px;
+    margin: 30px auto 0;
+    width: 900px;
 }
 
 .back-body-wrap {
-    min-height: calc(100vh - 80px);
-}
-
-.back-three {
-    background-color: #141a48;
+    min-height: calc(100vh - 30px - 80px);
 }
 
 .card-question-head {

@@ -18,7 +18,7 @@
                 </Input>
             </FormItem>
             <FormItem>
-                <Button type="primary" @click="handleSubmit('formInline')" long>登录</Button>
+                <Button type="primary" @click="handleSubmit('formInline')" long>注册</Button>
             </FormItem>
         </Form>
     </div>
@@ -74,12 +74,12 @@
                 });
             },
             async login() {
-                const { data: { data, code }} = await api.post('backend/admin/login', this.formInline);
+                const { data: { data, code }} = await api.post('backend/admin/register', this.formInline);
                 if (data && code === 200) {
-                    this.$Message.error('登录成功!');
-                    this.$router.replace('/backend/article/list');
+                    this.$Message.success('注册成功!');
+                    this.$router.replace('/backend/login');
                 } else {
-                    this.$Message.error('登录失败!');
+                    this.$Message.error('注册失败!');
                 }
             }
         }

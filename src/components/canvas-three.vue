@@ -5,7 +5,7 @@
 
 <script lang="babel">
     const THREE = require('THREE');
-    const Stats = require('Stats');
+    // const Stats = require('Stats');
     export default {
         name: 'canvsThree',
         mounted() {
@@ -13,7 +13,7 @@
             let AMOUNTX = 50;
             let AMOUNTY = 50;
             let container;
-            let stats;
+            // let stats;
             let camera;
             let scene;
             let renderer;
@@ -55,10 +55,12 @@
                 renderer = new THREE.CanvasRenderer();
                 renderer.setPixelRatio(window.devicePixelRatio);
                 renderer.setSize(window.innerWidth, window.innerHeight);
+                // 设置canvas的背景色，以及透明度。
+                renderer.setClearColor(0x141a48, 1);
                 container.appendChild(renderer.domElement);
                 // three.js的性能监控插件，正式上线前将其屏蔽掉
-                stats = new Stats();
-                container.appendChild(stats.dom);
+                // stats = new Stats();
+                // container.appendChild(stats.dom);
                 document.addEventListener('mousemove', onDocumentMouseMove, false);
                 document.addEventListener('touchstart', onDocumentTouchStart, false);
                 document.addEventListener('touchmove', onDocumentTouchMove, false);
@@ -95,7 +97,7 @@
             function animate() {
                 requestAnimationFrame(animate);
                 render();
-                stats.update();
+                // stats.update();
             }
             function render() {
                 camera.position.x += (mouseX - camera.position.x) * 0.05;

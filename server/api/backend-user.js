@@ -114,14 +114,23 @@ exports.insert = (req, res, next) => {
     let password = req.body.password;
     let username = req.body.username;
     if (fsExistsSync('./admin.lock')) {
-        return res.render('admin-add.html', { message: '请先把 admin.lock 删除' });
+        return res.json({
+            code: -200,
+            message: '不可注册!'
+        });
     }
     if (!username || !password || !email) {
-        return res.render('admin-add.html', { message: '请将表单填写完整' });
+        return res.json({
+            code: -200,
+            message: '请将表单填写完整!'
+        });
     }
     Admin.findOne({ username }).then(result => {
         if (result) {
-            return '该用户已经存在';
+            return res.json({
+                code: -200,
+                message: '该用户已经存在!'
+            });
         }
         return Admin.create({
             username,
@@ -136,12 +145,14 @@ exports.insert = (req, res, next) => {
                 if (err) {
                     throw err;
                 } else {
-                    return '添加用户成功：' + username + '，密码：' + password;
+                    return res.json({
+                        code: 200,
+                        message: '添加用户成功!',
+                        data: username
+                    });
                 }
             });
         });
-    }).then(message => {
-        res.render('admin-add.html', { message });
     }).catch(err => console.log(err));
 };
 

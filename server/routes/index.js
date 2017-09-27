@@ -11,14 +11,6 @@ const frontendArchive = require('../api/frontend-archive');
 const frontendSearch = require('../api/frontend-search');
 const isAdmin = require('./is-admin');
 
-// 添加管理员
-router.get('/register', (req, res) => {
-    res.render('admin-add.html', { title: '添加管理员', message: '' });
-});
-router.post('/register', (req, res) => {
-    backendUser.insert(req, res);
-});
-
 // API
 // ================ 后台 ================
 // ------- 文章 -------
@@ -56,6 +48,8 @@ router.get('/backend/tag/recover', isAdmin, backendTag.recover);
 router.post('/backend/tag/modify', isAdmin, multipartMiddleware, backendTag.modify);
 
 // ------- 管理 -------
+// 后台注册
+router.post('/backend/admin/register', multipartMiddleware, backendUser.insert);
 // 后台登录
 router.post('/backend/admin/login', multipartMiddleware, backendUser.login);
 // 管理列表
