@@ -56,7 +56,7 @@
                 :on-format-error="handleFormatError"
                 :on-exceeded-size="handleMaxSize"
                 :before-upload="handleUpload"
-                action="//localhost:8080/api/backend/article/upload">
+                action="/api/backend/article/upload">
                 <div style="padding: 20px 0">
                     <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
                     <p>点击或将文件拖拽到这里上传</p>

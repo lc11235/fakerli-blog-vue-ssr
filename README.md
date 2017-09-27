@@ -15,3 +15,5 @@ fakerli blog based on ssr
 1. 增加下拉加载的支持。进度: 0%
 1. 给归档页面增加一个按照年份的列表，参照[ququ的博客](https://imququ.com/post/archives.html)。进度：稍等，不急。
 1. 参考[这个页面](http://herozhou.coding.me/vue-framework-wz/#/login)。
+1. 正式区的首页图无法自动更换。
+1. gitalk的权限问题。
