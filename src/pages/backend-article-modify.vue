@@ -101,11 +101,6 @@
             }
         },
         mounted() {
-            $('#backmenu').addClass('hide');
-            $('#backmain').removeClass('main');
-            $('#backmain').removeClass('back-wrap');
-            $('#backmain').addClass('back-article');
-            $('#backbodywrap').removeClass('back-body-wrap');
             $('body').everyTime('500ms', 'A', function () {
                 if ($('.editormd-preview-close-btn').length > 0) {
                     $('.editormd-preview-close-btn').hide();

@@ -1,14 +1,13 @@
 <template>
     <div>
         <div class="article-select">
-            <div class="article-button-list">
-                <Button @click="writeArticle" type="success" shape="circle" size="large" long>写文章</Button>
+            <div class="article-button-list left">
+                <Button @click="writeArticle" type="success" size="large" long>写文章</Button>
             </div>
-            <div>
-                <Button @click="uploadArticle" type="success" shape="circle" size="large" long>上传文章</Button>
+            <div class="article-button-list right">
+                <Button @click="uploadArticle" type="success" size="large" long>上传文章</Button>
             </div>
         </div>
-        <div class="article-opacity" v-show="opacity"></div>
         <div class="settings-main card" v-show="showWrite">
             <div class="settings-main-content">
                 <a-input title="标题">
@@ -97,7 +96,7 @@
                     'monokai', 'neat,neo', 'night', 'paraiso-dark', 'paraiso-light', 'pastel-on-dark', 'rubyblue', 'solarized',
                     'the-matrix', 'tomorrow-night-eighties', 'twilight', 'vibrant-ink', 'xq-dark', 'xq-light'],
                 previewTheme: ['default', 'dark'],
-                showWrite: false,
+                showWrite: true,
                 showUpload: false,
                 file: null,
                 opacity: true
@@ -229,11 +228,6 @@
             }
         },
         mounted() {
-            $('#backmenu').addClass('hide');
-            $('#backmain').removeClass('main');
-            $('#backmain').removeClass('back-wrap');
-            $('#backmain').addClass('back-article');
-            $('#backbodywrap').removeClass('back-body-wrap');
             $('body').everyTime('500ms', 'A', function () {
                 if ($('.editormd-preview-close-btn').length > 0) {
                     $('.editormd-preview-close-btn').hide();

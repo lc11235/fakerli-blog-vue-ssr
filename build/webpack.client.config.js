@@ -13,7 +13,6 @@ let config = merge(baseConfig, {
     externals: {
         'jquery': 'jQuery',
         'THREE': 'THREE',
-        'Stats': 'Stats',
     },
     module: {
         rules: [{

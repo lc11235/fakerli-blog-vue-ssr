@@ -65,6 +65,8 @@
     "cross-env": "^5.0.1",
     "css-loader": "^0.28.4",
     "ejs": "^2.5.6",
+    "eslint": "^4.7.2",
+    "eslint-plugin-html":"^3.2.2",
     "eslint-config-alloy": "^1.0.0",
     "eslint-config-lcy-vue": "^2.0.2",
     "eslint-config-mysticatea": "^11.0.0",

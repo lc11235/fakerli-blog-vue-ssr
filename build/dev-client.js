@@ -1,6 +1,4 @@
-/**
- * eslint - disable
- */
+/* eslint - disable */
 require('eventsource-polyfill');
 const hotClient = require('webpack-hot-middleware/client?noinfo=true&reload=true');
 

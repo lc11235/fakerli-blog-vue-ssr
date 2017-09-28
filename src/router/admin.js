@@ -37,17 +37,6 @@ const guardRoute = (to, from, next) => {
     if (!token) {
         next('/backend/login');
     } else {
-        if (to.path === '/backend/article/insert' || to.path === '/backend/article/modify') {
-            $('#backmenu').addClass('hide');
-            $('#backmain').removeClass('back-wrap');
-            $('#backmain').addClass('back-article');
-            $('#backbodywrap').removeClass('back-body-wrap');
-        } else {
-            $('#backmenu').removeClass('hide');
-            $('#backmain').addClass('back-wrap');
-            $('#backmain').removeClass('back-article');
-            $('#backbodywrap').addClass('back-body-wrap');
-        }
         next();
     }
 };

@@ -156,9 +156,6 @@ body {
 .canvas{
     display: inline-block;
 }
-.g-doc{
-    background-color: #f6f6f6;
-}
 
 .feed-content{
     margin-bottom: 30px;
@@ -671,50 +668,6 @@ article .entry-content-archive .date{
     border-top: 1px solid #ddd;
 }
 
-#backmenu{
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    z-index: 66;
-    width: 250px;
-    min-height: 100%;
-    background: #fff;
-    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
-    -webkit-transition: .4s cubic-bezier(.18, .81, .3, .89);
-    transition: .4s cubic-bezier(.18, .81, .3, .89);
-}
-
-#backmenu.hide{
-    -webkit-transform: translateX(-100%);
-    transform: translateX(-100%);
-}
-
-.back-article{
-    width: 100%;
-    min-height: calc(100vh - 80px);
-    background-color: #3f3f3f;
-    color: #999999;
-}
-
-.back-wrap{
-    position: relative;
-    overflow: hidden;
-}
-
-.back-height {
-    height: 100vh;
-}
-
-.back-left {
-    margin: 30px auto 0;
-    width: 900px;
-}
-
-.back-body-wrap {
-    min-height: calc(100vh - 30px - 80px);
-}
-
 .card-question-head {
     background: white;
     border-radius: 4px;
@@ -762,49 +715,6 @@ article .entry-content-archive .date{
     height: 30px;
     text-align: center;
     color: #000;
-}
-
-.article-select{
-    position: fixed;
-    width: 20%;
-    height: 10%;
-    top: 30%;
-    left: 40%;
-    z-index: 9999;
-}
-
-.article-select.left{
-    left: 1%;
-    width: 10%;
-    -webkit-transition: .5s cubic-bezier(.18, .81, .3, .89);
-    transition: .5s cubic-bezier(.18, .81, .3, .89);
-}
-
-.article-opacity{
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    zoom: 1;
-    background: #2f2e2e;
-    z-index: 999;
-    width:100%;
-    height:100%;
-    filter:alpha(opacity=50); /*IE滤镜，透明度50%*/
-    -moz-opacity:0.5; /*Firefox私有，透明度50%*/
-    opacity:0.5;/*其他，透明度50%*/
-}
-
-.article-button-list{
-    margin-bottom: 10px;
-}
-
-.article-upload{
-    position: absolute;
-    width: 20%;
-    height: 5%;
-    top: 30%;
-    left: 40%;
 }
 
 .search-opacity{
@@ -973,6 +883,51 @@ article .entry-content-archive .date{
     right: 20px;
 }
 
+/* 后端页面的样式 */
+.g-doc{
+    background-color: #f6f6f6;
+}
+
+#backmenu{
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 66;
+    width: 250px;
+    min-height: 100%;
+    background: #202020;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
+    -webkit-transition: .4s cubic-bezier(.18, .81, .3, .89);
+    transition: .4s cubic-bezier(.18, .81, .3, .89);
+}
+
+#backmenu.hide{
+    -webkit-transform: translateX(-100%);
+    transform: translateX(-100%);
+}
+
+.back-article{
+    width: 100%;
+    min-height: calc(100vh - 80px);
+    background-color: #3f3f3f;
+    color: #999999;
+}
+
+.back-wrap{
+    position: relative;
+    overflow: hidden;
+}
+
+.back-height {
+    height: 100vh;
+}
+
+.back-left {
+    margin-left: 300px;
+    width: 900px;
+}
+
 #canvascontainer {
     position: absolute;
     top: 0px;
@@ -988,7 +943,85 @@ article .entry-content-archive .date{
     margin: 120px auto;
 }
 
+.logout-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
 
+.back-header {
+    width: 100%;
+    height: 55px;
+    margin: 0;
+    padding: 0;
+    background-color: #143f6d;
+    border-bottom: 1px solid #cfd8dc;
+}
+
+.backend-center {
+    position: relative;
+    min-height: calc(100vh - 55px - 80px);
+}
+
+.back-card {
+    background: transparent;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    position: relative;
+    display: block;
+}
+
+.back-card+.back-card {
+    margin-top: 10px;
+}
+
+.back-card-me .side-entry {
+    border-top: 1px solid #eef2f2;
+    display: block;
+    height: 54px;
+    line-height: 54px;
+    padding: 0 25px;
+    color: #999;
+    position: relative;
+}
+
+.back-card-me .side-entry.active, .card-me .side-entry:hover {
+    color: #3aced5;
+}
+
+.back-card-me .side-entry .icon {
+    vertical-align: -2px;
+    margin-right: 12px;
+}
+
+.article-button-list{
+    display: inline-block;
+}
+
+.article-button-list.left {
+    width: 442px;
+    margin-right: 12px
+}
+
+.article-button-list.right {
+    width: 442px;
+}
+
+.article-upload{
+    width: 60%;
+    height: 300px;
+    margin: 0 auto;
+}
+
+.back-page-header {
+    margin-left: 255px;
+    line-height: 3;
+    font-size: 2em;
+}
+
+.back-page-ul li {
+    display: inline-block;
+}
 /*自己引入*/    
 nav ul, nav ol {
     list-style: none;
@@ -2266,7 +2299,7 @@ a:hover .icon-arrow-right {
 }
 
 .settings-main-content {
-    padding: 0 24px
+    padding: 0 
 }
 
 .settings-section {
