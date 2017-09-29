@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const FirendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const isProd = process.env.NODE_ENV === 'production';
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const config = {
     performance: {
@@ -53,6 +54,9 @@ const config = {
     plugins: [
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
+        }),
+        new BundleAnalyzerPlugin({
+            analyzerHost: '0.0.0.0'
         })
     ]
 };
