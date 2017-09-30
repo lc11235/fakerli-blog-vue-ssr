@@ -6,7 +6,6 @@ import { sync } from 'vuex-router-sync';
 import * as filters from './filters';
 import iView from 'iview';
 
-import './assets/css/hljs/googlecode.css';
 import './assets/css/style.css';
 import './assets/css/font-awesome.css';
 import './assets/less/backend.less';

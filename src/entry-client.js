@@ -1,6 +1,5 @@
 import { app, store, router } from './app';
 
-import './assets/css/hljs/googlecode.css';
 import './assets/css/style.css';
 import './assets/css/font-awesome.css';
 import './assets/less/frontend.less';
