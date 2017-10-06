@@ -329,7 +329,7 @@ body {
     margin-left: -250px;
     padding: 104px 16px 48px 256px;
     color: #fff;
-    background: url('../../../headerImage/1.jpg');
+    background: url('../../../headerImage/header.jpg');
     text-shadow: 0 1px 1px rgba(0,0,0,0.2);
     box-sizing: border-box;
 }
@@ -881,6 +881,10 @@ article .entry-content-archive .date{
     height: 50px;
     top: 180px;
     right: 20px;
+}
+
+#gitalk-container {
+    width: 1060px;
 }
 
 /* 后端页面的样式 */

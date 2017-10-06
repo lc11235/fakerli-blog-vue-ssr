@@ -16,7 +16,7 @@ module.exports = {
             loader: 'url-loader',
             query: {
                 limit: 10000,
-                name: 'static/img/[name].[hash:7].[ext]'
+                name: 'static/img/[name].[ext]'
             }
         }, {
             test: /\.css$/,

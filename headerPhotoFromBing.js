@@ -4,7 +4,8 @@ const fs = require('fs');
 const path = require('path');
 const resolve = file => path.resolve(__dirname, file);
 
-const dir = resolve('/headerImage');
+const dir = resolve('./headerImage');
+const dir1 = resolve('./dist/static/img');
 
 schedule.scheduleJob('* * 8 * * *', () => {
     let url = 'http://cn.bing.com/HPImageArchive.aspx?idx=0&n=1';
@@ -24,10 +25,10 @@ schedule.scheduleJob('* * 8 * * *', () => {
 
 function getJpg(html) {
     let collection = html.match(/<Url>?.+?<\/Url>/ig);
-    let collectionCopy = html.match(/<copyright>?.+?<\/copyright>/ig);
+    // let collectionCopy = html.match(/<copyright>?.+?<\/copyright>/ig);
     if (collection.length > 0) {
         let imgUrl = 'http://www.bing.com' + collection[0].replace(/<\/?url>/g, '').replace('1366x768', '1920x1080');
-        let copyright = collectionCopy[0].replace(/<\/?copyright>/g, '');
+        // let copyright = collectionCopy[0].replace(/<\/?copyright>/g, '');
         http.get(imgUrl, result => {
             if (result.statusCode === 200) {
                 let image = '';
@@ -36,22 +37,23 @@ function getJpg(html) {
                     image += data;
                 });
                 result.on('end', () => {
-                    writeFile(image);
+                    writeFile(image, dir);
+                    writeFile(image, dir1);
                 });
             }
         });
     }
 }
 
-function writeFile(image) {
-    fs.exists(dir + '/header.jpg', exists => {
+function writeFile(image, pathStatic) {
+    fs.exists(pathStatic + '/header.jpg', exists => {
         if (exists) {
-            fs.unlink(dir + '/header.jpg', err => {
+            fs.unlink(pathStatic + '/header.jpg', err => {
                 if (err) {
                     console.log(1);
                     return;
                 }
-                fs.writeFile(dir + '/header.jpg', image, 'binary', err => {
+                fs.writeFile(pathStatic + '/header.jpg', image, 'binary', err => {
                     if (err) {
                         console.log(2);
                         return;
@@ -59,9 +61,9 @@ function writeFile(image) {
                 });
             });
         } else {
-            fs.writeFile(dir + '/header.jpg', image, 'binary', err => {
+            fs.writeFile(pathStatic + '/header.jpg', image, 'binary', err => {
                 if (err) {
-                    console.log(3);
+                    console.log(err);
                     return;
                 }
             });
