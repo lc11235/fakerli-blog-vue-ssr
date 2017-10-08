@@ -77,9 +77,9 @@ exports.login = (req, res) => {
     }).then(result => {
         if (result) {
             let id = result._id;
-            let remember_me = 2592000000;
+            let remember_me = 86400000;
             username = encodeURI(username);
-            let token = jwt.sign({ id, username }, secret, { expiresIn: 60 * 60 * 24 * 30 });
+            let token = jwt.sign({ id, username }, secret, { expiresIn: 60 * 60 * 24 * 1 });
             res.cookie('b_user', token, { maxAge: remember_me });
             res.cookie('b_userid', id, { maxAge: remember_me });
             res.cookie('b_username', username, { maxAge: remember_me });

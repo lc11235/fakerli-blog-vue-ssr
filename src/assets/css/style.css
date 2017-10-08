@@ -309,7 +309,7 @@ body {
 }
 
 #menu.hide+#main {
-    padding-left: 110px;
+    padding-left: 0;
 }
 
 .fade-scale.in {
@@ -326,7 +326,6 @@ body {
 
 .content-header {
     min-height: 210px;
-    margin-left: -250px;
     padding: 104px 16px 48px 256px;
     color: #fff;
     background: url('../../../headerImage/header.jpg');
