@@ -5,15 +5,15 @@
 </template>
 
 <script lang="babel">
+    import cookies from 'js-cookie';
     export default {
         name: 'log-out',
         methods: {
             logout() {
-                $.removeCookie('b_user');
-                $.removeCookie('b_userid');
-                $.removeCookie('b_username');
-                this.$router.replace('/backend/login');
-                console.log(1);
+                cookies.remove('b_user');
+                cookies.remove('b_userid');
+                cookies.remove('b_username');
+                this.$router.push({ path: '/backend/login' });
             }
         }
     };
