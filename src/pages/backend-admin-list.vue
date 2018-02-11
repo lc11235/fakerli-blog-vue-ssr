@@ -36,7 +36,7 @@
                     {
                         title: '操作',
                         key: 'action',
-                        width: 150,
+                        width: 250,
                         align: 'center',
                         render: (h, params) => {
                             let modifyButton = h('Button', {
@@ -55,8 +55,11 @@
                             }, '编辑');
                             let recoverButton = h('Button', {
                                 props: {
-                                    type: 'error',
+                                    type: 'warning',
                                     size: 'small'
+                                },
+                                style: {
+                                    marginRight: '5px'
                                 },
                                 on: {
                                     click: () => {
@@ -65,6 +68,20 @@
                                 }
                             }, '恢复');
                             let deleteButton = h('Button', {
+                                props: {
+                                    type: 'warning',
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginRight: '5px'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.deletes(params.index);
+                                    }
+                                }
+                            }, '失效');
+                            let deteleCompletelyButton = h('Button', {
                                 props: {
                                     type: 'error',
                                     size: 'small'
@@ -76,9 +93,9 @@
                                 }
                             }, '删除');
                             if (this.data[params.index].is_delete) {
-                                return h('div', [modifyButton, recoverButton]);
+                                return h('div', [modifyButton, recoverButton, deteleCompletelyButton]);
                             } else {
-                                return h('div', [modifyButton, deleteButton]);
+                                return h('div', [modifyButton, deleteButton, deteleCompletelyButton]);
                             }
                         }
                     }
@@ -120,6 +137,22 @@
                         duration: 3
                     });
                     this.$store.commit('backend/admin/deleteAdmin', username);
+                } else {
+                    this.$Message.error({
+                        content: message,
+                        duration: 3
+                    });
+                }
+            },
+            async deleteCompletely(index) {
+                let username = this.data[index].username;
+                const { data: { code, message }} = await api.get('backend/admin/deleteCompletely', { username });
+                if (code === 200) {
+                    this.$Message.success({
+                        content: message,
+                        duration: 3
+                    });
+                    this.$store.commit('backend/admin/deleteAdminCompletely', username);
                 } else {
                     this.$Message.error({
                         content: message,

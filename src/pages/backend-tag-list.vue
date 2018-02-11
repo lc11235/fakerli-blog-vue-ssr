@@ -48,7 +48,7 @@
                             }, '编辑');
                             let recoverButton = h('Button', {
                                 props: {
-                                    type: 'error',
+                                    type: 'warning',
                                     size: 'small'
                                 },
                                 style: {
@@ -62,7 +62,7 @@
                             }, '恢复');
                             let deleteButton = h('Button', {
                                 props: {
-                                    type: 'error',
+                                    type: 'warning',
                                     size: 'small'
                                 },
                                 style: {
@@ -73,7 +73,7 @@
                                         this.deletes(params.index);
                                     }
                                 }
-                            }, '删除');
+                            }, '失效');
                             let deteleCompletelyButton = h('Button', {
                                 props: {
                                     type: 'error',
@@ -84,7 +84,7 @@
                                         this.deleteCompletely(params.index);
                                     }
                                 }
-                            }, '彻底删除');
+                            }, '删除');
                             if (this.data[params.index].is_delete) {
                                 return h('div', [modifyButton, recoverButton, deteleCompletelyButton]);
                             } else {

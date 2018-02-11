@@ -5,12 +5,12 @@
             <FormItem prop="username">
                 <Input type="text" size="large" v-model="formInline.username" placeholder="Username">
                     <Icon type="ios-person-outline" slot="prepend"></Icon>
-                <Input>
+                </Input>
             </FormItem>
             <FormItem prop="password">
                 <Input type="password" size="large" v-model="formInline.password" placeholder="Password">
                     <Icon type="ios-locked-outline" slot="prepend"></Icon>
-                <Input>
+                </Input>
             </FormItem>
             <FormItem>
                 <Button type="primary" @click="handleSubmit('formInline')" long>登录</Button>
