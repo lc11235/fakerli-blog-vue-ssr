@@ -7,21 +7,23 @@ const resolve = file => path.resolve(__dirname, file);
 const dir = resolve('./headerImage');
 const dir1 = resolve('./dist/static/img');
 
-schedule.scheduleJob('* * 8 * * *', () => {
-    let url = 'http://cn.bing.com/HPImageArchive.aspx?idx=0&n=1';
-    http.get(url, res => {
-        if (res.statusCode === 200) {
-            let html = '';
-            res.setEncoding('utf-8');
-            res.on('data', chunk => {
-                html += chunk;
-            });
-            res.on('end', () => {
-                getJpg(html);
-            });
-        }
+exports.addHeaderPhoto = () => {
+    schedule.scheduleJob('* * 8 * * *', () => {
+        let url = 'http://cn.bing.com/HPImageArchive.aspx?idx=0&n=1';
+        http.get(url, res => {
+            if (res.statusCode === 200) {
+                let html = '';
+                res.setEncoding('utf-8');
+                res.on('data', chunk => {
+                    html += chunk;
+                });
+                res.on('end', () => {
+                    getJpg(html);
+                });
+            }
+        });
     });
-});
+}
 
 function getJpg(html) {
     let collection = html.match(/<Url>?.+?<\/Url>/ig);

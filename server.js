@@ -25,6 +25,10 @@ require('./server/models/tag');
 // 引入api路由
 const routes = require('./server/routes/index');
 
+// 引入网页题图的bing来源
+const headerPhotoFromBing = require('./headerPhotoFromBing');
+headerPhotoFromBing.addHeaderPhoto();
+
 function createRenderer(bundle, template) {
     // https://github.com/vuejs/vue/blob/dev/packages/vue-server-renderer/README.md#why-use-bundlerenderer
     return createBundleRenderer(bundle, {
