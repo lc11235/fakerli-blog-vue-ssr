@@ -16,7 +16,7 @@
   },
   "license": "MIT",
   "scripts": {
-    "dev": "npm run static && node ./server",
+    "dev": "cross-env NODE_ENV=development npm run static && node ./server",
     "start": "cross-env NODE_ENV=production node ./server",
     "build": "npm run static && npm run build:client && npm run build:server",
     "build:client": "cross-env NODE_ENV=production webpack --config build/webpack.client.config.js --progress --hide-modules",
