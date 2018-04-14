@@ -1,7 +1,7 @@
 {
   "name": "fakerli-blog-vue-ssr",
   "version": "0.0.1",
-  "description": "A Vue.js project wuth vue 2.0, vue-router and vuex for server side rendering.",
+  "description": "A Vue.js project with vue 2.0, vue-router and vuex for server side rendering.",
   "keywords": [
     "vue",
     "vuex",
