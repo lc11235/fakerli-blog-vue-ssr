@@ -7,7 +7,7 @@ const resolve = file => path.resolve(__dirname, file);
 const dir = resolve('./headerImage');
 const dir1 = resolve('./dist/static/img');
 
-exports.addHeaderPhoto = () => {
+exports.getPhotoFromBing = () => {
     schedule.scheduleJob('* * 8 * * *', () => {
         let url = 'http://cn.bing.com/HPImageArchive.aspx?idx=0&n=1';
         http.get(url, res => {
@@ -23,7 +23,7 @@ exports.addHeaderPhoto = () => {
             }
         });
     });
-}
+};
 
 function getJpg(html) {
     let collection = html.match(/<Url>?.+?<\/Url>/ig);
