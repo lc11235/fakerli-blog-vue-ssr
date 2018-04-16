@@ -40,7 +40,10 @@ function getJpg(html) {
                 });
                 result.on('end', () => {
                     writeFile(image, dir);
-                    writeFile(image, dir1);
+                    if(process.env.NODE_ENV === "production")
+                    {
+                        writeFile(image, dir1);
+                    } 
                 });
             }
         });
