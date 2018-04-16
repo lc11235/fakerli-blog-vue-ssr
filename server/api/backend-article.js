@@ -7,10 +7,10 @@ const general = require('./general');
 const list = general.list;
 
 const marked = require('marked');
-const hljs = require('highlight.js');
+const hightlight = require('highlight.js');
 marked.setOptions({
     highlight(code) {
-        return hljs.highlightAuto(code).value;
+        return hightlight.highlightAuto(code).value;
     },
     breaks: true
 });

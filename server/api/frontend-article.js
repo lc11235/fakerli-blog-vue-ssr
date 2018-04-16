@@ -29,10 +29,10 @@ exports.getList = (req, res) => {
         sort = '-' + by;
     }
 
-    let filds = 'title content tags create_date update_date is_delete timestamp';
+    let fields = 'title content tags create_date update_date is_delete timestamp';
 
     Promise.all([
-        Article.find(data, filds).sort(sort).skip(skip).limit(limit).exec(),
+        Article.find(data, fields).sort(sort).skip(skip).limit(limit).exec(),
         Article.count(data)
     ]).then(([result, total]) => {
         let totalPage = Math.ceil(total / limit);

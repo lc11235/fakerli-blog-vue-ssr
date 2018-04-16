@@ -14,10 +14,10 @@ exports.getListTitle = (req, res) => {
         is_delete: 0
     };
 
-    let filds = 'title update_date';
+    let fields = 'title update_date';
 
 
-    Article.find(data, filds).sort(sort).exec().then(result => {
+    Article.find(data, fields).sort(sort).exec().then(result => {
         let items = [];
         let item = {};
         let titles = [];

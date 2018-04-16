@@ -48,7 +48,7 @@ let backend;
 // 创建来自webpack生成的服务端包
 let renderer;
 if (isProd) {
-    // 生产模式：从fs创建服务器HTML渲染器和索引
+    // 生产模式：从文件创建服务器HTML渲染器和索引
     const bundle = require('./dist/vue-ssr-bundle.json');
     frontend = fs.readFileSync(resolve('./dist/server.html'), 'utf-8');
     renderer = createRenderer(bundle, frontend);

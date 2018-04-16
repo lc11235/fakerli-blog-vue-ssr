@@ -7,7 +7,7 @@ import { inBrowser } from '../utils';
 const login = r => require.ensure([], () => r(require('../pages/backend-login.vue')), 'chunk-backend-login');
 const register = r => require.ensure([], () => r(require('../pages/backend-register.vue')), 'chunk-backend-register');
 
-const aritcleList = r => require.ensure([], () => r(require('../pages/backend-article-list.vue')), 'chunk-backend-article');
+const articleList = r => require.ensure([], () => r(require('../pages/backend-article-list.vue')), 'chunk-backend-article');
 const articleInsert = r => require.ensure([], () => r(require('../pages/backend-article-insert.vue')), 'chunk-backend-article');
 const articleModify = r => require.ensure([], () => r(require('../pages/backend-article-modify.vue')), 'chunk-backend-article');
 
@@ -52,7 +52,7 @@ const router = new VueRouter({
         { name: 'admin_list', path: '/backend/admin/list', component: adminList, meta: { scrollToTop: true }, beforeEnter: guardRoute },
         { name: 'admin_modify', path: '/backend/admin/modify/:username', component: adminModify, meta: { scrollToTop: true }, beforeEnter: guardRoute },
 
-        { name: 'article_list', path: '/backend/article/list', component: aritcleList, meta: { scrollToTop: true }, beforeEnter: guardRoute },
+        { name: 'article_list', path: '/backend/article/list', component: articleList, meta: { scrollToTop: true }, beforeEnter: guardRoute },
         { name: 'article_insert', path: '/backend/article/insert', component: articleInsert, meta: { scrollToTop: true }, beforeEnter: guardRoute },
         { name: 'article_modify', path: '/backend/article/modify/:title', component: articleModify, meta: { scrollToTop: true }, beforeEnter: guardRoute },
 

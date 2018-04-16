@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const FirendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
+const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const isProd = process.env.NODE_ENV === 'production';
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
@@ -58,7 +58,7 @@ const config = {
     ]
 };
 
-!isProd && config.plugins.push(new FirendlyErrorsPlugin());
+!isProd && config.plugins.push(new FriendlyErrorsPlugin());
 isProd && config.plugins.push(new BundleAnalyzerPlugin({
     analyzerHost: '0.0.0.0'
 }));
