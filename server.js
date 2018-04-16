@@ -25,6 +25,10 @@ require('./server/models/tag');
 // 引入api路由
 const routes = require('./server/routes/index');
 
+// 引入题图的定时更新组件
+const headerPhoto = require('./headerPhotoFromBing');
+headerPhoto.getPhotoFromBing();
+
 function createRenderer(bundle, template) {
     // https://github.com/vuejs/vue/blob/dev/packages/vue-server-renderer/README.md#why-use-bundlerenderer
     return createBundleRenderer(bundle, {
@@ -168,7 +172,7 @@ process.on('unhandledRejection', (reason, p) => {
     // application specific logging, throwing an error, or other logic here
 });
 
-const port = process.env.PORT || config.port || 8080;
+const port = process.env.PORT || config.port || 8090;
 app.listen(port, () => {
     console.log(`Server started at localhost:${port}`);
 });
