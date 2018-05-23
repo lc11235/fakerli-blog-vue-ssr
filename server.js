@@ -25,6 +25,9 @@ require('./server/models/tag');
 // 引入api路由
 const routes = require('./server/routes/index');
 
+// 引入微信路由
+const routesWX = require('./server/routes/wx');
+
 // 引入题图的定时更新组件
 const headerPhoto = require('./headerPhotoFromBing');
 headerPhoto.getPhotoFromBing();
@@ -89,6 +92,9 @@ app.use('/service-worker.js', serve('./dist/service-worker.js'));
 
 // api路由
 app.use('/api', routes);
+
+// WX路由
+app.use('/wx', routesWX);
 
 // 前台路由， SSR渲染
 app.get(['/', '/tag/:tag', '/search/:qs', '/article/:title', '/about', '/tags', '/archives'], (req, res) => {
