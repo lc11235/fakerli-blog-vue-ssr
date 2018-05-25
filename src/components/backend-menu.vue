@@ -1,42 +1,38 @@
 <template>
-<aside id="backmenu">
-    <div>
-        <div class="back-card back-card-me">
-            <router-link to="/backend/admin/list" active-class="active" class="side-entry">
-                <i class="icon icon-arrow-right"></i>
-                <i class="fa fa-list-ul"></i>
-                管理账号
-            </router-link>
-        </div>
-        <div class="back-card back-card-me">
-            <router-link to="/backend/tag/insert" active-class="active" class="side-entry">
-                <i class="icon icon-arrow-right"></i>
-                <i class="fa fa-list-ul"></i>
-                添加标签
-            </router-link>
-            <router-link to="/backend/tag/list" active-class="active" class="side-entry">
-                <i class="icon icon-arrow-right"></i>
-                <i class="fa fa-list-ul"></i>
-                管理标签
-            </router-link>
-            <router-link to="/backend/article/insert" active-class="active" class="side-entry">
-                <i class="icon icon-arrow-right"></i>
-                <i class="fa fa-list-ul"></i>
-                发布文章
-            </router-link>
-            <router-link to="/backend/article/list" active-class="active" class="side-entry">
-                <i class="icon icon-arrow-right"></i>
-                <i class="fa fa-list-ul"></i>
-                管理文章
-            </router-link>
-        </div>
-    </div>
-</aside>
+    <div id="backmenu">
+        <Menu :theme="theme" active-name="1">
+        <MenuGroup title="内容管理">
+            <MenuItem name="1">
+                <Icon type="document-text"></Icon>
+                文章管理
+            </MenuItem>
+            <MenuItem name="2">
+                <Icon type="chatbubbles"></Icon>
+                评论管理
+            </MenuItem>
+        </MenuGroup>
+        <MenuGroup title="统计分析">
+            <MenuItem name="3">
+                <Icon type="heart"></Icon>
+                用户留存
+            </MenuItem>
+            <MenuItem name="4">
+                <Icon type="heart-broken"></Icon>
+                流失用户
+            </MenuItem>
+        </MenuGroup>
+        </Menu>
+    </div> 
 </template>
 
 <script lang="babel">
     export default {
         name: 'backend-menu',
+        data() {
+            return {
+                theme: 'light'
+            };
+        },
         serverCacheKey: () => {
             return `backend::menu`;
         }
