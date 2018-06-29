@@ -18,9 +18,9 @@ exports.checkServer = (req, res) =>{
     const sha1 = crypto.createHash('sha1');
     sha1.update(paramArray);
     const str = sha1.digest('hex');
-    if(str === signature){
+    if (str === signature) {
         res.send(echostr);
     } else {
-        res.send("test wxServer failure");
+        res.send('test wxServer failure');
     }
 };
