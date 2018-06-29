@@ -8,7 +8,7 @@ const crypto = require('crypto');
  * @param  {[type]} res [description]
  * @return {[type]}     [description]
  */
-exports.checkServer = (req, res) =>{
+exports.checkServer = (req, res) => {
     const signature = req.query.signature;
     const timestamp = req.query.timestamp;
     const nonce = req.query.nonce;
