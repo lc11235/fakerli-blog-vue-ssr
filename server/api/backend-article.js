@@ -35,8 +35,8 @@ const uploadFile = uploadMulter.single('file');
 /**
  * 管理时，获取文章列表
  * @method
- * @param  {[type]} req [description]
- * @param  {[type]} res [description]
+ * @param  {[type]} req [请求]
+ * @param  {[type]} res [返回]
  * @return {[type]}     [description]
  */
 exports.getList = (req, res) => {
