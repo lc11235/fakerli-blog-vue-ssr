@@ -26,7 +26,7 @@
                     </div>
                     <div class="search-modal-footer">
                         <span class="power-by">Powered by</span>
-                        <a rel="nofollow" target="_blank" href="https://www.elastic.co/products/elasticsearch" class="elastic-logo">ElasticSearch</a>
+                        <a rel="nofollow" target="_blank" href="https://www.elastic.co/products/elasticsearch" class="elastic-logo" rel="noopener">ElasticSearch</a>
                     </div>
                 </div>
             </div>

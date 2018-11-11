@@ -46,17 +46,17 @@
                         </a>
                     
                     
-                        <a class="inline" rel="nofollow" target="_blank" href="https://www.zhihu.com/people/lichang">
+                        <a class="inline" rel="nofollow" target="_blank" href="https://www.zhihu.com/people/lichang" rel="noopener">
                             <i class="fa fa-clone" title="知乎"></i>
                         </a>
                     
                     
-                        <a class="inline" rel="nofollow" target="_blank" href="https://github.com/lc11235">
+                        <a class="inline" rel="nofollow" target="_blank" href="https://github.com/lc11235" rel="noopener">
                             <i class="fa fa-github" title="Github"></i>
                         </a>
                     
                     
-                        <a class="inline" rel="nofollow" target="_blank" href="https://www.fakerli.com/rss.html">
+                        <a class="inline" rel="nofollow" target="_blank" href="https://www.fakerli.com/rss.html" rel="noopener">
                             <i class="fa fa-rss" title="RSS"></i>
                         </a>
                     </li>
