@@ -1,11 +1,11 @@
 <template>
     <aside id="menu">
         <div class="inner flex-row-vertical">
-            <a @click="hide" href="javascript:;" class="header-icon" id="menu-off">
+            <a @click="hide" href="javascript:;" aria-label="head" class="header-icon" id="menu-off">
                 <i class="fa fa-lg fa-remove"></i>
             </a>
             <div class="face-wrap">
-                <router-link to="/" >
+                <router-link to="/" aria-label="me" >
                     <img src="/static/images/me.jpg" alt="fakerli" height="144" width="144">
                 </router-link>
                 <span>fakerli's blog</span>

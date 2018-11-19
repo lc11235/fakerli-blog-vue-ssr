@@ -1,7 +1,7 @@
 <template>
     <header class="top-header" id="header">
         <div class="flex-row">
-            <a @click="visible" href="javascript:;" class="header-icon">
+            <a @click="visible" href="javascript:;" aria-label="bar" class="header-icon">
                 <i class="fa fa-lg fa-bars"></i>
             </a>
             <div class="flex-col header-title ellipsis">{{title}}</div>
@@ -9,11 +9,11 @@
                 <a href="javascript:;" class="header-icon" id="back">
                     <i class="fa fa-lg fa-chevron-left"></i>
                 </a>
-                <a @click="searchVisible" href="javascript:;" class="header-icon" id="search">
+                <a @click="searchVisible" href="javascript:;" aria-label="search" class="header-icon" id="search">
                     <i class="fa fa-lg fa-search"></i>
                 </a>
             </div>
-            <a href="javascript:;" class="header-icon">
+            <a href="javascript:;" class="header-icon" aria-label="share">
                 <i class="fa fa-lg fa-share-alt"></i>
             </a>
         </div>
