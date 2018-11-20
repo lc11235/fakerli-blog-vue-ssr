@@ -6,7 +6,7 @@
             </a>
             <div class="face-wrap">
                 <router-link to="/" aria-label="me" >
-                    <img src="/static/images/me.jpg" alt="fakerli" height="144" width="144">
+                    <img src="/static/images/me.png" alt="fakerli" height="144" width="144">
                 </router-link>
                 <span>fakerli's blog</span>
             </div>

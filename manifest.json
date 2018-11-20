@@ -1,0 +1,31 @@
+{
+    "name": "fakerli",
+    "short_name": "fakerli",
+    "description": "学习是为了探索这个世界的本质",
+    "start_url": "/server.html",
+    "display": "standalone",
+    "orientation": "any",
+    "background_color": "#ACE",
+    "theme_color": "#ACE",
+    "icons": [{
+      "src": "/static/images/logo/logo072.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    }, {
+      "src": "/static/images/logo/logo152.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    }, {
+      "src": "/static/images/logo/logo192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }, {
+      "src": "/static/images/logo/logo256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    }, {
+      "src": "/static/images/logo/logo512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }]
+  }
