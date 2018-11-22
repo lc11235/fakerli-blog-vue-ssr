@@ -13,7 +13,6 @@ fs.readFile('./1.md', 'utf-8', (err, data) => {
             result.push({
                 alt: matcher[1],
                 url: matcher[2]
-            });
-        }        
+            }); }
     }
 });
