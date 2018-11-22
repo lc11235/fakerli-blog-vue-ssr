@@ -35,8 +35,8 @@ const uploadFile = uploadMulter.single('file');
 /**
  * 管理时，获取文章列表
  * @method
- * @param  {[type]} req [请求]
- * @param  {[type]} res [返回]
+ * @param  {[Object]} req [请求]
+ * @param  {[Object]} res [返回]
  * @return {[type]}     [description]
  */
 exports.getList = (req, res) => {
@@ -125,7 +125,7 @@ exports.insert = (req, res) => {
 };
 
 /**
- * 管理时，删除文章
+ * 管理时，标记删除文章，文章在数据库中只是标记删除，未消失
  * @method
  * @param  {[type]} req [description]
  * @param  {[type]} res [description]
@@ -152,7 +152,7 @@ exports.deletes = (req, res) => {
 };
 
 /**
- * 管理时，删除文章
+ * 管理时，完全删除文章，即从数据库中删除
  * @method
  * @param  {[type]} req [description]
  * @param  {[type]} res [description]
@@ -179,7 +179,7 @@ exports.deleteCompletely = (req, res) => {
 };
 
 /**
- * 管理时，恢复文章
+ * 管理时，恢复文章，这是文章被标记删除的时候才能提供的功能
  * @method
  * @param  {[type]} req [description]
  * @param  {[type]} res [description]
@@ -281,7 +281,7 @@ exports.modify = (req, res) => {
 };
 
 /**
- * 管理时，编辑文章
+ * 管理时，上传已经写好的markdown格式的文章
  * @method
  * @param  {[type]} req [description]
  * @param  {[type]} res [description]
