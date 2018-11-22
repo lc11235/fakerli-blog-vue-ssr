@@ -2,7 +2,7 @@
     "name": "fakerli",
     "short_name": "fakerli",
     "description": "学习是为了探索这个世界的本质",
-    "start_url": "/server.html",
+    "start_url": "/",
     "display": "standalone",
     "orientation": "any",
     "background_color": "#ACE",
