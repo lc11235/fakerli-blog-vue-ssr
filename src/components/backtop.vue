@@ -1,5 +1,5 @@
 <template>
-    <a @click="handleBackTop" href="javascript:;" :class="{in: scrollTop > 300}" class="back-top">
+    <a @click="handleBackTop" aria-label="backTop" href="javascript:;" :class="{in: scrollTop > 300}" class="back-top">
         <span class="fa fa-chevron-up"></span>
     </a>
 </template>
