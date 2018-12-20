@@ -33,7 +33,7 @@ const config = merge(base, {
     resolve: {
         alias: {
             '~api': path.resolve(__dirname, '../src/api/index-server'),
-            'api-config': path.resolve(__dirname, '../src/api/config-server')
+            '~api-config': path.resolve(__dirname, '../src/api/config-server')
         }
     },
     node: {

@@ -1,24 +1,30 @@
 <template>
     <div id="backmenu">
-        <Menu :theme="theme" active-name="1">
+        <Menu :theme="theme" active-name="1" @on-select="navigateTo">
+        <MenuGroup title="账号管理">
+            <MenuItem name="/backend/admin/list" replace="true">
+                <Icon type="document-text"></Icon>
+                账号
+            </MenuItem>
+        </MenuGroup>
         <MenuGroup title="内容管理">
-            <MenuItem name="1">
+            <MenuItem name="/backend/article/list" replace="true">
                 <Icon type="document-text"></Icon>
                 文章管理
             </MenuItem>
-            <MenuItem name="2">
+            <MenuItem name="/backend/article/insert" replace="true">
                 <Icon type="chatbubbles"></Icon>
-                评论管理
+                发布文章
             </MenuItem>
         </MenuGroup>
-        <MenuGroup title="统计分析">
-            <MenuItem name="3">
+        <MenuGroup title="标签管理">
+            <MenuItem name="/backend/tag/list" replace="true">
                 <Icon type="heart"></Icon>
-                用户留存
+                管理标签
             </MenuItem>
-            <MenuItem name="4">
+            <MenuItem name="/backend/tag/insert" replace="true">
                 <Icon type="heart-broken"></Icon>
-                流失用户
+                添加标签
             </MenuItem>
         </MenuGroup>
         </Menu>
@@ -32,6 +38,11 @@
             return {
                 theme: 'light'
             };
+        },
+        methods: {
+            navigateTo(name) {
+                this.$router.replace(name);
+            }
         },
         serverCacheKey: () => {
             return `backend::menu`;

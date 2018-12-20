@@ -35,8 +35,8 @@ const config = {
             '~mixins': path.resolve(__dirname, '../src/mixins'),
             '~store': path.resolve(__dirname, '../src/store'),
             '~utils': path.resolve(__dirname, '../src/utils'),
-            'assets': path.resolve(__dirname, '../src/assets'),
-            'api-config': path.resolve(__dirname, '../src/api/config-client')
+            '~assets': path.resolve(__dirname, '../src/assets'),
+            '~api-config': path.resolve(__dirname, '../src/api/config-client')
         }
     },
     resolveLoader: {
