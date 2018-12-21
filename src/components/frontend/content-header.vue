@@ -9,7 +9,7 @@
 </template>
 
 <script lang="babel">
-    import tooltipBox from './tooltip-box.vue';
+    import tooltipBox from '~components/frontend/tooltip-box.vue';
     export default {
         name: 'content-header',
         data() {

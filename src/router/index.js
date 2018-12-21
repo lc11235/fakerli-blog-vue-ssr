@@ -5,11 +5,11 @@ import Meta from 'vue-meta';
 
 // import { inBrowser } from '../utils';
 
-import index from '../pages/frontend-index.vue';
-import article from '../pages/frontend-article.vue';
-import about from '../pages/frontend-about.vue';
-import tags from '../pages/frontend-tags.vue';
-import archives from '../pages/frontend-archives.vue';
+import index from '../pages/frontend/frontend-index.vue';
+import article from '../pages/frontend/frontend-article.vue';
+import about from '../pages/frontend/frontend-about.vue';
+import tags from '../pages/frontend/frontend-tags.vue';
+import archives from '../pages/frontend/frontend-archives.vue';
 
 Vue.use(VueRouter);
 Vue.use(Meta);

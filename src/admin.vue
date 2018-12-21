@@ -2,25 +2,29 @@
     <div id="app" class="g-doc">
         <backend-header v-if="!isLogin" />
         <div class="backend-center">
-            <backend-menu v-if="!isLogin"></backend-menu>
-            <backendPage v-if="!isLogin" :pageTitle="getTitle" />
-            <div class="back-wrap" :class="{'back-left': !isLogin, 'back-height': isLogin}">
-                <transition name="fade" mode="out-in">
-                    <router-view :key="key"></router-view>
-                </transition>
+            <backend-menu v-show="!isLogin"></backend-menu>
+            <div class="back-main">
+                <backendPage v-show="!isLogin" :pageTitle="getTitle" />
+                <div class="back-block">
+                    <div class="back-wrap" :class="{'back-left': !isLogin, 'back-height': isLogin}">
+                        <transition name="fade" mode="out-in">
+                            <router-view :key="key"></router-view>
+                        </transition>
+                    </div>
+                </div>
             </div>
         </div>
-        <footer-item v-if="!isLogin" />
+        <footer-item v-show="!isLogin" />
     </div>
 </template>
 
 <script lang="babel">
     import { mapGetters } from 'vuex';
     import NProgress from 'nprogress';
-    import backendMenu from './components/backend-menu.vue';
-    import footerItem from './components/footer.vue';
-    import backendHeader from './components/backend-header.vue';
-    import backendPage from './components/backend-page-header.vue';
+    import backendMenu from '~components/backend/backend-menu.vue';
+    import footerItem from '~components/public/footer.vue';
+    import backendHeader from '~components/backend/backend-header.vue';
+    import backendPage from '~components/backend/backend-page-header.vue';
 
     export default {
         name: 'backend',
@@ -38,22 +42,27 @@
                 return this.$route.path === '/backend/login' || this.$route.path === '/backend/register';
             },
             getTitle() {
-                let title = '';
+                let title = {};
                 switch (this.$route.path) {
                     case '/backend/article/list':
-                        title = '管理文章';
+                        title.middle = '文章 ';
+                        title.end = '/ 管理文章';
                         break;
                     case '/backend/article/insert':
-                        title = '发布文章';
+                        title.middle = '文章 ';
+                        title.end = '/ 发布文章';
                         break;
                     case '/backend/tag/list':
-                        title = '管理标签';
+                        title.middle = '标签 ';
+                        title.end = '/ 管理标签';
                         break;
                     case '/backend/tag/insert':
-                        title = '添加标签';
+                        title.middle = '标签 ';
+                        title.end = '/ 添加标签';
                         break;
                     default:
-                        title = '管理账号';
+                        title.middle = '文章 ';
+                        title.end = '/ 管理文章';
                 }
                 return title;
             }

@@ -24,8 +24,8 @@
 <script>
     import { mapGetters } from 'vuex';
     import api from '~api';
-    import backendMenu from '~components/backend-menu.vue';
-    import aInput from '~components/_input.vue';
+    import backendMenu from '~components/backend/backend-menu.vue';
+    import aInput from '~components/backend/_input.vue';
     const fetchInitialData = async store => {
         await store.dispatch('backend/admin/getAdminItem');
     };

@@ -14,7 +14,7 @@
 
 <script lang="babel">
     import api from '~api';
-    import aInput from '../components/_input.vue';
+    import aInput from '~components/backend/_input.vue';
 
     export default {
         name: 'backend-tag-insert',

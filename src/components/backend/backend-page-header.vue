@@ -1,11 +1,9 @@
 <template>
     <div class="back-page-header">
         <ul class="back-page-ul">
-            <li>
-                <a href="javascript:;">首页</a>
-            </li>
-            <li>></li>
-            <li>{{ pageTitle }}</li>
+            <li> 首页 /</li>
+            <li>{{ pageTitle.middle }}</li>
+            <li class="back-header-active">{{ pageTitle.end }}</li>
         </ul>
     </div>
 </template>

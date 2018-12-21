@@ -5,7 +5,7 @@
 </template>
 
 <script lang="babel">
-    import logout from './logout.vue';
+    import logout from '~components/backend/log-out.vue';
     export default {
         name: 'backendHeader',
         components: {

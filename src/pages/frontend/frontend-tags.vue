@@ -27,8 +27,8 @@
 
 <script lang="babel">
     import { mapGetters } from 'vuex';
-    import topicsItem from '../components/topics-item.vue';
-    import topicsItemNone from '../components/topics-item-none.vue';
+    import topicsItem from '~components/frontend/topics-item.vue';
+    import topicsItemNone from '~components/frontend/topics-item-none.vue';
     import metaMixin from '~mixins';
     const fetchInitialData = async (store, tag, page) => {
         await store.dispatch('global/tag/getTagList');

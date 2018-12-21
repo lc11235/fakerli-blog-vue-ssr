@@ -4,19 +4,19 @@ import cookies from 'js-cookie';
 
 import { inBrowser } from '../utils';
 
-const login = r => require.ensure([], () => r(require('../pages/backend-login.vue')), 'chunk-backend-login');
-const register = r => require.ensure([], () => r(require('../pages/backend-register.vue')), 'chunk-backend-register');
+const login = r => require.ensure([], () => r(require('../pages/backend/backend-login.vue')), 'chunk-backend-login');
+const register = r => require.ensure([], () => r(require('../pages/backend/backend-register.vue')), 'chunk-backend-register');
 
-const articleList = r => require.ensure([], () => r(require('../pages/backend-article-list.vue')), 'chunk-backend-article');
-const articleInsert = r => require.ensure([], () => r(require('../pages/backend-article-insert.vue')), 'chunk-backend-article');
-const articleModify = r => require.ensure([], () => r(require('../pages/backend-article-modify.vue')), 'chunk-backend-article');
+const articleList = r => require.ensure([], () => r(require('../pages/backend/backend-article-list.vue')), 'chunk-backend-article');
+const articleInsert = r => require.ensure([], () => r(require('../pages/backend/backend-article-insert.vue')), 'chunk-backend-article');
+const articleModify = r => require.ensure([], () => r(require('../pages/backend/backend-article-modify.vue')), 'chunk-backend-article');
 
-const tagList = r => require.ensure([], () => r(require('../pages/backend-tag-list.vue')), 'chunk-backend-tag');
-const tagInsert = r => require.ensure([], () => r(require('../pages/backend-tag-insert.vue')), 'chunk-backend-tag');
-const tagModify = r => require.ensure([], () => r(require('../pages/backend-tag-modify.vue')), 'chunk-backend-tag');
+const tagList = r => require.ensure([], () => r(require('../pages/backend/backend-tag-list.vue')), 'chunk-backend-tag');
+const tagInsert = r => require.ensure([], () => r(require('../pages/backend/backend-tag-insert.vue')), 'chunk-backend-tag');
+const tagModify = r => require.ensure([], () => r(require('../pages/backend/backend-tag-modify.vue')), 'chunk-backend-tag');
 
-const adminList = r => require.ensure([], () => r(require('../pages/backend-admin-list.vue')), 'chunk-backend-admin');
-const adminModify = r => require.ensure([], () => r(require('../pages/backend-admin-modify.vue')), 'chunk-backend-admin');
+const adminList = r => require.ensure([], () => r(require('../pages/backend/backend-admin-list.vue')), 'chunk-backend-admin');
+const adminModify = r => require.ensure([], () => r(require('../pages/backend/backend-admin-modify.vue')), 'chunk-backend-admin');
 
 Vue.use(VueRouter);
 

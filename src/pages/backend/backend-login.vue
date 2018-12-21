@@ -1,15 +1,10 @@
 <template>
-    <div>
-        <canvas-three />
+    <div class="login-container">
+        <canvas-line />
         <Form ref="formInline" :model="formInline" :rules="ruleInline" class="backend-login">
             <FormItem prop="username">
                 <Input type="text" size="large" v-model="formInline.username" placeholder="Username">
                     <Icon type="ios-person-outline" slot="prepend"></Icon>
-                </Input>
-            </FormItem>
-            <FormItem prop="email">
-                <Input type="text" size="large" v-model="formInline.email" placeholder="email">
-                    <Icon type="ios-locked-outline" slot="prepend"></Icon>
                 </Input>
             </FormItem>
             <FormItem prop="password">
@@ -18,7 +13,7 @@
                 </Input>
             </FormItem>
             <FormItem>
-                <Button type="primary" @click="handleSubmit('formInline')" long>注册</Button>
+                <Button type="primary" @click="handleSubmit('formInline')" long>登录</Button>
             </FormItem>
         </Form>
     </div>
@@ -27,10 +22,10 @@
 <script lang="babel">
     import cookies from 'js-cookie';
     import api from '~api';
-    import canvasThree from '~components/canvas-three.vue';
+    import canvasLine from '~components/backend/canvas-line.vue';
 
     export default {
-        name: 'register',
+        name: 'login',
         beforeRouteEnter(to, from, next) {
             if (cookies.get('b_user')) {
                 next('/backend/article/list');
@@ -42,26 +37,21 @@
             return {
                 formInline: {
                     username: '',
-                    email: '',
                     password: ''
                 },
                 ruleInline: {
                     username: [
                         { required: true, message: '请填写用户名', trigger: 'blur' }
                     ],
-                    email: [
-                        { required: true, message: '请填写邮件地址', trigger: 'blur' },
-                        { type: 'email', message: '邮箱格式不正确', trigger: 'blur' }
-                    ],
                     password: [
                         { required: true, message: '请填写密码', trigger: 'blur' },
-                        { type: 'string', min: 8, message: '密码长度不能小于8位', trigger: 'blur' }
+                        { type: 'string', min: 6, message: '密码长度不能小于6位', trigger: 'blur' }
                     ]
                 }
             };
         },
         components: {
-            canvasThree
+            canvasLine
         },
         methods: {
             handleSubmit(name) {
@@ -74,12 +64,12 @@
                 });
             },
             async login() {
-                const { data: { data, code }} = await api.post('backend/admin/register', this.formInline);
+                const { data: { data, code }} = await api.post('backend/admin/login', this.formInline);
                 if (data && code === 200) {
-                    this.$Message.success('注册成功!');
-                    this.$router.replace('/backend/login');
+                    this.$Message.success('登录成功!');
+                    this.$router.replace('/backend/article/list');
                 } else {
-                    this.$Message.error('注册失败!');
+                    this.$Message.error('登录失败!');
                 }
             }
         }

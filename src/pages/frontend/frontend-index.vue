@@ -20,9 +20,9 @@
 <script lang="babel">
     import store2 from 'store2';
     import { mapGetters } from 'vuex';
-    import topicsItem from '../components/topics-item.vue';
-    import topicsItemNone from '../components/topics-item-none.vue';
-    import { ssp } from '../utils';
+    import topicsItem from '~components/frontend/topics-item.vue';
+    import topicsItemNone from '~components/frontend/topics-item-none.vue';
+    import { ssp } from '~utils';
     import metaMixin from '~mixins';
 
     const fetchInitialData = async (store, config = { page: 1 }) => {

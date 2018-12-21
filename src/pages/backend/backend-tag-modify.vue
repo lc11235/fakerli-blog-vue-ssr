@@ -16,7 +16,7 @@
 <script lang="babel">
     import api from '~api';
     import { mapGetters } from 'vuex';
-    import aInput from '../components/_input.vue';
+    import aInput from '~components/backend/_input.vue';
 
     const fetchInitialData = async store => {
         await store.dispatch('global/tag/getTagItem');

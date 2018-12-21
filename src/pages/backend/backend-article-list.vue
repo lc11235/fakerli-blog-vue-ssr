@@ -11,7 +11,7 @@
 
 <script lang="babel">
     import api from '~api';
-    import { timeAgo } from '../filters';
+    import { timeAgo } from '~filters';
     import { mapGetters } from 'vuex';
     const fetchInitialData = async (store, config = { page: 1 }) => {
         const base = { ...config, limit: 10 };

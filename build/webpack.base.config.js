@@ -32,6 +32,7 @@ const config = {
             '~components': path.resolve(__dirname, '../src/components'),
             '~api': path.resolve(__dirname, '../src/api/index-client'),
             '~pages': path.resolve(__dirname, '../src/pages'),
+            '~filters': path.resolve(__dirname, '../src/filters'),
             '~mixins': path.resolve(__dirname, '../src/mixins'),
             '~store': path.resolve(__dirname, '../src/store'),
             '~utils': path.resolve(__dirname, '../src/utils'),

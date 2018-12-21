@@ -17,12 +17,13 @@
 <script lang="babel">
     import { mapGetters } from 'vuex';
     import NProgress from 'nprogress';
-    import Navigation from './components/navigation.vue';
-    import backTop from './components/backtop.vue';
-    import topHeader from './components/top-header.vue';
-    import contentHeader from './components/content-header.vue';
-    import footerItem from './components/footer.vue';
-    import search from './components/search.vue';
+    import Navigation from '~components/frontend/navigation.vue';
+    import backTop from '~components/frontend/back-top.vue';
+    import topHeader from '~components/frontend/top-header.vue';
+    import contentHeader from '~components/frontend/content-header.vue';
+    import search from '~components/frontend/search.vue';
+
+    import footerItem from '~components/public/footer.vue';
 
     export default {
         name: 'app',
