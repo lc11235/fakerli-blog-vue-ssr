@@ -89,6 +89,7 @@ app.use('/server', serve('./dist/server', true));
 app.use('/static', serve('./dist/static', true));
 app.use('/manifest.json', serve('./manifest.json'));
 app.use('/service-worker.js', serve('./dist/service-worker.js'));
+app.use('/myGirl', serve('./myGirl', true));
 
 // api路由
 app.use('/api', routes);
