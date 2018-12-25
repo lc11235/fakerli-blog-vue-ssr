@@ -10,6 +10,7 @@ prefixMulti[srcDir] = '';
 
 module.exports = {
     devtool: false,
+    mode: 'production',
     module: {
         rules: [{
             test: /\.(jpg|png|gif|eot|svg|ttf|woff|woff2)$/,
@@ -26,22 +27,29 @@ module.exports = {
             loader: ExtractTextPlugin.extract(['css-loader', 'postcss-loader', 'less-loader'])
         }]
     },
+    optimization: {
+        minimize: true
+    },
     plugins: [
         new ExtractTextPlugin('static/css/[name].[hash:7].css'),
         new webpack.optimize.ModuleConcatenationPlugin(),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'vendor',
-            minChunks(module, count) {
-                return (module.resource && /\.js$/.test(module.resource) && module.resource.indexOf('node_modules') > 0)
-            }
-        }),
-        new webpack.optimize.CommonsChunkPlugin({ name: 'manifest', chunks: ['vendor'] }),
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                warnings: false
-            },
-            output: {
-                comments: false
+        new webpack.optimize.SplitChunksPlugin({
+            chunks: "async",
+            minSize: 30000,
+            minChunks: 1,
+            maxAsyncRequests: 5,
+            maxInitialRequests: 3,
+            name: true,
+            cacheGroups: {
+                default: {
+                    minChunks: 2,
+                    priority: -20,
+                    reuseExistingChunk: true,
+                },
+                vendors: {
+                    test: /[\\/]node_modules[\\/]/,
+                    priority: -10
+                }
             }
         }),
         new webpack.LoaderOptionsPlugin({

@@ -7,6 +7,7 @@ const baseConfig = require('./webpack.base.config');
 const devConfig = require('./webpack.client.dev.config');
 const prodConfig = require('./webpack.client.prod.config');
 const vueConfig = require('./vue-loader.config');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const projectRoot = path.resolve(__dirname, '../');
 
 let config = merge(baseConfig, {
@@ -16,29 +17,24 @@ let config = merge(baseConfig, {
     },
     module: {
         rules: [{
-            test: /\.vue$/,
+            test: /\.(js|vue)$/,
             loader: 'eslint-loader',
             enforce: "pre",
             include: projectRoot,
             exclude: /node_modules/
-        }, {
-            test: /\.js$/,
-            loader: 'eslint-loader',
-            enforce: "pre",
-            include: projectRoot,
-            exclude: /node_modules/
-        }, {
+        },{
             test: /\.vue$/,
             loader: 'vue-loader',
             options: vueConfig
         }]
     },
     plugins: [
-        new webpack.ProgressPlugin({
+        new webpack.ProvidePlugin({
             $: 'jquery',
             jQuery: 'jquery',
             'window.jQuery': 'jquery',
-        })
+        }),
+        new VueLoaderPlugin()
     ]
 });
 

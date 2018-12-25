@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     devtool: '#source-map',
+    mode: 'development',
     module: {
         rules: [{
             test: /\.css$/,
@@ -18,9 +19,17 @@ module.exports = {
             }
         }]
     },
+    optimization: {
+        minimize: false
+    },
     plugins: [
-        new webpack.optimize.CommonsChunkPlugin({
-            name: ["vendor"]
+        new webpack.optimize.SplitChunksPlugin({
+            chunks: "all",
+            minSize: 20000,
+            minChunks: 1,
+            maxAsyncRequests: 5,
+            maxInitialRequests: 3,
+            name: true
         }),
         new HtmlWebpackPlugin({
             chunks: [
