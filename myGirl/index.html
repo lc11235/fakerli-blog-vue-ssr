@@ -62,14 +62,14 @@
                 </div>
             </div>
         </div>
-        <div class="li-audio">
-            <img class="label-audio" src="data:image/gif;base64,R0lGODlhHAAcAPABAP///wAAACH5BAkeAAEAIf8LTkVUU0NBUEUyLjADAQAAACH/C0ltYWdlTWFnaWNrDWdhbW1hPTAuNDU0NTUALAAAAAAcABwAAAJPjI+py+0BIngUyvrkxE3zfn2LJypkiZyooaah0x6x+SazXbsRdd/6RttlcjJiEIgTwowWZVKD/DGgzB41WnT+rNosdFq9grss8ShMXqkZBQAh+QQJHgABACH/C0ltYWdlTWFnaWNrDWdhbW1hPTAuNDU0NTUALAAAAAAcABwAAAJGjI+py+0PDZggPlptw3rTznCgIo5IaUrYZ67s6E5pnMHxfLe57eL9gjrtEsEDLfQiDoUy4NKYZK6QTdJTVVX+rFlp6qspAAAh+QQJHgABACH/C0ltYWdlTWFnaWNrDWdhbW1hPTAuNDU0NTUALAAAAAAcABwAAAJQjI+py+1vgAQQTlrdzXrytn1LKCZkeZxooKbe00ZvJzGxOeM1nCO333PtaBjFT1jUXZLAofIGXTqbTGR0ag3KsNulTcuSVrtfaXkc5q7WjAIAOw==">
-            <span class="name-audio">假如爱有天意 - 李健</span>
-            <audio src="https://mr3.doubanio.com/2648b1b518bbcdbe36834ed11e0d3a5f/0/fm/song/p2937377_128k.mp4" style="display: none;"></audio>
+        <div class="audio-player">
+            <audio id="player" src="./music/demo1.mp3" type="audio/mp3" autoplay preload loop="loop" controls>
         </div>
+        
     </div>
 
     <script type="text/javascript">
+        
         var offsetX = $("#loveHeart").width() / 2;
         var offsetY = $("#loveHeart").height() / 2 - 55;
         var together = new Date();
@@ -100,7 +100,7 @@
 
             adjustCodePosition();
             $("#code").typewriter();
-        }
+        } 
     </script>
 
 </body>
