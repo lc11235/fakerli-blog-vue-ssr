@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const VueSSRPlugin = require('vue-ssr-webpack-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const base = require('./webpack.base.config');
 
 let query = {};
@@ -46,7 +47,8 @@ const config = merge(base, {
             'process.env.NODE_ENV': '"server"',
             'global.GENTLY': false
         }),
-        new VueSSRPlugin()
+        new VueSSRPlugin(),
+        new VueLoaderPlugin()
     ]
 });
 

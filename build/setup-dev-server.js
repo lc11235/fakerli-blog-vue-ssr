@@ -9,6 +9,7 @@ module.exports = function setupDevServer(app, callback){
     let frontend;
     let backend;
     // modify client config to work with hot middleware
+    clientConfig.mode = 'development';
     clientConfig.entry.app = ['./build/dev-client', clientConfig.entry.app];
     clientConfig.entry.admin = ['./build/dev-client', clientConfig.entry.admin];
     clientConfig.output.filename = '[name].js';
@@ -42,6 +43,7 @@ module.exports = function setupDevServer(app, callback){
     app.use(require('webpack-hot-middleware')(clientCompiler));
 
     // watch and update server renderer
+    serverConfig.mode = 'development';
     const serverCompiler = webpack(serverConfig);
     const mfs = new MFS();
     serverCompiler.outputFileSystem = mfs;

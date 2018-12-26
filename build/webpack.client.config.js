@@ -17,12 +17,6 @@ let config = merge(baseConfig, {
     },
     module: {
         rules: [{
-            test: /\.(js|vue)$/,
-            loader: 'eslint-loader',
-            enforce: "pre",
-            include: projectRoot,
-            exclude: /node_modules/
-        },{
             test: /\.vue$/,
             loader: 'vue-loader',
             options: vueConfig

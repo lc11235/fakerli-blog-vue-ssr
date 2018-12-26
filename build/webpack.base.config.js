@@ -5,6 +5,8 @@ const isProd = process.env.NODE_ENV === 'production';
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const config = {
+    // 性能提示
+    // https://www.webpackjs.com/configuration/performance/
     performance: {
         maxEntrypointSize: 300000,
         hints: isProd ? 'warning': false
@@ -19,6 +21,16 @@ const config = {
         publicPath: '/',
         filename: 'static/js/[name].[chunkhash:7].js',
         chunkFilename: 'static/js/[name].[chunkhash:7].js'
+    },
+    module: {
+        rules: [{
+            test: /\.js$/,
+            loader: 'babel-loader',
+            exclude: /node_modules/
+        }],
+        noParse: function(content) {
+            return /jquery|lodash/.test(content);
+        }
     },
     resolve:{
         extensions: [
@@ -44,13 +56,6 @@ const config = {
         modules: [
             path.join(__dirname, '../node_modules')
         ]
-    },
-    module: {
-        rules: [{
-            test: /\.js$/,
-            loader: 'babel-loader',
-            exclude: /node_modules/
-        }]
     },
     plugins: [
         new webpack.DefinePlugin({
