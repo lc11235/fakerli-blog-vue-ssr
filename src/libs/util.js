@@ -25,7 +25,7 @@ const showThisMenuEle = (item, access) => {
         if (hasOneOf(item.meta.access, access)) return true;
         else return false;
     } else return true;
-}；
+};
 /**
  * @param {Array} list 通过路由列表得到菜单列表
  * @returns {Array}
