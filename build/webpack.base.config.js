@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const isProd = process.env.NODE_ENV === 'production';
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
@@ -10,11 +11,6 @@ const config = {
     performance: {
         maxEntrypointSize: 300000,
         hints: isProd ? 'warning': false
-    },
-    entry: {
-        app: './src/entry-client.js',
-        admin: './src/admin.js',
-        vendor: ['./src/polyfill']
     },
     output: {
         path: path.resolve(__dirname, '../dist'),
@@ -26,7 +22,11 @@ const config = {
         rules: [{
             test: /\.js$/,
             loader: 'babel-loader',
-            exclude: /node_modules/
+            exclude: /node_modules/,
+            options: {
+                presets: ['@babel/preset-env'],
+                plugins: ['@babel/transform-runtime']
+            }
         }],
         noParse: function(content) {
             return /jquery|lodash/.test(content);
@@ -60,7 +60,8 @@ const config = {
     plugins: [
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
-        })
+        }),
+        new VueLoaderPlugin()
     ]
 };
 

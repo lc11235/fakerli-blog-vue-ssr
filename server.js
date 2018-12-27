@@ -6,6 +6,7 @@ const path = require('path');
 const favicon = require('serve-favicon');
 const express = require('express');
 const compression = require('compression');
+const LRU = require('lru-cache');
 // const HTMLStream = require('vue-ssr-html-stream');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
@@ -36,7 +37,7 @@ function createRenderer(bundle, template) {
     // https://github.com/vuejs/vue/blob/dev/packages/vue-server-renderer/README.md#why-use-bundlerenderer
     return createBundleRenderer(bundle, {
         template,
-        cache: require('lru-cache')({
+        cache: new LRU({
             max: 1000,
             maxAge: 1000 * 60 * 15
         })
@@ -52,7 +53,7 @@ let backend;
 let renderer;
 if (isProd) {
     // 生产模式：从文件创建服务器HTML渲染器和索引
-    const bundle = require('./dist/vue-ssr-bundle.json');
+    const bundle = require('./dist/vue-ssr-server-bundle.json');
     frontend = fs.readFileSync(resolve('./dist/server.html'), 'utf-8');
     renderer = createRenderer(bundle, frontend);
 } else {

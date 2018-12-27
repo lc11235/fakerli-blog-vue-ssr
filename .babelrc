@@ -2,7 +2,7 @@
     "env": {
         "production": {
             "presets": [
-                ["env", {
+                ["@babel/preset-env", {
                     "targets": {
                         "browsers": ["last 2 version", "> 1%"]
                     },
@@ -11,13 +11,13 @@
                 }]
             ],
             "plugins": [
-                "transform-runtime",
-                "transform-object-rest-spread"
+                "@babel/transform-runtime",
+                "@babel/plugin-transform-spread"
             ]
         },
         "development": {
             "presets": [
-                ["env", {
+                ["@babel/preset-env", {
                     "targets": {
                         "chrome": 52
                     },
@@ -26,7 +26,7 @@
                 }]
             ],
             "plugins": [
-                "transform-object-rest-spread"
+                "@babel/plugin-transform-spread"
             ]
         }
     }

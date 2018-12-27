@@ -33,7 +33,7 @@ exports.getList = (req, res) => {
 
     Promise.all([
         Article.find(data, fields).sort(sort).skip(skip).limit(limit).exec(),
-        Article.count(data)
+        Article.countDocuments(data)
     ]).then(([result, total]) => {
         let totalPage = Math.ceil(total / limit);
         let resultData = result.map(item => {

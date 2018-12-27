@@ -35,6 +35,7 @@
                     <p>本站服务端采用 express + mongoDB 搭建, 客户端采用 Vue2 的服务端渲染搭建</p>
                     <p>网站分成前台和后台, 前台采用 SSR 模式渲染, 后台采用 SPA 模式</p>
                     <p>主要功能包括: 管理员, 用户, 标签, 文章, 评论, 文章点赞</p>
+                    <p>你好</p>
                     <p>主要技术栈: express, mongoose, vue2, vue2-router, vuex, webpack, babel, eslint</p>
                 </div>
             </div>

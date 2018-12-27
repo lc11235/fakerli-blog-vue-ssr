@@ -18,7 +18,7 @@ exports.list = (req, res, mongoDB, sort) => {
     let skip = (page - 1) * limit;
     Promise.all([
         mongoDB.find().sort(sortlist).skip(skip).limit(limit).exec(),
-        mongoDB.count()
+        mongoDB.countDocuments()
     ]).then(result => {
         let total = result[1];
         let totalPage = Math.ceil(total / limit);
