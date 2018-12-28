@@ -2,6 +2,10 @@ module.exports = {
     extends: [
         'eslint-config-alloy',
     ],
+    rules: {
+        "no-shadow": "off",
+        "no-undefined": "off"
+    },
     globals: {
         $: true,
         _: true,

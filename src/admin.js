@@ -53,10 +53,12 @@ Object.keys(filters).forEach(key => {
     Vue.filter(key, filters[key]);
 });
 
-new Vue({
+let newVue = new Vue({
     el: '#app',
     router,
     i18n,
     store,
     render: h => h(App)
 });
+
+Vue.use(newVue);
