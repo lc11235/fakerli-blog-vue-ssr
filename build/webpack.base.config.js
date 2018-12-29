@@ -40,7 +40,7 @@ const config = {
             path.join(__dirname, '../node_modules')
         ],
         alias: {
-            '~src':path.resolve(__dirname, '../src'),
+            '@':path.resolve(__dirname, '../src'),
             '~components': path.resolve(__dirname, '../src/components'),
             '~api': path.resolve(__dirname, '../src/api/index-client'),
             '~pages': path.resolve(__dirname, '../src/pages'),

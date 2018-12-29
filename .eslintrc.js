@@ -4,7 +4,8 @@ module.exports = {
     ],
     rules: {
         "no-shadow": "off",
-        "no-undefined": "off"
+        "no-undefined": "off",
+        "no-param-reassign": "off"
     },
     globals: {
         $: true,

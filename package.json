@@ -52,7 +52,8 @@
     "vuex-router-sync": "^5.0.0",
     "vue-i18n": "^8.6.0",
     "tree-table-vue": "^1.1.0",
-    "v-org-tree": "^1.0.6"
+    "v-org-tree": "^1.0.6",
+    "xlsx":"^0.14.1"
   },
   "devDependencies": {
     "autoprefixer": "^9.4.3",
