@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueI18n from 'vue-i18n';
-import { localRead } from '@libs/util.js';
+import { localRead } from '@/libs/util.js';
 import customZhCn from './lang/zh-CN';
 import customZhTw from './lang/zh-TW';
 import customEnUs from './lang/en-US';

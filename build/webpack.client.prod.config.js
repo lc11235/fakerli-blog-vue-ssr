@@ -21,10 +21,17 @@ module.exports = {
             }
         }, {
             test: /\.css$/,
-            loader: ExtractTextPlugin.extract(['css-loader', 'postcss-loader'])
+            loader: 'vue-style-loader!css-loader!postcss-loader'
         }, {
             test: /\.less$/,
-            loader: ExtractTextPlugin.extract(['css-loader', 'postcss-loader', 'less-loader'])
+            loader: 'vue-style-loader!css-loader!postcss-loader'
+            
+        }, {
+            test: /\.less$/,
+            loader: 'less-loader',
+            options: {
+                javascriptEnabled: true
+            }
         }]
     },
     optimization: {
