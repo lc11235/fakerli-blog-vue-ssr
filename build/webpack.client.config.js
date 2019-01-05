@@ -23,8 +23,7 @@ let config = merge(baseConfig, {
     module: {
         rules: [{
             test: /\.vue$/,
-            loader: 'vue-loader',
-            options: vueConfig
+            loader: 'vue-loader'
         }]
     },
     plugins: [

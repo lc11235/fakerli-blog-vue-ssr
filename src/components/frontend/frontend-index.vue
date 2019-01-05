@@ -20,8 +20,8 @@
 <script lang="babel">
     import store2 from 'store2';
     import { mapGetters } from 'vuex';
-    import topicsItem from '~components/frontend/topics-item.vue';
-    import topicsItemNone from '~components/frontend/topics-item-none.vue';
+    import topicsItem from '~views/frontend/topics-item.vue';
+    import topicsItemNone from '~views/frontend/topics-item-none.vue';
     import { ssp } from '~utils';
     import metaMixin from '~mixins';
 

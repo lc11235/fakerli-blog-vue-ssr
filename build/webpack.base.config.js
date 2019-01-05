@@ -43,7 +43,7 @@ const config = {
             '@':path.resolve(__dirname, '../src'),
             '~components': path.resolve(__dirname, '../src/components'),
             '~api': path.resolve(__dirname, '../src/api/index-client'),
-            '~pages': path.resolve(__dirname, '../src/pages'),
+            '~views': path.resolve(__dirname, '../src/views'),
             '~filters': path.resolve(__dirname, '../src/filters'),
             '~mixins': path.resolve(__dirname, '../src/mixins'),
             '~store': path.resolve(__dirname, '../src/store'),

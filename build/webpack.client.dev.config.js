@@ -7,11 +7,20 @@ module.exports = {
     module: {
         rules: [{
             test: /\.css$/,
-            loader: 'style-loader!css-loader!postcss-loader'
-        }, {
+            loader: 'vue-style-loader!css-loader!postcss-loader'
+        }, 
+        {
             test: /\.less$/,
-            loader: 'style-loader!css-loader!postcss-loader!less-loader'
-        }, {
+            loader: 'vue-style-loader!css-loader!postcss-loader'
+        }, 
+        {
+            test: /\.less$/,
+            loader: 'less-loader',
+            options: {
+                javascriptEnabled: true
+            }
+        },
+        {
             test: /\.(jpg|png|gif|eot|svg|ttf|woff|woff2)$/,
             loader: 'url-loader',
             query: {
@@ -37,7 +46,8 @@ module.exports = {
             ],
             filename: 'server.html',
             template: 'src/template/server.html',
-            inject: true
+            inject: true,
+            chunksSortMode: 'none'
         }),
         new HtmlWebpackPlugin({
             chunks:[
@@ -45,7 +55,9 @@ module.exports = {
             ],
             filename: 'admin.html',
             template: 'src/template/admin.html',
-            inject: true
+            inject: true,
+            chunksSortMode: 'none'
         })
+        // https://github.com/jantimon/html-webpack-plugin/issues/895
     ]
 };

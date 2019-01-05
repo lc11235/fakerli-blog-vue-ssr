@@ -1,9 +1,9 @@
 import api from '~api';
 import {
     getBreadCrumbList,
-    setTagNavListInLocalstroage,
+    setTagNavListInLocalstorage,
     getMenuByRouter,
-    getTagNavListFromLocalstroage,
+    getTagNavListFromLocalstorage,
     getHomeRoute,
     getNextRoute,
     routeHasExist,
@@ -104,7 +104,7 @@ const mutations = {
         if (list) {
             tagList = [...list];
         } else {
-            tagList = getTagNavListFromLocalstroage() || [];
+            tagList = getTagNavListFromLocalstorage() || [];
         }
         if (tagList[0] && tagList[0] !== homeName) {
             tagList.shift();
@@ -115,7 +115,7 @@ const mutations = {
             tagList.unshift(homeTag);
         }
         state.tagNavList = tagList;
-        setTagNavListInLocalstroage([...tagList]);
+        setTagNavListInLocalstorage([...tagList]);
     },
     closeTag(state, route) {
         let tag = state.tagNavList.filter(item => routeEqual(item, route));
@@ -143,7 +143,7 @@ const mutations = {
                     state.tagNavList.splice(1, 0, router);
                 }
             }
-            setTagNavListInLocalstroage([...state.tagNavList]);
+            setTagNavListInLocalstorage([...state.tagNavList]);
         }
     },
     setLocal(state, lang) {
@@ -201,7 +201,7 @@ const actions = {
     },
     addErrorLog({ commit, rootState }, info) {
         if (!window.location.href.includes('error_logger_page')) commit('setHasReadErrorLoggerStatus', false);
-        const { user: { token, userId, userName } } = rootState;
+        const { user: { token, userId, userName }} = rootState;
         let data = {
             ...info,
             time: Date.parse(new Date()),

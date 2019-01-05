@@ -70,7 +70,7 @@ import routes from './routers';
 import store from '@/store';
 import iView from 'iview';
 import { setToken, getToken, canTurnTo, setTitle } from '@/libs/util.js';
-import config from '@config';
+import config from '@/config';
 const { homeName } = config;
 
 Vue.use(Router);
