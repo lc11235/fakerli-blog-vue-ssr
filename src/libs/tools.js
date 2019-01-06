@@ -45,7 +45,7 @@ export const hasOneOf = (target, arr) => {
 /**
  * @param {String|Number} value 要验证的字符串或数值
  * @param {Array} validList 用来验证的列表
- * @return {Boolean} 返回true或者false
+ * @return {Boolean} 返回true false
  * @description 判断字符串或数值是否在数组中
  */
 export const oneOf = (value, validList) => {
@@ -86,7 +86,7 @@ const getHandledValue = num => {
 
 /**
  * @param {Number} timeStamp 传入的时间戳
- * @param {Number} startType 要返回的时间字符串的格式类型，传入‘year’则返回年开头的完整时间
+ * @param {Number} startType 要返回的时间字符串的格式类型，传入year则返回年开头的完整时间
  */
 const getDate = (timeStamp, startType) => {
     const d = new Date(timeStamp * 1000);
@@ -122,7 +122,7 @@ export const getRelativeTime = timeStamp => {
     const IS_EARLY = isEarly(timeStamp, currentTime);
     // 获取两个时间戳差值
     let diff = currentTime - timeStamp;
-    // 如果IS_EARLY为false，则差值取反
+    // 如果IS_EARLY false，则差值取反
     if (!IS_EARLY) diff = -diff;
     let resStr = '';
     const dirStr = IS_EARLY ? '前' : '后';
@@ -159,6 +159,8 @@ export const getExplorer = () => {
  * @description 绑定事件 on(element, event, handler)
  */
 export const on = (function () {
+    const inBrowser = typeof window !== 'undefined';
+    if (!inBrowser) return;
     if (document.addEventListener) {
         return function (element, event, handler) {
             if (element && event && handler) {
@@ -178,6 +180,8 @@ export const on = (function () {
  * @description 解绑事件 off(element, event, handler)
  */
 export const off = (function () {
+    const inBrowser = typeof window !== 'undefined';
+    if (!inBrowser) return;
     if (document.removeEventListener) {
         return function (element, event, handler) {
             if (element && event) {
@@ -194,7 +198,7 @@ export const off = (function () {
 })();
 
 /**
- * 判断一个对象是否存在key，如果传入第二个参数key，则是判断这个obj对象是否存在key这个属性
+ * 判断一个对象是否存在key，如果传入第二个参数key，则是判断这个对象是否存在key这个属性
  * 如果没有传入key这个参数，则判断obj对象是否有键值对
  */
 export const hasKey = (obj, key) => {

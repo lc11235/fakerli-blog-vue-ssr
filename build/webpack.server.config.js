@@ -30,6 +30,19 @@ const config = merge(base, {
             test: /\.(jpg|png|gif|eot|svg|ttf|woff|woff2)$/,
             loader: 'url-loader',
             query
+        }, {
+            test: /\.css$/,
+            loader: 'vue-style-loader!css-loader!postcss-loader'
+        }, {
+            test: /\.less$/,
+            loader: 'vue-style-loader!css-loader!postcss-loader'
+            
+        }, {
+            test: /\.less$/,
+            loader: 'less-loader',
+            options: {
+                javascriptEnabled: true
+            }
         }]
     },
     resolve: {

@@ -30,7 +30,7 @@ let config = merge(baseConfig, {
         new webpack.ProvidePlugin({
             $: 'jquery',
             jQuery: 'jquery',
-            'window.jQuery': 'jquery',
+            'window.jQuery': 'jquery'
         }),
         new VueSSRClientPlugin()
     ]

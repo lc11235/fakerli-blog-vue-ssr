@@ -122,7 +122,7 @@ router.beforeEach((to, from, next) => {
 router.afterEach(to => {
     setTitle(to, router.app);
     iView.LoadingBar.finish();
-    window.scrolllTo(0, 0);
+    window.scrollTo(0, 0);
 });
 
 export default router;

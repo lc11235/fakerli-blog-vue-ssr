@@ -54,10 +54,7 @@ module.exports = function setupDevServer(app, callback){
         stats.warnings.forEach(err => console.warn(err));
         const bundlePath = path.join(serverConfig.output.path, 'vue-ssr-server-bundle.json');
         bundle = JSON.parse(mfs.readFileSync(bundlePath, 'utf-8'));
-        console.log(frontend);
-        console.log(backend);
         if(frontend && backend){
-            console.log("1");
             callback(bundle, {frontend, backend});
         }
     });
