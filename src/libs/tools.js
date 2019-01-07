@@ -159,8 +159,6 @@ export const getExplorer = () => {
  * @description 绑定事件 on(element, event, handler)
  */
 export const on = (function () {
-    const inBrowser = typeof window !== 'undefined';
-    if (!inBrowser) return;
     if (document.addEventListener) {
         return function (element, event, handler) {
             if (element && event && handler) {
@@ -180,8 +178,6 @@ export const on = (function () {
  * @description 解绑事件 off(element, event, handler)
  */
 export const off = (function () {
-    const inBrowser = typeof window !== 'undefined';
-    if (!inBrowser) return;
     if (document.removeEventListener) {
         return function (element, event, handler) {
             if (element && event) {
@@ -222,5 +218,5 @@ export const objEqual = (obj1, obj2) => {
     if (keysArr1.length !== keysArr2.length) return false;
     else if (keysArr1.length === 0 && keysArr2.length === 0) return true;
     /* eslint-disable-next-line */
-    else return !keysArr1.some(key => obj1[key] != obj2[key]);
+    else return !keysArr1.some(key => obj1[key] !== obj2[key]);
 };

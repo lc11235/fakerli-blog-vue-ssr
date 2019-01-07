@@ -78,9 +78,6 @@ export default {
   .left-drop-box{
     margin-right: 10px;
   }
-  .right-drop-box{
-    //
-  }
 }
 .handle-log-box{
   display: inline-block;
