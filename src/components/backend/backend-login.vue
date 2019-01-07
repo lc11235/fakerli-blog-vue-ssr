@@ -22,7 +22,7 @@
 <script lang="babel">
     import cookies from 'js-cookie';
     import api from '~api';
-    import canvasLine from '~components/backend/canvas-line.vue';
+    import canvasLine from '@/views/backend/canvas-line.vue';
 
     export default {
         name: 'login',

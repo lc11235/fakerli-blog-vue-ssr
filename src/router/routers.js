@@ -19,7 +19,7 @@ import parentView from '@/components/parent-view';
 
 export default [
     {
-        path: '/login',
+        path: '/backend/login',
         name: 'login',
         meta: {
             title: 'Login - 登录',
@@ -28,9 +28,9 @@ export default [
         component: () => import('@/views/login/login.vue')
     },
     {
-        path: '/',
+        path: '/backend/',
         name: '_home',
-        redirect: '/home',
+        redirect: '/backend/home',
         component: Main,
         meta: {
             hideInMenu: true,
@@ -38,7 +38,7 @@ export default [
         },
         children: [
             {
-                path: '/home',
+                path: '/backend/home',
                 name: 'home',
                 meta: {
                     hideInMenu: true,
@@ -60,7 +60,7 @@ export default [
         }
     },
     {
-        path: '/join',
+        path: '/backend/join',
         name: 'join',
         component: Main,
         meta: {
@@ -79,7 +79,7 @@ export default [
         ]
     },
     {
-        path: '/message',
+        path: '/backend/message',
         name: 'message',
         component: Main,
         meta: {
@@ -99,7 +99,7 @@ export default [
         ]
     },
     {
-        path: '/components',
+        path: '/backend/components',
         name: 'components',
         meta: {
             icon: 'logo-buffer',
@@ -209,7 +209,7 @@ export default [
         ]
     },
     {
-        path: '/update',
+        path: '/backend/update',
         name: 'update',
         meta: {
             icon: 'md-cloud-upload',
@@ -238,7 +238,7 @@ export default [
         ]
     },
     {
-        path: '/excel',
+        path: '/backend/excel',
         name: 'excel',
         meta: {
             icon: 'ios-stats',
@@ -267,7 +267,7 @@ export default [
         ]
     },
     {
-        path: '/tools_methods',
+        path: '/backend/tools_methods',
         name: 'tools_methods',
         meta: {
             hideInBread: true
@@ -287,7 +287,7 @@ export default [
         ]
     },
     {
-        path: '/i18n',
+        path: '/backend/i18n',
         name: 'i18n',
         meta: {
             hideInBread: true
@@ -306,7 +306,7 @@ export default [
         ]
     },
     {
-        path: '/error_store',
+        path: '/backend/error_store',
         name: 'error_store',
         meta: {
             hideInBread: true
@@ -325,7 +325,7 @@ export default [
         ]
     },
     {
-        path: '/error_logger',
+        path: '/backend/error_logger',
         name: 'error_logger',
         meta: {
             hideInBread: true,
@@ -345,7 +345,7 @@ export default [
         ]
     },
     {
-        path: '/directive',
+        path: '/backend/directive',
         name: 'directive',
         meta: {
             hideInBread: true
@@ -364,7 +364,7 @@ export default [
         ]
     },
     {
-        path: '/multilevel',
+        path: '/backend/multilevel',
         name: 'multilevel',
         meta: {
             icon: 'md-menu',
@@ -424,7 +424,7 @@ export default [
         ]
     },
     {
-        path: '/argu',
+        path: '/backend/argu',
         name: 'argu',
         meta: {
             hideInMenu: true
@@ -455,7 +455,7 @@ export default [
         ]
     },
     {
-        path: '/401',
+        path: '/backend/401',
         name: 'error_401',
         meta: {
             hideInMenu: true
@@ -463,7 +463,7 @@ export default [
         component: () => import('@/views/error-page/401.vue')
     },
     {
-        path: '/500',
+        path: '/backend/500',
         name: 'error_500',
         meta: {
             hideInMenu: true

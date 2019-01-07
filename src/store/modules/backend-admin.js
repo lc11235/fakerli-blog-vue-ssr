@@ -73,7 +73,7 @@ const mutations = {
         const obj = states.lists.data.find(ii => ii.username === username);
         if (obj) obj.is_delete = 0;
     },
-    saveAvator(state, avatorPath) {
+    setAvator(state, avatorPath) {
         state.avatorImgPath = avatorPath;
     },
     setUserId(state, id) {

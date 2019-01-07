@@ -180,6 +180,8 @@ export const canTurnTo = (name, access, routes) => {
                 return routePermissionJudge(item.children);
             } else if (item.name === name) {
                 return hasAccess(access, item);
+            } else {
+                return true;
             }
         });
     };

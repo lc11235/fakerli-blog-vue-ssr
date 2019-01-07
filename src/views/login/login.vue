@@ -23,10 +23,10 @@ export default {
     LoginForm
   },
   methods: {
-    ...mapActions([
-      'handleLogin',
-      'getUserInfo'
-    ]),
+    ...mapActions({
+      handleLogin: 'backend/admin/handleLogin',
+      getUserInfo: 'backend/admin/getUserInfo'
+    }),
     handleSubmit ({ userName, password }) {
       this.handleLogin({ userName, password }).then(res => {
         this.getUserInfo().then(res => {
