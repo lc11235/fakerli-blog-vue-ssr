@@ -8,7 +8,8 @@ export const login = ({ userName, password }) => {
     return axios.request({
         url: 'api/backend/admin/login',
         data,
-        method: 'post'
+        method: 'post',
+        source: 'server'
     });
 };
 
@@ -18,28 +19,32 @@ export const getUserInfo = (token) => {
         params: {
             token
         },
-        method: 'get'
+        method: 'get',
+        source: 'server'
     });
 };
 
 export const logout = (token) => {
     return axios.request({
         url: 'api/backend/admin/logout',
-        method: 'post'
+        method: 'post',
+        source: 'server'
     });
 };
 
 export const getUnreadCount = () => {
     return axios.request({
         url: 'api/backend/message/count',
-        method: 'get'
+        method: 'get',
+        source: 'server'
     });
 };
 
 export const getMessage = () => {
     return axios.request({
         url: 'api/backend/message/init',
-        method: 'get'
+        method: 'get',
+        source: 'server'
     });
 };
 
@@ -49,7 +54,8 @@ export const getContentByMsgId = msg_id => {
         method: 'get',
         params: {
             msg_id
-        }
+        },
+        source: 'server'
     });
 };
 
@@ -59,7 +65,8 @@ export const hasRead = msg_id => {
         method: 'post',
         data: {
             msg_id
-        }
+        },
+        source: 'server'
     });
 };
 
@@ -69,7 +76,8 @@ export const removeReaded = msg_id => {
         method: 'post',
         data: {
             msg_id
-        }
+        },
+        source: 'server'
     });
 };
 
@@ -79,6 +87,7 @@ export const restoreTrash = msg_id => {
         method: 'post',
         data: {
             msg_id
-        }
+        },
+        source: 'server'
     });
 };

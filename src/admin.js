@@ -22,7 +22,7 @@ import * as filters from './filters';
 // import './assets/less/backend.less';
 // import 'toastr/build/toastr.css';
 import 'nprogress/nprogress.css';
-// import 'iview/dist/styles/iview.css';
+import 'iview/dist/styles/iview.css';
 
 Vue.use(iView, {
     i18n: (key, value) => i18n.t(key, value)

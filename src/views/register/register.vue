@@ -1,20 +1,30 @@
+<style lang="less">
+  @import './register.less';
+</style>
+
 <template>
     <div>
         <canvas-three />
-        <Form ref="formInline" :model="formInline" :rules="ruleInline" class="backend-login">
+        <Form ref="formInline" :model="formInline" :rules="ruleInline" class="register">
             <FormItem prop="username">
                 <Input type="text" size="large" v-model="formInline.username" placeholder="Username">
-                    <Icon type="ios-person-outline" slot="prepend"></Icon>
+                    <span slot="prepend">
+                        <Icon :size="20" type="ios-person"></Icon>
+                    </span>
                 </Input>
             </FormItem>
             <FormItem prop="email">
                 <Input type="text" size="large" v-model="formInline.email" placeholder="email">
-                    <Icon type="ios-locked-outline" slot="prepend"></Icon>
+                    <span slot="prepend">
+                        <Icon :size="20" type="ios-mail"></Icon>
+                    </span>
                 </Input>
             </FormItem>
             <FormItem prop="password">
                 <Input type="password" size="large" v-model="formInline.password" placeholder="Password">
-                    <Icon type="ios-locked-outline" slot="prepend"></Icon>
+                    <span slot="prepend">
+                        <Icon :size="20" type="md-lock"></Icon>
+                    </span>
                 </Input>
             </FormItem>
             <FormItem>
@@ -27,7 +37,7 @@
 <script lang="babel">
     import cookies from 'js-cookie';
     import api from '~api';
-    import canvasThree from '~components/backend/canvas-three.vue';
+    import canvasThree from '@/components/canvas/canvas-three.vue';
 
     export default {
         name: 'register',

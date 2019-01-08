@@ -203,7 +203,7 @@ const actions = {
     getUnreadMessageCount({ state, commit }) {
         getUnreadCount().then(res => {
             const { data } = res;
-            commit('setMessageCount', data);
+            commit('setMessageCount', data.count);
         });
     },
     // 获取消息列表，其中包含未读、已读、回收站三个列表

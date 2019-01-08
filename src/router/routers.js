@@ -28,6 +28,15 @@ export default [
         component: () => import('@/views/login/login.vue')
     },
     {
+        path: '/backend/register',
+        name: 'register',
+        meta: {
+            title: 'Register - 注册',
+            hideInMenu: true
+        },
+        component: () => import('@/views/register/register.vue')
+    },
+    {
         path: '/backend/',
         name: '_home',
         redirect: '/backend/home',

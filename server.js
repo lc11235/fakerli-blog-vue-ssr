@@ -22,6 +22,9 @@ const serverInfo = `express/${require('express/package.json').version} ` +
 require('./server/models/admin');
 require('./server/models/article');
 require('./server/models/tag');
+require('./server/models/message');
+require('./server/models/logReqRes');
+require('./server/models/logError');
 
 // 引入api路由
 const routes = require('./server/routes/index');

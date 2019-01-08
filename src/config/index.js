@@ -8,6 +8,10 @@ export default {
      */
     cookieExpires: 1,
     /**
+     * @description api请求的超时时间，以毫秒计时
+     */
+    timeout: 30000,
+    /**
      * @description 是否使用国际化，默认为false
      *              如果不使用，则需要在路由中给需要在菜单中展示的路由设置meta: {title: 'xxx'}
      *              用来在菜单中显示文字
