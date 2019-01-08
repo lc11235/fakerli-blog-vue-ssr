@@ -6,6 +6,7 @@ const multipartMiddleware = multipart();
 const backendArticle = require('../api/backend-article');
 const backendTag = require('../api/backend-tag');
 const backendUser = require('../api/backend-user');
+const backend
 const frontendArticle = require('../api/frontend-article');
 const frontendArchive = require('../api/frontend-archive');
 const frontendSearch = require('../api/frontend-search');
@@ -62,6 +63,11 @@ router.post('/backend/admin/modify', isAdmin, multipartMiddleware, backendUser.m
 router.get('/backend/admin/delete', isAdmin, backendUser.deletes);
 // 恢复管理员
 router.get('/backend/admin/recover', isAdmin, backendUser.recover);
+
+// ------- 消息 -------
+
+// 取得未读消息条数
+router.get('/backend/message/count', isAdmin)
 
 // ================= 前台 =================
 // ------ 文章 ------

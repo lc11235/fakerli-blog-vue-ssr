@@ -70,17 +70,17 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'errorCount'
-    ]),
+    ...mapGetters({
+      errorCount: 'backend/article/errorCount'
+    }),
     tagNavList () {
-      return this.$store.state.app.tagNavList
+      return this.$store.state.backend.article.tagNavList
     },
     tagRouter () {
-      return this.$store.state.app.tagRouter
+      return this.$store.state.backend.article.tagRouter
     },
     userAvator () {
-      return this.$store.state.user.avatorImgPath
+      return this.$store.state.backend.admin.avatorImgPath
     },
     cacheList () {
       return ['ParentView', ...this.tagNavList.length ? this.tagNavList.filter(item => !(item.meta && item.meta.notCache)).map(item => item.name) : []]
@@ -89,28 +89,28 @@ export default {
       return this.$store.getters.menuList
     },
     local () {
-      return this.$store.state.app.local
+      return this.$store.state.backend.article.local
     },
     hasReadErrorPage () {
-      return this.$store.state.app.hasReadErrorPage
+      return this.$store.state.backend.article.hasReadErrorPage
     },
     unreadCount () {
-      return this.$store.state.user.unreadCount
+      return this.$store.state.backend.admin.unreadCount
     }
   },
   methods: {
-    ...mapMutations([
-      'setBreadCrumb',
-      'setTagNavList',
-      'addTag',
-      'setLocal',
-      'setHomeRoute',
-      'closeTag'
-    ]),
-    ...mapActions([
-      'handleLogin',
-      'getUnreadMessageCount'
-    ]),
+    ...mapMutations({
+      setBreadCrumb: 'backend/article/setBreadCrumb',
+      setTagNavList: 'backend/article/setTagNavList',
+      addTag: 'backend/article/addTag',
+      setLocal: 'backend/article/setLocal',
+      setHomeRoute: 'backend/article/setHomeRoute',
+      closeTag: 'backend/article/closeTag'
+    }),
+    ...mapActions({
+      handleLogin: 'backend/admin/handleLogin',
+      getUnreadMessageCount: 'backend/admin/getUnreadMessageCount'
+    }),
     turnToPage (route) {
       let { name, params, query } = {}
       if (typeof route === 'string') name = route
@@ -167,7 +167,7 @@ export default {
     this.setTagNavList()
     this.setHomeRoute(routers)
     this.addTag({
-      route: this.$store.state.app.homeRoute
+      route: this.$store.state.backend.article.homeRoute
     })
     this.setBreadCrumb(this.$route)
     // 设置初始语言

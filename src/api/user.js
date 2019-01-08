@@ -6,7 +6,7 @@ export const login = ({ userName, password }) => {
         password
     };
     return axios.request({
-        url: 'login',
+        url: 'api/backend/admin/login',
         data,
         method: 'post'
     });
@@ -14,7 +14,7 @@ export const login = ({ userName, password }) => {
 
 export const getUserInfo = (token) => {
     return axios.request({
-        url: 'get_info',
+        url: 'api/backend/admin/get_info',
         params: {
             token
         },
@@ -24,28 +24,28 @@ export const getUserInfo = (token) => {
 
 export const logout = (token) => {
     return axios.request({
-        url: 'logout',
+        url: 'api/backend/admin/logout',
         method: 'post'
     });
 };
 
 export const getUnreadCount = () => {
     return axios.request({
-        url: 'message/count',
+        url: 'api/backend/message/count',
         method: 'get'
     });
 };
 
 export const getMessage = () => {
     return axios.request({
-        url: 'message/init',
+        url: 'api/backend/message/init',
         method: 'get'
     });
 };
 
 export const getContentByMsgId = msg_id => {
     return axios.request({
-        url: 'message/content',
+        url: 'api/backend/message/content',
         method: 'get',
         params: {
             msg_id
@@ -55,7 +55,7 @@ export const getContentByMsgId = msg_id => {
 
 export const hasRead = msg_id => {
     return axios.request({
-        url: 'message/has_read',
+        url: 'api/backend/message/has_read',
         method: 'post',
         data: {
             msg_id
@@ -65,7 +65,7 @@ export const hasRead = msg_id => {
 
 export const removeReaded = msg_id => {
     return axios.request({
-        url: 'message/remove_readed',
+        url: 'api/backend/message/remove_readed',
         method: 'post',
         data: {
             msg_id
@@ -75,7 +75,7 @@ export const removeReaded = msg_id => {
 
 export const restoreTrash = msg_id => {
     return axios.request({
-        url: 'message/restore',
+        url: 'api/backend/message/restore',
         method: 'post',
         data: {
             msg_id
