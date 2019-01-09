@@ -70,10 +70,12 @@ exports.login = (req, res) => {
         };
         return res.json(json);
     }
+    console.log(username, password);
     Admin.findOne({
         username,
         password: md5(md5Pre + password),
-        is_delete: 0
+        is_delete: 0,
+        is_confirm: 0
     }).then(result => {
         if (result) {
             let id = result._id;
@@ -86,7 +88,13 @@ exports.login = (req, res) => {
             return res.json({
                 code: 200,
                 message: '登录成功',
-                data: token
+                data: {
+                    token: token,
+                    id: id,
+                    name: username,
+                    access: result.access,
+                    avator: result.avator
+                }
             });
         }
         return res.json({
@@ -113,12 +121,6 @@ exports.insert = (req, res, next) => {
     let email = req.body.email;
     let password = req.body.password;
     let username = req.body.username;
-    if (fsExistsSync('./admin.lock')) {
-        return res.json({
-            code: -200,
-            message: '不可注册!'
-        });
-    }
     if (!username || !password || !email) {
         return res.json({
             code: -200,
@@ -132,27 +134,50 @@ exports.insert = (req, res, next) => {
                 message: '该用户已经存在!'
             });
         }
-        return Admin.create({
-            username,
-            password: md5(md5Pre + password),
-            email,
-            create_date: moment().format('YYYY-MM-DD HH:mm:ss'),
-            update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
-            is_delete: 0,
-            timestamp: moment().format('X')
-        }).then(() => {
-            fs.writeFile('./admin.lock', username, (err) => {
-                if (err) {
-                    throw err;
-                } else {
-                    return res.json({
-                        code: 200,
-                        message: '添加用户成功!',
-                        data: username
-                    });
-                }
+        if (fsExistsSync('./admin.lock')) {
+            return Admin.create({
+                username,
+                password: md5(md5Pre + password),
+                email,
+                access: 'normal',
+                avator: '',
+                create_date: moment().format('YYYY-MM-DD HH:mm:ss'),
+                update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
+                is_delete: 0,
+                is_confirm: 1,
+                timestamp: moment().format('X')
+            }).then(() => {
+                return res.json({
+                    code: 200,
+                    message: '已添加到申请列表，管理员审核后将发送邮件通知!',
+                });
             });
-        });
+        } else {
+            return Admin.create({
+                username,
+                password: md5(md5Pre + password),
+                email,
+                access: 'super_admin',
+                avator: '/dist/static/images/me.png',
+                create_date: moment().format('YYYY-MM-DD HH:mm:ss'),
+                update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
+                is_delete: 0,
+                is_confirm: 0,
+                timestamp: moment().format('X')
+            }).then(() => {
+                fs.writeFile('./admin.lock', username, (err) => {
+                    if (err) {
+                        throw err;
+                    } else {
+                        return res.json({
+                            code: 200,
+                            message: '添加用户成功!',
+                            data: username
+                        });
+                    }
+                });
+            });
+        }
     }).catch(err => console.log(err));
 };
 

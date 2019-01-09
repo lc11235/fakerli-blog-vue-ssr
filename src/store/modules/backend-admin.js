@@ -24,7 +24,7 @@ const state = {
         data: {},
         path: ''
     },
-    userName: '',
+    username: '',
     userId: '',
     avatorImgPath: '',
     token: getToken(),
@@ -80,7 +80,7 @@ const mutations = {
         state.userId = id;
     },
     setUserName(state, name) {
-        state.userName = name;
+        state.username = name;
     },
     setAccess(state, access) {
         state.access = access;
@@ -148,16 +148,20 @@ const actions = {
         }
     },
     // 登录
-    handleLogin({ commit }, { userName, password }) {
-        userName = userName.trim();
+    handleLogin({ commit }, { username, password }) {
+        username = username.trim();
         return new Promise((resolve, reject) => {
             login({
-                userName,
+                username,
                 password
             }).then(res => {
                 const data = res.data;
-                commit('setToken', data.token);
-                resolve();
+                if (data && data.code === 200) {
+                    commit('setToken', data.token);
+                    resolve();
+                } else {
+                    reject(data.message);
+                }
             }).catch(err => {
                 reject(err);
             });
@@ -187,7 +191,7 @@ const actions = {
                     const data = res.data;
                     commit('setAvator', data.avator);
                     commit('setUserName', data.name);
-                    commit('setUserId', data.user_id);
+                    commit('setUserId', data.id);
                     commit('setAccess', data.access);
                     commit('setHasGetInfo', true);
                     resolve(data);

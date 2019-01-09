@@ -6,9 +6,12 @@ const AdminSchema = new Schema({
     username: String,
     email: String,
     password: String,
+    access: String,
+    avator: String,
     create_date: String,
     update_date: String,
     is_delete: Number,
+    is_confirm: Number,
     timestamp: Number
 });
 
