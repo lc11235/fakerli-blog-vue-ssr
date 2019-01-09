@@ -137,8 +137,8 @@ export default {
         this.turnToPage(this.$config.homeName)
       } else if (routeEqual(this.$route, route)) {
         if (type !== 'others') {
+          console.log(this.$route, route);
           const nextRoute = getNextRoute(this.tagNavList, route)
-          console.log(nextRoute);
           this.$router.push(nextRoute)
         }
       }

@@ -263,7 +263,7 @@ exports.getInfo = (req, res) => {
         if (result) {
             return res.json({
                 code: 200,
-                messgae: '拉取信息成功',
+                message: '拉取信息成功',
                 data: {
                     avator: result.avator,
                     access: result.access

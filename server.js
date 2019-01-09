@@ -33,8 +33,10 @@ const routes = require('./server/routes/index');
 const routesWX = require('./server/routes/wx');
 
 // 引入题图的定时更新组件
-const headerPhoto = require('./headerPhotoFromBing');
-headerPhoto.getPhotoFromBing();
+if (isProd) {
+    const headerPhoto = require('./headerPhotoFromBing');
+    headerPhoto.getPhotoFromBing();
+}
 
 function createRenderer(bundle, template) {
     // https://github.com/vuejs/vue/blob/dev/packages/vue-server-renderer/README.md#why-use-bundlerenderer

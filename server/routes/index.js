@@ -73,7 +73,7 @@ router.get('/backend/admin/recover', isAdmin, backendUser.recover);
 // 取得未读消息条数
 router.get('/backend/message/count', isAdmin, backendMessage.getUnreadMessageCount);
 // 取得已读，未读，回收站的消息
-router.get('backend/message/init', isAdmin, backendMessage.getAllMessage);
+router.get('/backend/message/init', isAdmin, backendMessage.getAllMessage);
 
 // ================= 前台 =================
 // ------ 文章 ------

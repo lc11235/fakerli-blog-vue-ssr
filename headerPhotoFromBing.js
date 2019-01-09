@@ -54,12 +54,12 @@ function writeFile(image, pathStatic) {
         if (exists) {
             fs.unlink(pathStatic + '/header.jpg', err => {
                 if (err) {
-                    console.log(1);
+                    console.log(err.toString());
                     return;
                 }
                 fs.writeFile(pathStatic + '/header.jpg', image, 'binary', err => {
                     if (err) {
-                        console.log(2);
+                        console.log(err.toString());
                         return;
                     }
                 });

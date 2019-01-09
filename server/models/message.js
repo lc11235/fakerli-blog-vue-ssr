@@ -9,6 +9,7 @@ const MessageSchema = new Schema({
     update_date: String,
     is_readed: Number,
     is_delete: Number,
+    id: String,
     timestamp: Number
 });
 
