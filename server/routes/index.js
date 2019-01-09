@@ -53,6 +53,10 @@ router.post('/backend/tag/modify', isAdmin, multipartMiddleware, backendTag.modi
 router.post('/backend/admin/register', multipartMiddleware, backendUser.insert);
 // 后台登录
 router.post('/backend/admin/login', multipartMiddleware, backendUser.login);
+// 后台登出
+router.post('/backend/admin/logout', isAdmin, backendUser.logout);
+// 取得用户信息
+router.get('/backend/admin/get_info', isAdmin, backendUser.getInfo);
 // 管理列表
 router.get('/backend/admin/list', isAdmin, backendUser.getList);
 // 获取单个管理员
@@ -68,6 +72,8 @@ router.get('/backend/admin/recover', isAdmin, backendUser.recover);
 
 // 取得未读消息条数
 router.get('/backend/message/count', isAdmin, backendMessage.getUnreadMessageCount);
+// 取得已读，未读，回收站的消息
+router.get('backend/message/init', isAdmin, backendMessage.getAllMessage);
 
 // ================= 前台 =================
 // ------ 文章 ------

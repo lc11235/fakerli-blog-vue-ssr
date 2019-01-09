@@ -31,9 +31,9 @@ export default {
     }
   },
   methods: {
-    ...mapActions([
-      'handleLogOut'
-    ]),
+    ...mapActions({
+      handleLogOut: 'backend/admin/handleLogOut'
+    }),
     logout () {
       this.handleLogOut().then(() => {
         this.$router.push({

@@ -12,6 +12,7 @@ const AdminSchema = new Schema({
     update_date: String,
     is_delete: Number,
     is_confirm: Number,
+    is_login: Number,
     timestamp: Number
 });
 

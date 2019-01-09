@@ -71,29 +71,23 @@ exports.login = (req, res) => {
         return res.json(json);
     }
     console.log(username, password);
-    Admin.findOne({
+    Admin.findOneAndUpdate({
         username,
         password: md5(md5Pre + password),
         is_delete: 0,
         is_confirm: 0
-    }).then(result => {
+    }, { is_login: 0 }).then(result => {
         if (result) {
             let id = result._id;
-            let remember_me = 86400000;
             username = encodeURI(username);
             let token = jwt.sign({ id, username }, secret, { expiresIn: 60 * 60 * 24 * 1 });
-            res.cookie('b_user', token, { maxAge: remember_me });
-            res.cookie('b_userid', id, { maxAge: remember_me });
-            res.cookie('b_username', username, { maxAge: remember_me });
             return res.json({
                 code: 200,
                 message: '登录成功',
                 data: {
                     token: token,
-                    id: id,
                     name: username,
-                    access: result.access,
-                    avator: result.avator
+                    id: id
                 }
             });
         }
@@ -112,8 +106,8 @@ exports.login = (req, res) => {
 /**
  * 初始化时添加管理员
  * @method insertAdmin
- * @param  {[type]}    req  [description]
- * @param  {[type]}    res  [description]
+ * @param  {Object}    req  [description]
+ * @param  {Object}    res  [description]
  * @param  {Function}  next [description]
  * @return {json}         [description]
  */
@@ -247,6 +241,66 @@ exports.recover = (req, res) => {
             code: 200,
             message: '更新成功',
             data: 'success'
+        });
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
+};
+
+/**
+ * 取得用户详细信息
+ * @method getInfo
+ * @param  {[type]}    req [description]
+ * @param  {[type]}    res [description]
+ * @return {[type]}        [description]
+ */
+exports.getInfo = (req, res) => {
+    let userid = req.cookies.f_userId;
+    Admin.findOne({ _id: userid }).then(result => {
+        if (result) {
+            return res.json({
+                code: 200,
+                messgae: '拉取信息成功',
+                data: {
+                    avator: result.avator,
+                    access: result.access
+                }
+            });
+        }
+        return res.json({
+            code: -200,
+            message: '拉取信息失败'
+        });
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
+};
+
+/**
+ * 取得用户详细信息
+ * @method logout
+ * @param  {[type]}    req [description]
+ * @param  {[type]}    res [description]
+ * @return {[type]}        [description]
+ */
+exports.logout = (req, res) => {
+    let userid = req.cookies.f_userId;
+    Admin.findOneAndUpdate({ _id: userid }, { is_login: 1 }).then(result => {
+        if (result) {
+            return res.json({
+                code: 200,
+                message: '登出成功'
+            });
+        }
+        return res.json({
+            code: -200,
+            message: '登出失败'
         });
     }).catch(err => {
         res.json({

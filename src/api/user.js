@@ -13,18 +13,15 @@ export const login = ({ username, password }) => {
     });
 };
 
-export const getUserInfo = (token) => {
+export const getUserInfo = () => {
     return axios.request({
         url: 'api/backend/admin/get_info',
-        params: {
-            token
-        },
         method: 'get',
         source: 'server'
     });
 };
 
-export const logout = (token) => {
+export const logout = () => {
     return axios.request({
         url: 'api/backend/admin/logout',
         method: 'post',

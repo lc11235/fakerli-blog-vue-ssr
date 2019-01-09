@@ -10,7 +10,7 @@ import {
     restoreTrash,
     getUnreadCount
 } from '@/api/user';
-import { setToken, getToken } from '@/libs/util';
+import { setToken, getToken, setUserId, getUserId, setUserName, getUserName } from '@/libs/util';
 
 const state = {
     lists: {
@@ -24,8 +24,8 @@ const state = {
         data: {},
         path: ''
     },
-    username: '',
-    userId: '',
+    username: getUserName(),
+    userId: getUserId(),
     avatorImgPath: '',
     token: getToken(),
     access: '',
@@ -78,9 +78,11 @@ const mutations = {
     },
     setUserId(state, id) {
         state.userId = id;
+        setUserId(id);
     },
     setUserName(state, name) {
         state.username = name;
+        setUserName(name);
     },
     setAccess(state, access) {
         state.access = access;
@@ -157,7 +159,9 @@ const actions = {
             }).then(res => {
                 const data = res.data;
                 if (data && data.code === 200) {
-                    commit('setToken', data.token);
+                    commit('setToken', data.data.token);
+                    commit('setUserId', data.data.id);
+                    commit('setUserName', data.data.name);
                     resolve();
                 } else {
                     reject(data.message);
@@ -170,8 +174,10 @@ const actions = {
     // 退出登录
     handleLogOut({ state, commit }) {
         return new Promise((resolve, reject) => {
-            logout(state.token).then(() => {
+            logout().then(() => {
                 commit('setToken', '');
+                commit('setUserId', '');
+                commit('setUserName', '');
                 commit('setAccess', []);
                 resolve();
             }).catch(err => {
@@ -187,12 +193,10 @@ const actions = {
     getUserInfo({ state, commit }) {
         return new Promise((resolve, reject) => {
             try {
-                getUserInfo(state.token).then(res => {
+                getUserInfo().then(res => {
                     const data = res.data;
-                    commit('setAvator', data.avator);
-                    commit('setUserName', data.name);
-                    commit('setUserId', data.id);
-                    commit('setAccess', data.access);
+                    commit('setAvator', data.data.avator);
+                    commit('setAccess', data.data.access);
                     commit('setHasGetInfo', true);
                     resolve(data);
                 }).catch(err => {
@@ -207,7 +211,7 @@ const actions = {
     getUnreadMessageCount({ state, commit }) {
         getUnreadCount().then(res => {
             const { data } = res;
-            commit('setMessageCount', data.count);
+            commit('setMessageCount', data.data.count);
         });
     },
     // 获取消息列表，其中包含未读、已读、回收站三个列表

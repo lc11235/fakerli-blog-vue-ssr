@@ -12,7 +12,10 @@ exports.getUnreadMessageCount = (req, res) => {
     Message.countDocuments({ is_readed: 0, is_delete: 0 }).then(result => {
         let json = {
             code: 200,
-            count: result
+            message: '取得未阅读数成功',
+            data: {
+                count: result
+            }
         };
         res.json(json);
     }).catch(err => {

@@ -4,7 +4,9 @@ import config from '@/config';
 import { forEach, hasOneOf, objEqual } from '@/libs/tools';
 const { title, cookieExpires, useI18n } = config;
 
-export const TOKEN_KEY = 'b_user';
+export const TOKEN_KEY = 'f_token';
+export const USERID_KEY = 'f_userId';
+export const USERNAME_KEY = 'f_userName';
 
 export const setToken = (token) => {
     Cookies.set(TOKEN_KEY, token, { expires: cookieExpires || 1 });
@@ -13,6 +15,26 @@ export const setToken = (token) => {
 export const getToken = () => {
     const token = Cookies.get(TOKEN_KEY);
     if (token) return token;
+    else return false;
+};
+
+export const setUserId = (userId) => {
+    Cookies.set(USERID_KEY, userId, { expires: cookieExpires || 1 });
+};
+
+export const getUserId = () => {
+    const userId = Cookies.get(USERID_KEY);
+    if (userId) return userId;
+    else return false;
+};
+
+export const setUserName = (userName) => {
+    Cookies.set(USERNAME_KEY, userName, { expires: cookieExpires || 1 });
+};
+
+export const getUserName = () => {
+    const userName = Cookies.get(USERNAME_KEY);
+    if (userName) return userName;
     else return false;
 };
 

@@ -138,6 +138,7 @@ export default {
       } else if (routeEqual(this.$route, route)) {
         if (type !== 'others') {
           const nextRoute = getNextRoute(this.tagNavList, route)
+          console.log(nextRoute);
           this.$router.push(nextRoute)
         }
       }

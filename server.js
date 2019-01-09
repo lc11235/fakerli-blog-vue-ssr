@@ -152,7 +152,7 @@ app.get(['/', '/tag/:tag', '/search/:qs', '/article/:title', '/about', '/tags', 
 
 // 后台渲染
 app.get(['/backend', '/backend/*'], (req, res) => {
-    if (req.originalUrl !== '/backend' && req.originalUrl !== '/backend/' && req.originalUrl !== '/backend/login' && req.originalUrl !== '/backend/register' && !req.cookies.b_user) {
+    if (req.originalUrl !== '/backend' && req.originalUrl !== '/backend/' && req.originalUrl !== '/backend/login' && req.originalUrl !== '/backend/register' && !req.cookies.f_token) {
         return res.redirect('/backend/login');
     }
     if (isProd) {

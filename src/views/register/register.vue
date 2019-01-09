@@ -42,7 +42,7 @@
     export default {
         name: 'register',
         beforeRouteEnter(to, from, next) {
-            if (cookies.get('b_user')) {
+            if (cookies.get('f_token')) {
                 next('/backend/article/list');
             } else {
                 next();

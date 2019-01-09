@@ -1,5 +1,6 @@
 import axios from 'axios';
 import store from '@/store';
+import qs from 'qs';
 // import { Spin } from 'iview'
 
 
@@ -82,6 +83,10 @@ class HttpRequest {
             }
             this.queue[url] = true;
             store.dispatch('global/gProgress', 50);
+            if (config.method === 'post') {
+                config.data = qs.stringify(config.data);
+            }
+            console.log(config);
             return config;
         }, error => {
             return Promise.reject(error);

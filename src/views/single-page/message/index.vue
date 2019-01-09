@@ -72,9 +72,9 @@ export default {
   },
   computed: {
     ...mapState({
-      messageUnreadList: state => state.user.messageUnreadList,
-      messageReadedList: state => state.user.messageReadedList,
-      messageTrashList: state => state.user.messageTrashList,
+      messageUnreadList: state => state.backend.admin.messageUnreadList,
+      messageReadedList: state => state.backend.admin.messageReadedList,
+      messageTrashList: state => state.backend.admin.messageTrashList,
       messageList () {
         return this[listDic[this.currentMessageType]]
       },
@@ -84,23 +84,23 @@ export default {
         }
       }
     }),
-    ...mapGetters([
-      'messageUnreadCount',
-      'messageReadedCount',
-      'messageTrashCount'
-    ])
+    ...mapGetters({
+      messageUnreadCount: 'backend/admin/messageUnreadCount',
+      messageReadedCount: 'backend/admin/messageReadedCount',
+      messageTrashCount: 'backend/admin/messageTrashCount'
+    })
   },
   methods: {
     ...mapMutations([
       //
     ]),
-    ...mapActions([
-      'getContentByMsgId',
-      'getMessageList',
-      'hasRead',
-      'removeReaded',
-      'restoreTrash'
-    ]),
+    ...mapActions({
+      getContentByMsgId: 'backend/admin/getContentByMsgId',
+      getMessageList: 'backend/admin/getMessageList',
+      hasRead: 'backend/admin/hasRead',
+      removeReaded: 'backend/admin/removeReaded',
+      restoreTrash: 'backend/admin/restoreTrash'
+    }),
     stopLoading (name) {
       this[name] = false
     },
