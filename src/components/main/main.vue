@@ -71,7 +71,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      errorCount: 'backend/article/errorCount'
+      errorCount: 'backend/article/errorCount',
+      menuListAll: 'backend/article/menuList'
     }),
     tagNavList () {
       return this.$store.state.backend.article.tagNavList
@@ -86,7 +87,7 @@ export default {
       return ['ParentView', ...this.tagNavList.length ? this.tagNavList.filter(item => !(item.meta && item.meta.notCache)).map(item => item.name) : []]
     },
     menuList () {
-      return this.$store.getters.menuList
+      return this.menuListAll
     },
     local () {
       return this.$store.state.backend.article.local
@@ -137,7 +138,6 @@ export default {
         this.turnToPage(this.$config.homeName)
       } else if (routeEqual(this.$route, route)) {
         if (type !== 'others') {
-          console.log(this.$route, route);
           const nextRoute = getNextRoute(this.tagNavList, route)
           this.$router.push(nextRoute)
         }

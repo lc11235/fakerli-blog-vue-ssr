@@ -106,7 +106,7 @@ const mutations = {
         } else {
             tagList = getTagNavListFromLocalstorage() || [];
         }
-        if (tagList[0] && tagList[0] !== homeName) {
+        if (tagList[0] && tagList[0].name !== homeName) {
             tagList.shift();
         }
         let homeTagIndex = tagList.findIndex(item => item.name === homeName);

@@ -64,13 +64,13 @@ export default {
   },
   computed: {
     errorList () {
-      return this.$store.state.app.errorList
+      return this.$store.state.backend.article.errorList
     }
   },
   methods: {
-    ...mapMutations([
-      'setHasReadErrorLoggerStatus'
-    ]),
+    ...mapMutations({
+      setHasReadErrorLoggerStatus: 'backend/article/setHasReadErrorLoggerStatus'
+    }),
     exportData () {
       this.$refs.table.exportCsv({
         filename: '错误日志.csv'

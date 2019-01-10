@@ -86,7 +86,6 @@ class HttpRequest {
             if (config.method === 'post') {
                 config.data = qs.stringify(config.data);
             }
-            console.log(config);
             return config;
         }, error => {
             return Promise.reject(error);

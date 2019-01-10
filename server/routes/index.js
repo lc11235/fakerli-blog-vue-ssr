@@ -7,6 +7,7 @@ const backendArticle = require('../api/backend-article');
 const backendTag = require('../api/backend-tag');
 const backendUser = require('../api/backend-user');
 const backendMessage = require('../api/backend-message');
+const backendData = require('../api/backend-data');
 const frontendArticle = require('../api/frontend-article');
 const frontendArchive = require('../api/frontend-archive');
 const frontendSearch = require('../api/frontend-search');
@@ -74,6 +75,9 @@ router.get('/backend/admin/recover', isAdmin, backendUser.recover);
 router.get('/backend/message/count', isAdmin, backendMessage.getUnreadMessageCount);
 // 取得已读，未读，回收站的消息
 router.get('/backend/message/init', isAdmin, backendMessage.getAllMessage);
+
+// 取得拖拽列表
+router.get('/backend/data/get_drag_list', isAdmin, backendData.getDragList);
 
 // ================= 前台 =================
 // ------ 文章 ------

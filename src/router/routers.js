@@ -42,7 +42,7 @@ export default [
         redirect: '/backend/home',
         component: Main,
         meta: {
-            hideInMenu: true,
+            hideInMenu: false,
             notCache: true
         },
         children: [
@@ -50,7 +50,7 @@ export default [
                 path: '/backend/home',
                 name: 'home',
                 meta: {
-                    hideInMenu: true,
+                    hideInMenu: false,
                     title: '首页',
                     notCache: true,
                     icon: 'md-home'
@@ -60,13 +60,112 @@ export default [
         ]
     },
     {
-        path: '',
-        name: 'doc',
+        path: '/backend/article',
+        name: 'article',
+        component: Main,
         meta: {
-            title: '文档',
-            href: 'https://lison16.github.io/iview-admin-doc/#/',
+            title: '文章',
             icon: 'ios-book'
-        }
+        },
+        children: [
+            {
+                path: 'article_manage',
+                name: 'article_manage',
+                meta: {
+                    title: '文章管理',
+                    icon: 'ios-book'
+                },
+                component: () => import('@/views/article/article-manage.vue')
+            },
+            {
+                path: 'article_insert',
+                name: 'article_insert',
+                meta: {
+                    title: '文章发表',
+                    icon: 'ios-book'
+                }
+            },
+            {
+                path: 'article_modify',
+                name: 'article_modify',
+                meta: {
+                    title: '文章修正',
+                    icon: 'ios-book'
+                }
+            }
+        ]
+    },
+    {
+        path: '/backend/tag',
+        name: 'tag',
+        component: Main,
+        meta: {
+            title: '标签',
+            icon: 'md-pricetag'
+        },
+        children: [
+            {
+                path: 'tag_manage',
+                name: 'tag_manage',
+                meta: {
+                    title: '标签管理',
+                    icon: 'md-pricetag'
+                },
+                component: () => import('@/views/article/article-manage.vue')
+            },
+            {
+                path: 'tag_insert',
+                name: 'tag_insert',
+                meta: {
+                    title: '标签发表',
+                    icon: 'md-pricetag'
+                }
+            },
+            {
+                path: 'tag_modify',
+                name: 'tag_modify',
+                meta: {
+                    title: '标签修正',
+                    icon: 'md-pricetag'
+                }
+            }
+        ]
+    },
+    {
+        path: '/backend/user',
+        name: 'user',
+        component: Main,
+        meta: {
+            title: '用户',
+            icon: 'md-person'
+        },
+        children: [
+            {
+                path: 'user_manage',
+                name: 'user_manage',
+                meta: {
+                    title: '用户管理',
+                    icon: 'md-person'
+                },
+                component: () => import('@/views/article/article-manage.vue')
+            },
+            {
+                path: 'user_insert',
+                name: 'user_insert',
+                meta: {
+                    title: '用户新增',
+                    icon: 'md-person-add'
+                }
+            },
+            {
+                path: 'user_access',
+                name: 'user_access',
+                meta: {
+                    title: '用户权限',
+                    icon: 'md-person'
+                }
+            }
+        ]
     },
     {
         path: '/backend/join',
@@ -77,8 +176,8 @@ export default [
         },
         children: [
             {
-                path: 'join-page',
-                name: 'join-page',
+                path: 'join_page',
+                name: 'join_page',
                 meta: {
                     icon: '_qq',
                     title: 'QQ群'

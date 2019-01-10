@@ -110,7 +110,7 @@ export default {
       if (type.includes('all')) {
         // 关闭所有，除了home
         let res = this.list.filter(item => item.name === this.$config.homeName)
-        this.$emit('on-close', res, 'all')
+        this.$emit('on-close', res, 'all', this.currentRouteObj)
       } else if (type.includes('others')) {
         // 关闭除当前页和home页的其他页
         let res = this.list.filter(item => routeEqual(this.currentRouteObj, item) || item.name === this.$config.homeName)

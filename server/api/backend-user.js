@@ -152,7 +152,7 @@ exports.insert = (req, res, next) => {
                 password: md5(md5Pre + password),
                 email,
                 access: 'super_admin',
-                avator: '/dist/static/images/me.png',
+                avator: '/static/images/me.png',
                 create_date: moment().format('YYYY-MM-DD HH:mm:ss'),
                 update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
                 is_delete: 0,
