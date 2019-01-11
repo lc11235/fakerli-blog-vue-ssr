@@ -1,67 +1,86 @@
+<style lang="less">
+  @import './article-insert.less';
+</style>
+
 <template>
     <div>
-        <div class="article-select">
-            <div class="article-button-list left">
-                <Button @click="writeArticle" type="success" size="large" long>写文章</Button>
-            </div>
-            <div class="article-button-list right">
-                <Button @click="uploadArticle" type="success" size="large" long>上传文章</Button>
-            </div>
-        </div>
-        <div class="settings-main card" v-show="showWrite">
+        <Card>
+            <Modal
+                title="文章标题"
+                v-model="modalWriteOrUpload"
+                :closable="false"
+                :mask-closable="false">
+                <Form :model="form" :label-width="80">
+                    <FormItem label="文章标题">
+                        <Input v-model="form.title" placeholder="请输入文章标题"></Input>
+                    </FormItem>
+                    <FormItem label="文章标签">
+                        <AutoComplete
+                            v-model="value4"
+                            icon="ios-search"
+                            placeholder="input here"
+                            style="width:300px">
+                            <div v-if="tagList.length > 0">
+                                <Tag v-for="tagItem in tagList" :key="tagItem" type="dot" closable @on-close="closeTag" color="blue">{{ tagItem }}</Tag>
+                            </div>
+                            <div class="demo-auto-complete-item" v-for="item in data4">
+                                <div class="demo-auto-complete-group">
+                                    <span>{{ item.title }}</span>
+                                    <a href="https://www.google.com/search?q=iView" target="_blank">更多</a>
+                                </div>
+                                <Option v-for="option in item.children" :value="option.title" :key="option.title">
+                                    <span class="demo-auto-complete-title">{{ option.title }}</span>
+                                    <span class="demo-auto-complete-count">{{ option.count }} 人关注</span>
+                                </Option>
+                            </div>
+                            <a href="https://www.google.com/search?q=iView" target="_blank" class="demo-auto-complete-more">查看所有结果</a>
+                        </AutoComplete>
+                    </FormItem>
+                </Form>
+            </Modal>
+            <Modal
+                title="Title"
+                v-model="modalTheme"
+                :closable="false"
+                :mask-closable="false">
+                <Select class="select-item" name="theme" v-model="selectTheme" @on-change="themeChange(selectTheme, 'theme')" style="width: 30%">
+                            <Option v-for="theme in theme" :value="theme" :key="theme">{{ theme }}</Option>
+                        </Select>
+                        <Select class="select-item" name="previewTheme" v-model="selectPreviewTheme" @on-change="themeChange(selectPreviewTheme, 'previewtheme')" style="width: 30%">
+                            <Option v-for="theme in previewTheme" :value="theme" :key="theme">{{ theme }}</Option>
+                        </Select>
+                        <Select class="select-item" name="editorTheme" v-model="selectEditorTheme" @on-change="themeChange(selectEditorTheme, 'editortheme')" style="width: 30%">
+                            <Option v-for="theme in editorTheme" :value="theme" :key="theme">{{ theme }}</Option>
+                        </Select>
+            </Modal>
+            <Button style="margin: 10px 0;" type="primary" @click="handleArticleMode">文章标题</Button>
+            <Button style="margin: 10px 0;" type="primary" @click="handleTheme">编辑器主题</Button>
+            <Divider type="vertical" />
+            <Button style="margin: 10px 0;" type="success" @click="insert" shape="circle">添加文章</Button>
             <div class="settings-main-content">
-                <a-input title="标题">
-                    <input type="text" v-model="form.title" placeholder="标题" class="base-input" name="title" style="width: 70%">
-                    <span class="input-info error">请输入标题</span>
-                </a-input>
-                <a-input title="标签" class="select-item-wrap">
-                    <i class="icon icon-arrow-down"></i>
-                    <Select v-model="form.tag" style="width: 70%">
-                        <Option v-for="tag in tags" :value="tag.tag_name" :key="tag.tag_name">{{ tag.tag_name }}</Option>
-                    </Select>
-                    <Button @click="addTagList" type="success" shape="circle">添加标签</Button>
-                    <span class="input-info error">请输入标签</span>
-                </a-input>
-                <a-input title="已有标签" v-if="tagList.length > 0">
-                    <Tag v-for="tagItem in tagList" :key="tagItem" type="dot" closable @on-close="closeTag" color="blue">{{ tagItem }}</Tag>
-                </a-input>
-                <div>
-                    <Select class="select-item" name="theme" v-model="selectTheme" @on-change="themeChange(selectTheme, 'theme')" style="width: 30%">
-                        <Option v-for="theme in theme" :value="theme" :key="theme">{{ theme }}</Option>
-                    </Select>
-                    <Select class="select-item" name="previewTheme" v-model="selectPreviewTheme" @on-change="themeChange(selectPreviewTheme, 'previewtheme')" style="width: 30%">
-                        <Option v-for="theme in previewTheme" :value="theme" :key="theme">{{ theme }}</Option>
-                    </Select>
-                    <Select class="select-item" name="editorTheme" v-model="selectEditorTheme" @on-change="themeChange(selectEditorTheme, 'editortheme')" style="width: 30%">
-                        <Option v-for="theme in editorTheme" :value="theme" :key="theme">{{ theme }}</Option>
-                    </Select>
-                </div>
                 <div class="settings-section" style="padding-bottom:0">
                     <div id="post-content" class="settings-item-content">
                         <textarea id="editor" name="content" class="form-control hidden" data-autosave="editor-content"></textarea>
                     </div>
                 </div>
             </div>
-            <div class="settings-footer clearfix">
-                <Button @click="insert" type="success" shape="circle">添加文章</Button>
+            <div class="article-upload" v-show="showUpload">
+                <Upload
+                    type="drag"
+                    with-credentials
+                    :format="['md']"
+                    :max-size="2048"
+                    :on-format-error="handleFormatError"
+                    :on-exceeded-size="handleMaxSize"
+                    :before-upload="handleUpload"
+                    action="/api/backend/article/upload">
+                    <div style="padding: 20px 0">
+                        <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                        <p>点击或将文件拖拽到这里上传</p>
+                    </div>
+                </Upload>
             </div>
-        </div>
-        <div class="article-upload" v-show="showUpload">
-            <Upload
-                type="drag"
-                with-credentials
-                :format="['md']"
-                :max-size="2048"
-                :on-format-error="handleFormatError"
-                :on-exceeded-size="handleMaxSize"
-                :before-upload="handleUpload"
-                action="/api/backend/article/upload">
-                <div style="padding: 20px 0">
-                    <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
-                    <p>点击或将文件拖拽到这里上传</p>
-                </div>
-            </Upload>
-        </div>
+        </Card>
     </div>
 </template>
 
@@ -69,7 +88,7 @@
     /* global postEditor */
     import api from '~api';
     import { mapGetters } from 'vuex';
-    import aInput from '~components/backend/_input.vue';
+    import aInput from '@/views/backend/_input.vue';
     const fetchInitIalData = async (store) => {
         await store.dispatch('global/tag/getTagList');
     };
@@ -99,7 +118,52 @@
                 showWrite: true,
                 showUpload: false,
                 file: null,
-                opacity: true
+                opacity: true,
+                modalWriteOrUpload: false,
+                modalTheme: false,
+                 value4: '',
+                data4: [
+                    {
+                        title: '话题',
+                        children: [
+                            {
+                                title: 'iView',
+                                count: 10000,
+
+                            },
+                            {
+                                title: 'iView UI',
+                                count: 10600,
+
+                            }
+                        ]
+                    },
+                    {
+                        title: '问题',
+                        children: [
+                            {
+                                title: 'iView UI 有多好',
+                                count: 60100,
+
+                            },
+                            {
+                                title: 'iView 是啥',
+                                count: 30010,
+
+                            }
+                        ]
+                    },
+                    {
+                        title: '文章',
+                        children: [
+                            {
+                                title: 'iView 是一个设计语言',
+                                count: 100000,
+
+                            }
+                        ]
+                    }
+                ]
             };
         },
         components: {
@@ -150,21 +214,15 @@
                     postEditor.setEditorTheme(themeTitle);
                 }
             },
+            handleArticleMode() {
+                this.modalWriteOrUpload = true;
+            },
+            handleTheme() {
+                this.modalTheme = true;
+            },
             closeTag(event, name) {
                 const index = this.tagList.indexOf(name);
                 this.tagList.splice(index, 1);
-            },
-            writeArticle() {
-                this.showWrite = true;
-                this.showUpload = false;
-                this.opacity = false;
-                $('.article-select').addClass('left');
-            },
-            uploadArticle() {
-                this.showWrite = false;
-                this.showUpload = true;
-                this.opacity = false;
-                $('.article-select').addClass('left');
             },
             handleFormatError(file) {
                 this.$Notice.warning({
