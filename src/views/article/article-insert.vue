@@ -17,23 +17,11 @@
                     <FormItem label="文章标签">
                         <AutoComplete
                             v-model="value4"
-                            icon="ios-search"
-                            placeholder="input here"
-                            style="width:300px">
-                            <div v-if="tagList.length > 0">
-                                <Tag v-for="tagItem in tagList" :key="tagItem" type="dot" closable @on-close="closeTag" color="blue">{{ tagItem }}</Tag>
+                            placeholder="input here">
+                            <div class="demo-auto-complete-item">
+                                <Tag v-for="item in tagAll" :key="item" checkable color="success">{{ item.title }}</Tag>
                             </div>
-                            <div class="demo-auto-complete-item" v-for="item in data4">
-                                <div class="demo-auto-complete-group">
-                                    <span>{{ item.title }}</span>
-                                    <a href="https://www.google.com/search?q=iView" target="_blank">更多</a>
-                                </div>
-                                <Option v-for="option in item.children" :value="option.title" :key="option.title">
-                                    <span class="demo-auto-complete-title">{{ option.title }}</span>
-                                    <span class="demo-auto-complete-count">{{ option.count }} 人关注</span>
-                                </Option>
-                            </div>
-                            <a href="https://www.google.com/search?q=iView" target="_blank" class="demo-auto-complete-more">查看所有结果</a>
+                            <div class="demo-auto-complete-content"></div>
                         </AutoComplete>
                     </FormItem>
                 </Form>
@@ -108,7 +96,7 @@
                 selectTheme: '',
                 selectPreviewTheme: '',
                 selectEditorTheme: '',
-                tagList: [],
+                tagList: ['es6', 'vue', 'webpack'],
                 theme: ['default', 'dark'],
                 editorTheme: ['default', '3024-day', '3024-night', 'ambiance', 'ambiance-mobile', 'base16-dark', 'base16-light',
                     'blackboard', 'cobalt', 'eclipse', 'elegant', 'erlang-dark', 'lesser-dark', 'mbo,mdn-like', 'midnight',
@@ -121,45 +109,62 @@
                 opacity: true,
                 modalWriteOrUpload: false,
                 modalTheme: false,
-                 value4: '',
-                data4: [
+                value4: '',
+                tagAll: [
                     {
-                        title: '话题',
+                        title: '前端',
                         children: [
                             {
-                                title: 'iView',
+                                title: 'es6',
                                 count: 10000,
 
                             },
                             {
-                                title: 'iView UI',
+                                title: 'vue',
                                 count: 10600,
-
-                            }
-                        ]
-                    },
-                    {
-                        title: '问题',
-                        children: [
-                            {
-                                title: 'iView UI 有多好',
-                                count: 60100,
 
                             },
                             {
-                                title: 'iView 是啥',
-                                count: 30010,
-
+                                title: 'webpack',
+                                count: 100
                             }
                         ]
                     },
                     {
-                        title: '文章',
+                        title: '后端',
                         children: [
                             {
-                                title: 'iView 是一个设计语言',
-                                count: 100000,
+                                title: 'es6',
+                                count: 10000,
 
+                            },
+                            {
+                                title: 'vue',
+                                count: 10600,
+
+                            },
+                            {
+                                title: 'webpack',
+                                count: 100
+                            }
+                        ]
+                    },
+                    {
+                        title: '艺术',
+                        children: [
+                            {
+                                title: 'es6',
+                                count: 10000,
+
+                            },
+                            {
+                                title: 'vue',
+                                count: 10600,
+
+                            },
+                            {
+                                title: 'webpack',
+                                count: 100
                             }
                         ]
                     }
