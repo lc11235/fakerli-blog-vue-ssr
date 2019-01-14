@@ -1,24 +1,10 @@
 import api from '~api';
 
+import { postTagInsert } from '@/api/tag';
+
 const state = {
     lists: [],
     item: {}
-};
-
-const actions = {
-    async 'getTagList'({ commit }) {
-        // if (state.lists.length) return;
-        const { data: { data, code }} = await api.get('backend/tag/list', { cache: true });
-        if (data && code === 200) {
-            commit('receiveTagList', data.list);
-        }
-    },
-    async 'getTagItem'({ commit, rootState: { route: { params: { tag_name }}}}) {
-        const { data: { data, code }} = await api.get('backend/tag/item', { tag_name });
-        if (data && code === 200) {
-            commit('receiveTagItem', data);
-        }
-    }
 };
 
 const mutations = {
@@ -54,6 +40,46 @@ const getters = {
     },
     'getTagItem'(states) {
         return states.item;
+    }
+};
+
+const actions = {
+    async 'getTagList'({ commit }) {
+        // if (state.lists.length) return;
+        const { data: { data, code }} = await api.get('backend/tag/list', { cache: true });
+        if (data && code === 200) {
+            commit('receiveTagList', data.list);
+        }
+    },
+    async 'getTagItem'({ commit, rootState: { route: { params: { tag_name }}}}) {
+        const { data: { data, code }} = await api.get('backend/tag/item', { tag_name });
+        if (data && code === 200) {
+            commit('receiveTagItem', data);
+        }
+    },
+    handleInsertTag({ commit }, { tag_name, tag_desc, tag_classify }) {
+        if (tag_classify === '') {
+            tag_classify = 'classify';
+        }
+        return new Promise((resolve, reject) => {
+            postTagInsert({
+                tag_name,
+                tag_desc,
+                tag_classify
+            }).then(res => {
+                const data = res.data;
+                if (data && data.code === 200) {
+                    commit('insertTagItem', {
+                        ...data.data
+                    });
+                    resolve();
+                } else {
+                    reject(data.message);
+                }
+            }).catch(err => {
+                reject(err);
+            });
+        });
     }
 };
 

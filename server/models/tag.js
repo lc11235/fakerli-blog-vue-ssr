@@ -5,6 +5,8 @@ const Promise = require('bluebird');
 const TagSchema = new Schema({
     tag_name: String,
     tag_num: Number,
+    tag_desc: String,
+    tag_classify: String,
     create_date: String,
     update_date: String,
     is_delete: Number,

@@ -121,7 +121,8 @@ export default [
                 meta: {
                     title: '标签发表',
                     icon: 'md-pricetag'
-                }
+                },
+                component: () => import('@/views/tag/tag-insert.vue')
             },
             {
                 path: 'tag_modify',

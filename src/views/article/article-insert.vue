@@ -10,16 +10,16 @@
                 v-model="modalWriteOrUpload"
                 :closable="false"
                 :mask-closable="false">
-                <Form :model="form" :label-width="80">
+                <Form :model="formArticle" :label-width="80">
                     <FormItem label="文章标题">
-                        <Input v-model="form.title" placeholder="请输入文章标题"></Input>
+                        <Input v-model="formArticle.title" placeholder="请输入文章标题"></Input>
                     </FormItem>
                     <FormItem label="文章标签">
                         <AutoComplete
                             v-model="value4"
                             placeholder="input here">
                             <div class="demo-auto-complete-item">
-                                <Tag v-for="item in tagAll" :key="item" checkable color="success">{{ item.title }}</Tag>
+                                <Tag v-for="item in tagAll" :key="item.title" checkable color="success">{{ item.title }}</Tag>
                             </div>
                             <div class="demo-auto-complete-content"></div>
                         </AutoComplete>
@@ -27,32 +27,33 @@
                 </Form>
             </Modal>
             <Modal
-                title="Title"
+                title="编辑器主题"
                 v-model="modalTheme"
                 :closable="false"
                 :mask-closable="false">
-                <Select class="select-item" name="theme" v-model="selectTheme" @on-change="themeChange(selectTheme, 'theme')" style="width: 30%">
-                            <Option v-for="theme in theme" :value="theme" :key="theme">{{ theme }}</Option>
+                <Form :model="formTheme" :label-width="80">
+                    <FormItem label="菜单主题">
+                        <Select class="select-item" name="theme" v-model="formTheme.selectTheme" @on-change="themeChange(formTheme.selectTheme, 'theme')" style="width: 100%">
+                            <Option v-for="theme in formTheme.theme" :value="theme" :key="theme">{{ theme }}</Option>
                         </Select>
-                        <Select class="select-item" name="previewTheme" v-model="selectPreviewTheme" @on-change="themeChange(selectPreviewTheme, 'previewtheme')" style="width: 30%">
-                            <Option v-for="theme in previewTheme" :value="theme" :key="theme">{{ theme }}</Option>
+                    </FormItem>
+                    <FormItem label="编辑器主题">
+                        <Select class="select-item" name="editorTheme" v-model="formTheme.selectEditorTheme" @on-change="themeChange(formTheme.selectEditorTheme, 'editortheme')" style="width: 100%">
+                            <Option v-for="theme in formTheme.editorTheme" :value="theme" :key="theme">{{ theme }}</Option>
                         </Select>
-                        <Select class="select-item" name="editorTheme" v-model="selectEditorTheme" @on-change="themeChange(selectEditorTheme, 'editortheme')" style="width: 30%">
-                            <Option v-for="theme in editorTheme" :value="theme" :key="theme">{{ theme }}</Option>
+                    </FormItem>
+                    <FormItem label="预览器主题">
+                        <Select class="select-item" name="previewTheme" v-model="formTheme.selectPreviewTheme" @on-change="themeChange(formTheme.selectPreviewTheme, 'previewtheme')" style="width: 100%">
+                            <Option v-for="theme in formTheme.previewTheme" :value="theme" :key="theme">{{ theme }}</Option>
                         </Select>
+                    </FormItem>
+                </Form>         
             </Modal>
-            <Button style="margin: 10px 0;" type="primary" @click="handleArticleMode">文章标题</Button>
-            <Button style="margin: 10px 0;" type="primary" @click="handleTheme">编辑器主题</Button>
-            <Divider type="vertical" />
-            <Button style="margin: 10px 0;" type="success" @click="insert" shape="circle">添加文章</Button>
-            <div class="settings-main-content">
-                <div class="settings-section" style="padding-bottom:0">
-                    <div id="post-content" class="settings-item-content">
-                        <textarea id="editor" name="content" class="form-control hidden" data-autosave="editor-content"></textarea>
-                    </div>
-                </div>
-            </div>
-            <div class="article-upload" v-show="showUpload">
+            <Modal
+                title="文章上传"
+                v-model="modalUpload"
+                :closable="false"
+                :mask-closable="false">
                 <Upload
                     type="drag"
                     with-credentials
@@ -67,6 +68,21 @@
                         <p>点击或将文件拖拽到这里上传</p>
                     </div>
                 </Upload>
+
+            </Modal>
+            <Button style="margin: 10px 0;" type="primary" @click="handleArticleMode">文章标题</Button>
+            <Divider type="vertical" />
+            <Button style="margin: 10px 0;" type="success" @click="handleInsertArticle" shape="circle">添加文章</Button>
+            <Divider type="vertical" />
+            <Button style="margin: 10px 0;" type="success" @click="handleUploadArticle" shape="circle">上传文章</Button>
+            <Divider type="vertical" />
+            <Button style="margin: 10px 0;" type="info" @click="handleTheme">编辑器主题</Button>
+            <div class="settings-main-content">
+                <div class="settings-section" style="padding-bottom:0">
+                    <div id="post-content" class="settings-item-content">
+                        <textarea id="editor" name="content" class="form-control hidden" data-autosave="editor-content"></textarea>
+                    </div>
+                </div>
             </div>
         </Card>
     </div>
@@ -76,7 +92,6 @@
     /* global postEditor */
     import api from '~api';
     import { mapGetters } from 'vuex';
-    import aInput from '@/views/backend/_input.vue';
     const fetchInitIalData = async (store) => {
         await store.dispatch('global/tag/getTagList');
     };
@@ -85,7 +100,7 @@
         name: 'backend-article-insert',
         data() {
             return {
-                form: {
+                formArticle: {
                     title: '',
                     tag: '',
                     tagString: '',
@@ -93,22 +108,23 @@
                     html: '',
                     tocHTML: '',
                 },
-                selectTheme: '',
-                selectPreviewTheme: '',
-                selectEditorTheme: '',
+                formTheme: {
+                    selectTheme: 'default',
+                    selectPreviewTheme: 'default',
+                    selectEditorTheme: 'default',
+                    theme: ['default', 'dark'],
+                    editorTheme: ['default', '3024-day', '3024-night', 'ambiance', 'ambiance-mobile', 'base16-dark', 'base16-light',
+                        'blackboard', 'cobalt', 'eclipse', 'elegant', 'erlang-dark', 'lesser-dark', 'mbo,mdn-like', 'midnight',
+                        'monokai', 'neat,neo', 'night', 'paraiso-dark', 'paraiso-light', 'pastel-on-dark', 'rubyblue', 'solarized',
+                        'the-matrix', 'tomorrow-night-eighties', 'twilight', 'vibrant-ink', 'xq-dark', 'xq-light'],
+                    previewTheme: ['default', 'dark'],
+                },
                 tagList: ['es6', 'vue', 'webpack'],
-                theme: ['default', 'dark'],
-                editorTheme: ['default', '3024-day', '3024-night', 'ambiance', 'ambiance-mobile', 'base16-dark', 'base16-light',
-                    'blackboard', 'cobalt', 'eclipse', 'elegant', 'erlang-dark', 'lesser-dark', 'mbo,mdn-like', 'midnight',
-                    'monokai', 'neat,neo', 'night', 'paraiso-dark', 'paraiso-light', 'pastel-on-dark', 'rubyblue', 'solarized',
-                    'the-matrix', 'tomorrow-night-eighties', 'twilight', 'vibrant-ink', 'xq-dark', 'xq-light'],
-                previewTheme: ['default', 'dark'],
-                showWrite: true,
-                showUpload: false,
                 file: null,
                 opacity: true,
                 modalWriteOrUpload: false,
                 modalTheme: false,
+                modalUpload: false,
                 value4: '',
                 tagAll: [
                     {
@@ -171,43 +187,45 @@
                 ]
             };
         },
-        components: {
-            aInput
-        },
         computed: {
             ...mapGetters({
                 tags: 'global/tag/getTagList'
             })
         },
         methods: {
-            async insert() {
+            async handleInsertArticle() {
                 const content = postEditor.getMarkdown();
                 const html = postEditor.getPreviewedHTML();
                 let tocHtml = '';
                 if (document.querySelectorAll('.markdown-toc')[0]) {
                     tocHtml = document.querySelectorAll('.markdown-toc')[0].outerHTML;
                 }
-                if (!this.form.title || !this.form.tagString || !content) {
-                    this.$store.dispatch('global/showMsg', '请将表单填写完整！');
+                if (!this.formArticle.title) {
+                    this.$Message.error('请填写文章标题');
                     return;
                 }
-                this.form.content = content;
-                this.form.html = html;
-                this.form.tocHTML = tocHtml;
-                const { data: { message, code, data }} = await api.post('backend/article/insert', this.form);
+                if (!!this.formArticle.tagString) {
+                    this.$Message.error('请选择文章标签');
+                    return;
+                }
+                if (!content) {
+                    this.$Message.error('请填写文章内容');
+                    return;
+                }
+                this.formArticle.content = content;
+                this.formArticle.html = html;
+                this.formArticle.tocHTML = tocHtml;
+                const { data: { message, code, data }} = await api.post('backend/article/insert', this.formArticle);
                 if (code === 200) {
-                    this.$store.dispatch('global/showMsg', {
-                        type: 'success',
-                        content: message
-                    });
+                    this.$Message.success(message);
                     this.$store.commit('backend/article/insertArticleItem', data);
                     this.$router.push('/backend/article/list');
                 }
             },
             addTagList() {
-                if (!this.tagList.includes(this.form.tag)) {
-                    this.tagList.push(this.form.tag);
-                    this.form.tagString = this.tagList.join('|');
+                if (!this.tagList.includes(this.formArticle.tag)) {
+                    this.tagList.push(this.formArticle.tag);
+                    this.formArticle.tagString = this.tagList.join('|');
                 }
             },
             themeChange(themeTitle, source) {
@@ -224,6 +242,9 @@
             },
             handleTheme() {
                 this.modalTheme = true;
+            },
+            handleUploadArticle() {
+                this.modalUpload = true;
             },
             closeTag(event, name) {
                 const index = this.tagList.indexOf(name);
@@ -247,8 +268,6 @@
                 reader.readAsText(file);
                 reader.onload = function () {
                     // 此处不可使用箭头函数，因为箭头函数的this绑定为定义时的this，跟运行时的this不一样。
-                    that.showWrite = true;
-                    that.showUpload = false;
                     that.opacity = false;
                     $('.article-select').addClass('left');
                     // eslint-disable-next-line
