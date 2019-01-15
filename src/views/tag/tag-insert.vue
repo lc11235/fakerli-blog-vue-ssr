@@ -16,7 +16,7 @@
                             </Select>
                         </FormItem>
                     </Form>
-                    <Button style="margin: 10px 0;" type="primary" @click="handleInsertTag">文章标题</Button>
+                    <Button style="margin: 10px 0;" type="primary" @click="handleInsert">文章标题</Button>
                 </TabPane>
                 <TabPane label="分类标签" name="name1">
                     <Form :model="formArticle" :label-width="80">
@@ -36,6 +36,7 @@
 
 <script lang="babel">
     import api from '~api';
+    import { mapActions } from 'vuex';
 
     export default {
         name: 'backend-tag-insert',
