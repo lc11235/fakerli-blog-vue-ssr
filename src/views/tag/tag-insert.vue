@@ -16,18 +16,18 @@
                             </Select>
                         </FormItem>
                     </Form>
-                    <Button style="margin: 10px 0;" type="primary" @click="handleInsert">文章标题</Button>
+                    <Button style="margin: 10px 0;" type="primary" @click="handleInsert">添加普通标签</Button>
                 </TabPane>
                 <TabPane label="分类标签" name="name1">
-                    <Form :model="formArticle" :label-width="80">
-                        <FormItem label="标签名称">
+                    <Form :model="formArticle" :label-width="80" :rules="ruleInline">
+                        <FormItem label="标签名称" prop="tag_name">
                             <Input v-model="formArticle.tag_name" placeholder="请输入标签名称" style="width: 30%"></Input>
                         </FormItem>
-                        <FormItem label="标签描述">
+                        <FormItem label="标签描述" prop="tag_desc">
                             <Input v-model="formArticle.tag_desc" placeholder="请输入标签描述" style="width: 30%"></Input>
                         </FormItem>
                     </Form>
-                    <Button style="margin: 10px 0;" type="primary" @click="handleInsert">文章标题</Button>
+                    <Button style="margin: 10px 0;" type="primary" @click="handleInsert">添加分类标签</Button>
                 </TabPane>
             </Tabs>
         </Card>
@@ -46,8 +46,8 @@
                     tag_name: '',
                     tag_desc: '',
                     tag_classify: '',
-                    tag_classify_list: []
                 },
+                tag_classify_list: [],
                 ruleInline: {
                     tag_name: [
                         { required: true, message: '请填写标签名称', trigger: 'blur' }
