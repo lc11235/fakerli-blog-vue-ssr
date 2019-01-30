@@ -38,6 +38,10 @@ router.post('/backend/article/upload', isAdmin, backendArticle.upload);
 router.get('/backend/tag/list', backendTag.getList);
 // 管理时, 获取单个标签
 router.get('/backend/tag/item', backendTag.getItem);
+// 管理时, 获取标签列表
+router.get('/backend/tag/classifyList', backendTag.getClassifyList);
+// 管理时, 获取单个标签
+router.get('/backend/tag/classifyItem', backendTag.getClassifyItem);
 // 管理时, 添加标签
 router.post('/backend/tag/insert', multipartMiddleware, isAdmin, backendTag.insert);
 // 管理时, 删除标签

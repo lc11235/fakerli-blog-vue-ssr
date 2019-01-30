@@ -11,7 +11,7 @@ const Article = mongoose.model('Article');
  * @return {[type]}     [description]
  */
 exports.getList = (req, res) => {
-    Tag.find().sort('-tag_num').exec().then(result => {
+    Tag.find({ tag_classify: '' }).sort('-tag_num').exec().then(result => {
         let json = {
             code: 200,
             data: {
@@ -42,8 +42,42 @@ exports.getItem = (req, res) => {
     });
 };
 
+exports.getClassifyList = (req, res) => {
+    Tag.find({ tag_classify: 'classify' }).sort('-tag_num').exec().then(result => {
+        let json = {
+            code: 200,
+            data: {
+                list: result
+            }
+        };
+        res.json(json);
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
+};
+
+exports.getClassifyItem = (req, res) => {
+    let tag_name = req.query.tag_name;
+    Tag.findOne({ tag_name: tag_name }).then(result => {
+        res.json({
+            code: 200,
+            data: result
+        });
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
+};
+
 exports.insert = (req, res) => {
     let tag_name = req.body.tag_name;
+    let tag_desc = req.body.tag_desc;
+    let tag_classify = req.body.tag_classify;
     if (!tag_name) {
         return res.json({
             code: -200,
@@ -60,6 +94,8 @@ exports.insert = (req, res) => {
         return Tag.create({
             tag_name,
             tag_num: 0,
+            tag_desc: tag_desc,
+            tag_classify: tag_classify,
             create_date: moment().format('YYYY-MM-DD HH:mm:ss'),
             update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
             is_delete: 0,

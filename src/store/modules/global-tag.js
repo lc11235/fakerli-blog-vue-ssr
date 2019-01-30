@@ -1,15 +1,19 @@
 import api from '~api';
 
-import { postTagInsert } from '@/api/tag';
+import { getTagList, postTagInsert, getTagClassifyList } from '@/api/tag';
 
 const state = {
     lists: [],
-    item: {}
+    item: {},
+    classifyLists: []
 };
 
 const mutations = {
     'receiveTagList'(states, payload) {
         states.lists = payload;
+    },
+    'receiveClassifyList'(states, payload) {
+        states.classifyLists = payload;
     },
     'receiveTagItem'(states, data) {
         states.item = data;
@@ -40,22 +44,50 @@ const getters = {
     },
     'getTagItem'(states) {
         return states.item;
+    },
+    'getClassifyList'(states) {
+        return states.classifyLists;
     }
 };
 
 const actions = {
-    async 'getTagList'({ commit }) {
+    getTagList({ commit }) {
         // if (state.lists.length) return;
-        const { data: { data, code }} = await api.get('backend/tag/list', { cache: true });
-        if (data && code === 200) {
-            commit('receiveTagList', data.list);
-        }
+        return new Promise((resolve, reject) => {
+            getTagList().then(res => {
+                const data = res.data;
+                if (data && data.code === 200) {
+                    commit('receiveTagList', data.data.list);
+                    resolve();
+                } else {
+                    reject(data.message);
+                }
+            }).catch(err => {
+                reject(err);
+            });
+        });
     },
-    async 'getTagItem'({ commit, rootState: { route: { params: { tag_name }}}}) {
+    async getTagItem({ commit, rootState: { route: { params: { tag_name }}}}) {
         const { data: { data, code }} = await api.get('backend/tag/item', { tag_name });
         if (data && code === 200) {
             commit('receiveTagItem', data);
         }
+    },
+    getClassifyList({ commit }) {
+        // if (state.lists.length) return;
+        return new Promise((resolve, reject) => {
+            getTagClassifyList().then(res => {
+                const data = res.data;
+                if (data && data.code === 200) {
+                    commit('receiveClassifyList', data.data.list);
+                    resolve();
+                } else {
+                    reject(data.message);
+                }
+            }).catch(err => {
+                reject(err);
+            });
+        });
     },
     handleInsertTag({ commit }, { tag_name, tag_desc, tag_classify }) {
         if (tag_classify === '') {
