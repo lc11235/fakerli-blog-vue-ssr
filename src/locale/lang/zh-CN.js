@@ -17,7 +17,6 @@ export default {
     tag: '标签',
     tag_manage: '标签管理',
     tag_insert: '标签发表',
-    tag_modify: '标签修正',
     user: '用户',
     user_manage: '用户管理',
     user_insert: '用户新增',

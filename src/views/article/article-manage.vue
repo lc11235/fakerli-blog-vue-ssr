@@ -22,8 +22,8 @@ export default {
         {title: '邮箱', key: 'email', editable: true},
         {title: '最后更新时间', key: 'update_date'},
         {
-          title: 'Handle',
-          key: 'handle',
+          title: '操作',
+          key: 'action',
           options: ['delete'],
           button: [
             (h, params, vm) => {

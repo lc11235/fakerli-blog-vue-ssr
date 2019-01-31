@@ -1,6 +1,13 @@
 import api from '~api';
 
-import { getTagList, postTagInsert, getTagClassifyList } from '@/api/tag';
+import {
+    getTagList,
+    postTagInsert,
+    getTagClassifyList,
+    getRecoverTag,
+    getDeleteTag,
+    getDeleteCompletelyTag
+} from '@/api/tag';
 
 const state = {
     lists: [],
@@ -23,6 +30,9 @@ const mutations = {
     },
     'updateTagItem'(states, data) {
         states.item = data;
+    },
+    'insertClassifyItem'(states, data) {
+        states.classifyLists.push(data);
     },
     'deleteTag'(states, tag_name) {
         const obj = states.lists.find(ii => ii.tag_name === tag_name);
@@ -90,9 +100,6 @@ const actions = {
         });
     },
     handleInsertTag({ commit }, { tag_name, tag_desc, tag_classify }) {
-        if (tag_classify === '') {
-            tag_classify = 'classify';
-        }
         return new Promise((resolve, reject) => {
             postTagInsert({
                 tag_name,
@@ -104,7 +111,61 @@ const actions = {
                     commit('insertTagItem', {
                         ...data.data
                     });
+                    if (tag_classify !== '') {
+                        commit('insertClassifyItem', data.data);
+                    }
                     resolve();
+                } else {
+                    reject(data.message);
+                }
+            }).catch(err => {
+                reject(err);
+            });
+        });
+    },
+    handleRecoverTag({ commit }, { tag_name }) {
+        return new Promise((resolve, reject) => {
+            getRecoverTag({
+                tag_name
+            }).then(res => {
+                const data = res.data;
+                if (data && data.code === 200) {
+                    commit('recoverTag', data.data);
+                    resolve(data.message);
+                } else {
+                    reject(data.message);
+                }
+            }).catch(err => {
+                reject(err);
+            });
+        });
+    },
+    handleDeleteTag({ commit }, { tag_name }) {
+        return new Promise((resolve, reject) => {
+            getDeleteTag({
+                tag_name
+            }).then(res => {
+                const data = res.data;
+                if (data && data.code === 200) {
+                    commit('deleteTag', data.data);
+                    resolve(data.message);
+                } else {
+                    reject(data.message);
+                }
+            }).catch(err => {
+                reject(err);
+            });
+        });
+    },
+    handleDeleteCompletelyTag({ commit }, { tag_name }) {
+        return new Promise((resolve, reject) => {
+            getDeleteCompletelyTag({
+                tag_name
+            }).then(res => {
+                const data = res.data;
+                if (data && data.code === 200) {
+                    commit('deleteTagCompletely', data.data);
+                    resolve(data.message);
                 } else {
                     reject(data.message);
                 }

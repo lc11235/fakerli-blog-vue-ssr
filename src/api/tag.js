@@ -24,3 +24,36 @@ export const getTagClassifyList = () => {
         source: 'server'
     });
 };
+
+export const getRecoverTag = ({ tag_name }) => {
+    return axios.request({
+        url: 'api/backend/tag/recover',
+        params: {
+            tag_name
+        },
+        method: 'get',
+        source: 'server'
+    });
+};
+
+export const getDeleteTag = ({ tag_name }) => {
+    return axios.request({
+        url: 'api/backend/tag/delete',
+        params: {
+            tag_name
+        },
+        method: 'get',
+        source: 'server'
+    });
+};
+
+export const getDeleteCompletelyTag = ({ tag_name }) => {
+    return axios.request({
+        url: 'api/backend/tag/deleteCompletely',
+        params: {
+            tag_name
+        },
+        method: 'get',
+        source: 'server'
+    });
+};

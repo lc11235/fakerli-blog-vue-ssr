@@ -11,7 +11,7 @@ const Article = mongoose.model('Article');
  * @return {[type]}     [description]
  */
 exports.getList = (req, res) => {
-    Tag.find({ tag_classify: '' }).sort('-tag_num').exec().then(result => {
+    Tag.find().sort('-tag_num').exec().then(result => {
         let json = {
             code: 200,
             data: {
@@ -104,7 +104,7 @@ exports.insert = (req, res) => {
             res.json({
                 code: 200,
                 message: '添加成功',
-                data: resultTag._id
+                data: resultTag
             });
         });
     }).catch(err => {
@@ -122,8 +122,8 @@ exports.deletes = (req, res) => {
             return Tag.update({ tag_name: tag_name }, { is_delete: 1 }).then(() => {
                 res.json({
                     code: 200,
-                    message: '删除成功！',
-                    data: 'success'
+                    message: '失效成功！',
+                    data: tag_name
                 });
             });
         }
@@ -147,7 +147,7 @@ exports.deleteCompletely = (req, res) => {
                 res.json({
                     code: 200,
                     message: '彻底删除成功！',
-                    data: 'success'
+                    data: tag_name
                 });
             });
         }
@@ -168,8 +168,8 @@ exports.recover = (req, res) => {
     Tag.update({ tag_name: tag_name }, { is_delete: 0 }).then(() => {
         res.json({
             code: 200,
-            message: '更新成功',
-            data: 'success'
+            message: '恢复成功',
+            data: tag_name
         });
     }).catch(err => {
         res.json({
