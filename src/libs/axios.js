@@ -68,7 +68,7 @@ class HttpRequest {
         };
         return config;
     }
-    destory(url) {
+    destroy(url) {
         delete this.queue(url);
         if (!Object.keys(this.queue).length) {
             // Spin.hide()
@@ -92,11 +92,11 @@ class HttpRequest {
         });
         // 响应拦截
         instance.interceptors.response.use(res => {
-            // this.destory(url);
+            // this.destroy(url);
             const { data, status } = res;
             return { data, status };
         }, error => {
-            this.destory(url);
+            this.destroy(url);
             let errorInfo = error.response;
             if (!errorInfo) {
                 const { request: { statusText, status }, config } = JSON.parse(JSON.stringify(error));
