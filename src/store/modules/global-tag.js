@@ -19,8 +19,8 @@ const mutations = {
     'receiveTagList'(states, payload) {
         states.lists = payload;
     },
-    'receiveClassifyList'(states, payload) {
-        states.classifyLists = payload;
+    'insertTagList'(states, data) {
+        states.lists.push(data);
     },
     'receiveTagItem'(states, data) {
         states.item = data;
@@ -31,7 +31,10 @@ const mutations = {
     'updateTagItem'(states, data) {
         states.item = data;
     },
-    'insertClassifyItem'(states, data) {
+    'receiveClassifyList'(states, payload) {
+        states.classifyLists = payload;
+    },
+    'insertClassifyList'(states, data) {
         states.classifyLists.push(data);
     },
     'deleteTag'(states, tag_name) {
@@ -61,10 +64,10 @@ const getters = {
 };
 
 const actions = {
-    getTagList({ commit }) {
+    getTagList({ commit }, config) {
         // if (state.lists.length) return;
         return new Promise((resolve, reject) => {
-            getTagList().then(res => {
+            getTagList(config).then(res => {
                 const data = res.data;
                 if (data && data.code === 200) {
                     commit('receiveTagList', data.data.list);
@@ -111,8 +114,9 @@ const actions = {
                     commit('insertTagItem', {
                         ...data.data
                     });
-                    if (tag_classify !== '') {
-                        commit('insertClassifyItem', data.data);
+                    commit('insertTagList', data.data);
+                    if (tag_classify === 'classify') {
+                        commit('insertClassifyList', data.data);
                     }
                     resolve();
                 } else {

@@ -2,6 +2,9 @@ const moment = require('moment');
 const mongoose = require('../mongoose');
 const Tag = mongoose.model('Tag');
 const Article = mongoose.model('Article');
+const general = require('./general');
+
+const list = general.list;
 
 /**
  * 管理时, 获取标签列表
@@ -11,20 +14,7 @@ const Article = mongoose.model('Article');
  * @return {[type]}     [description]
  */
 exports.getList = (req, res) => {
-    Tag.find().sort('-tag_num').exec().then(result => {
-        let json = {
-            code: 200,
-            data: {
-                list: result
-            }
-        };
-        res.json(json);
-    }).catch(err => {
-        res.json({
-            code: -200,
-            message: err.toString()
-        });
-    });
+    list(req, res, Tag, '-tag_num');
 };
 
 exports.getItem = (req, res) => {

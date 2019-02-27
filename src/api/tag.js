@@ -9,10 +9,11 @@ export const postTagInsert = (formData) => {
     });
 };
 
-export const getTagList = () => {
+export const getTagList = (config) => {
     return axios.request({
         url: 'api/backend/tag/list',
         method: 'get',
+        params: config,
         source: 'server'
     });
 };

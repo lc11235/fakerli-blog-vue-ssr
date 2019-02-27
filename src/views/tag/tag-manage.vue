@@ -1,8 +1,12 @@
 <template>
     <div>
         <Card>
-            <tables ref="tables" editable searchable search-place="top" v-model="tableData" :columns="columns" @on-delete-completely="deleteCompletely"/>
-            <Button style="margin: 10px 0;" type="primary" @click="exportExcel">导出为Csv文件</Button>
+            <tables ref="tables" editable searchable search-place="top" :loading="loading" v-model="tableData" :columns="columns" @on-delete-completely="deleteCompletely"/>
+            <div style="margin: 10px;overflow: hidden;">
+                <div style="float: right;">
+                    <Page :total="100" :current="1" @on-change="changePage"></Page>
+                </div>
+            </div>
         </Card>
     </div>
 </template>
@@ -10,8 +14,9 @@
 <script>
 import Tables from '~components/tables';
 import { mapGetters, mapActions } from 'vuex';
-const fetchInitialData = async (store) => {
-        await store.dispatch('global/tag/getTagList');
+const fetchInitialData = async (store, config = { page: 1 }) => {
+    const base = { ...config, limit: 10 };
+    await store.dispatch('global/tag/getTagList', base);
 };
 export default {
     name: 'backend-tag-manage',
@@ -20,6 +25,7 @@ export default {
     },
     data () {
         return {
+            loading: false,
             columns: [
                 {title: '标签名称', key: 'tag_name'},
                 {title: '标签数量', key: 'tag_num'},
@@ -133,10 +139,9 @@ export default {
         go(index) {
             this.$router.push({ name: 'tag_modify', params: { tag_name: this.tableData[index].tag_name }});
         },
-        exportExcel () {
-            this.$refs.tables.exportCsv({
-                filename: `table-${(new Date()).valueOf()}.csv`
-            });
+        changePage() {
+            console.log('loading');
+            this.loading = true;
         }
     },
     computed: {

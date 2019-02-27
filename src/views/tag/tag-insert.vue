@@ -76,8 +76,13 @@
                     if(valid) {
                         let demoFoom = name === 'formTag' ? this.formTag : this.formClassify;
                         this.handleInsertTag(demoFoom).then(res => {
-                            this.formClassify.tag_name = '';
-                            this.formClassify.tag_desc = '';
+                            if(name === 'formTag') {
+                                this.formTag.tag_name = '';
+                                this.formTag.tag_desc = '';
+                            } else {
+                                this.formClassify.tag_name = '';
+                                this.formClassify.tag_desc = '';
+                            }
                             this.$Message.success('新增标签成功！');
                         }, reject => {
                             this.$Message.error('新增标签失败！');
@@ -95,9 +100,7 @@
             if (this.tagClassifyList.length <= 0) {
                 fetchInitialData(this.$store);
             } else {
-                this.tag_classify_list = this.tagClassifyList;
-                console.log(this.tag_classify_list);
-            
+                this.tag_classify_list = this.tagClassifyList;           
             }
         },
         beforeRouteEnter(to, from, next) {

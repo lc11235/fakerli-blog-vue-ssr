@@ -15,14 +15,11 @@
                         <Input v-model="formArticle.title" placeholder="请输入文章标题"></Input>
                     </FormItem>
                     <FormItem label="文章标签">
-                        <AutoComplete
-                            v-model="value4"
-                            placeholder="input here">
-                            <div class="demo-auto-complete-item">
-                                <Tag v-for="item in tagAll" :key="item.title" checkable color="success">{{ item.title }}</Tag>
-                            </div>
-                            <div class="demo-auto-complete-content"></div>
-                        </AutoComplete>
+                        <Select v-model="tagList" multiple @on-change="addTagList">
+                            <OptionGroup v-for="item1 in tagClassifyAll" :label="item1.tag_name" :value="item1.tag_name" :key="item1.tag_name">
+                                <Option v-for="item2 in tagAll.filter(word => word.tag_classify === item1.tag_name)" :value="item2.tag_name" :key="item2.tag_name">{{ item2.tag_name }}</Option>
+                            </OptionGroup>
+                        </Select>
                     </FormItem>
                 </Form>
             </Modal>
@@ -94,6 +91,7 @@
     import { mapGetters } from 'vuex';
     const fetchInitIalData = async (store) => {
         await store.dispatch('global/tag/getTagList');
+        await store.dispatch('global/tag/getClassifyList');
     };
 
     export default {
@@ -102,7 +100,6 @@
             return {
                 formArticle: {
                     title: '',
-                    tag: '',
                     tagString: '',
                     content: '',
                     html: '',
@@ -119,77 +116,21 @@
                         'the-matrix', 'tomorrow-night-eighties', 'twilight', 'vibrant-ink', 'xq-dark', 'xq-light'],
                     previewTheme: ['default', 'dark'],
                 },
-                tagList: ['es6', 'vue', 'webpack'],
+                tagList: [],
                 file: null,
                 opacity: true,
                 modalWriteOrUpload: false,
                 modalTheme: false,
                 modalUpload: false,
                 value4: '',
-                tagAll: [
-                    {
-                        title: '前端',
-                        children: [
-                            {
-                                title: 'es6',
-                                count: 10000,
-
-                            },
-                            {
-                                title: 'vue',
-                                count: 10600,
-
-                            },
-                            {
-                                title: 'webpack',
-                                count: 100
-                            }
-                        ]
-                    },
-                    {
-                        title: '后端',
-                        children: [
-                            {
-                                title: 'es6',
-                                count: 10000,
-
-                            },
-                            {
-                                title: 'vue',
-                                count: 10600,
-
-                            },
-                            {
-                                title: 'webpack',
-                                count: 100
-                            }
-                        ]
-                    },
-                    {
-                        title: '艺术',
-                        children: [
-                            {
-                                title: 'es6',
-                                count: 10000,
-
-                            },
-                            {
-                                title: 'vue',
-                                count: 10600,
-
-                            },
-                            {
-                                title: 'webpack',
-                                count: 100
-                            }
-                        ]
-                    }
-                ]
+                tagAll: [],
+                tagClassifyAll: []
             };
         },
         computed: {
             ...mapGetters({
-                tags: 'global/tag/getTagList'
+                tags: 'global/tag/getTagList',
+                tagClassifys: 'global/tag/getClassifyList',
             })
         },
         methods: {
@@ -204,7 +145,7 @@
                     this.$Message.error('请填写文章标题');
                     return;
                 }
-                if (!!this.formArticle.tagString) {
+                if (!this.formArticle.tagString) {
                     this.$Message.error('请选择文章标签');
                     return;
                 }
@@ -219,14 +160,11 @@
                 if (code === 200) {
                     this.$Message.success(message);
                     this.$store.commit('backend/article/insertArticleItem', data);
-                    this.$router.push('/backend/article/list');
+                    this.$router.push('/backend/article/article_manage');
                 }
             },
             addTagList() {
-                if (!this.tagList.includes(this.formArticle.tag)) {
-                    this.tagList.push(this.formArticle.tag);
-                    this.formArticle.tagString = this.tagList.join('|');
-                }
+                this.formArticle.tagString = this.tagList.join('|');
             },
             themeChange(themeTitle, source) {
                 if (source === 'theme') {
@@ -318,6 +256,13 @@
             });
             if (this.tags.length <= 0) {
                 fetchInitIalData(this.$store);
+            } else {
+                this.tagAll = this.tags;
+            }
+            if (this.tagClassifys.length <= 0) {
+                fetchInitIalData(this.$store);
+            } else {
+                this.tagClassifyAll = this.tagClassifys;
             }
             // eslint-disable-next-line
             window.postEditor = editormd('post-content', {
@@ -348,6 +293,14 @@
                 htmlDecode: 'style, script, iframe',
                 emoji: true
             });
+        },
+        watch: {
+            tags(val) {
+                this.tagAll = val;
+            },
+            tagClassifys(val) {
+                this.tagClassifyAll = val;
+            }
         }
     };
 </script>
