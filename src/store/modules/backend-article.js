@@ -30,9 +30,7 @@ const closePage = (state, route) => {
 const state = {
     lists: {
         data: [],
-        path: '',
-        hasNext: 0,
-        hasPrev: 0,
+        total: 0,
         page: 1
     },
     item: {
@@ -59,16 +57,10 @@ const getters = {
 };
 
 const mutations = {
-    'receiveArticleList'(states, { list, path, hasNext, hasPrev, page }) {
-        let tempList;
-        if (page === 1) {
-            tempList = [].concat(list);
-        } else {
-            tempList = states.lists.data.concat(list);
-        }
-        states.lists = {
-            data: tempList, path, hasNext, hasPrev, page
-        };
+    'receiveArticleList'(states, payload) {
+        states.lists.data = [].concat(payload.list);
+        states.lists.total = payload.total;
+        states.lists.page = payload.page;
     },
     'receiveArticleItem'(states, { data, path }) {
         states.item = {
@@ -167,11 +159,7 @@ const actions = {
         // }
         const { data: { data, code }} = await api.get('backend/article/list', config);
         if (data && code === 200) {
-            commit('receiveArticleList', {
-                ...data,
-                fullPath,
-                page: config.page
-            });
+            commit('receiveArticleList', data);
         }
     },
     async 'getArticleItem'({ commit, rootState: { global, route: { path, params: { title }}}}) {

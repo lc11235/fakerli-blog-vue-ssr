@@ -21,14 +21,13 @@ exports.list = (req, res, mongoDB, sort) => {
         mongoDB.countDocuments()
     ]).then(result => {
         let total = result[1];
-        let totalPage = Math.ceil(total / limit);
+        // let totalPage = Math.ceil(total / limit);
         let json = {
             code: 200,
             data: {
                 list: result[0],
                 total,
-                hasNext: totalPage > page ? 1 : 0,
-                hasPrev: page > 1 ? 1 : 0
+                page: page
             }
         };
         res.json(json);

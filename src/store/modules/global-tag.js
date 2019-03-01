@@ -10,17 +10,20 @@ import {
 } from '@/api/tag';
 
 const state = {
-    lists: [],
-    item: {},
+    tagLists: {
+        data: [],
+        total: 0,
+        page: 1
+    },
+    tagItem: {},
     classifyLists: []
 };
 
 const mutations = {
     'receiveTagList'(states, payload) {
-        states.lists = payload;
-    },
-    'insertTagList'(states, data) {
-        states.lists.push(data);
+        states.tagLists.data = [].concat(payload.list);
+        states.tagLists.total = payload.total;
+        states.tagLists.page = payload.page;
     },
     'receiveTagItem'(states, data) {
         states.item = data;
@@ -38,22 +41,22 @@ const mutations = {
         states.classifyLists.push(data);
     },
     'deleteTag'(states, tag_name) {
-        const obj = states.lists.find(ii => ii.tag_name === tag_name);
+        const obj = states.tagLists.data.find(ii => ii.tag_name === tag_name);
         if (obj) obj.is_delete = 1;
     },
     'deleteTagCompletely'(states, tag_name) {
-        const obj = states.lists.findIndex(ii => ii.tag_name === tag_name);
-        if (obj > -1) states.lists.splice(obj, 1);
+        const obj = states.tagLists.data.findIndex(ii => ii.tag_name === tag_name);
+        if (obj > -1) states.tagLists.data.splice(obj, 1);
     },
     'recoverTag'(states, tag_name) {
-        const obj = states.lists.find(ii => ii.tag_name === tag_name);
+        const obj = states.tagLists.data.find(ii => ii.tag_name === tag_name);
         if (obj) obj.is_delete = 0;
     }
 };
 
 const getters = {
     'getTagList'(states) {
-        return states.lists;
+        return states.tagLists;
     },
     'getTagItem'(states) {
         return states.item;
@@ -70,7 +73,7 @@ const actions = {
             getTagList(config).then(res => {
                 const data = res.data;
                 if (data && data.code === 200) {
-                    commit('receiveTagList', data.data.list);
+                    commit('receiveTagList', data.data);
                     resolve();
                 } else {
                     reject(data.message);
@@ -114,7 +117,6 @@ const actions = {
                     commit('insertTagItem', {
                         ...data.data
                     });
-                    commit('insertTagList', data.data);
                     if (tag_classify === 'classify') {
                         commit('insertClassifyList', data.data);
                     }

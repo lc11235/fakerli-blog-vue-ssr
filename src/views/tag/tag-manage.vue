@@ -4,7 +4,7 @@
             <tables ref="tables" editable searchable search-place="top" :loading="loading" v-model="tableData" :columns="columns" @on-delete-completely="deleteCompletely"/>
             <div style="margin: 10px;overflow: hidden;">
                 <div style="float: right;">
-                    <Page :total="100" :current="1" @on-change="changePage"></Page>
+                    <Page :total="total" :current="current" @on-change="changePage"></Page>
                 </div>
             </div>
         </Card>
@@ -26,6 +26,8 @@ export default {
     data () {
         return {
             loading: false,
+            total: 0,
+            current: 1,
             columns: [
                 {title: '标签名称', key: 'tag_name'},
                 {title: '标签数量', key: 'tag_num'},
@@ -139,21 +141,23 @@ export default {
         go(index) {
             this.$router.push({ name: 'tag_modify', params: { tag_name: this.tableData[index].tag_name }});
         },
-        changePage() {
-            console.log('loading');
+        changePage(page) {
             this.loading = true;
+            this.current = page;
+            fetchInitialData(this.$store, { page: page});
         }
     },
     computed: {
         ...mapGetters({
-            tags: 'global/tag/getTagList'
+            tags: 'global/tag/getTagList',
         })
     },
     mounted() {
-        if (this.tags.length <= 0) {
+        if (this.tags.data.length <= 0) {
             fetchInitialData(this.$store);
         } else {
-            this.tableData = this.tags;
+            this.tableData = this.tags.data;
+            this.total = this.tags.total;
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -164,8 +168,12 @@ export default {
         });
     },
     watch: {
-        tags(val) {
+        'tags.data'(val) {
             this.tableData = val;
+            this.loading = false;
+        },
+        'tags.total'(val) {
+            this.total = val;
         }
     } 
 }
