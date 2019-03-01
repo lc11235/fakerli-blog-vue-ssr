@@ -6,6 +6,7 @@
       </Select>
       <Input @on-change="handleClear" clearable placeholder="输入关键字搜索" class="search-input" v-model="searchValue"/>
       <Button @click="handleSearch" class="search-btn" type="primary"><Icon type="search"/>&nbsp;&nbsp;搜索</Button>
+      <Button style="margin: 10px 0;" type="primary" @click="exportCsv">导出为Csv文件</Button>
     </div>
     <Table
       ref="tablesMain"
@@ -221,8 +222,10 @@ export default {
         return res
       })
     },
-    exportCsv (params) {
-      this.$refs.tablesMain.exportCsv(params)
+    exportCsv () {
+      this.$refs.tablesMain.exportCsv({
+          filename: `table-${(new Date()).valueOf()}.csv`
+      })
     },
     clearCurrentRow () {
       this.$refs.talbesMain.clearCurrentRow()

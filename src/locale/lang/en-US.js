@@ -16,7 +16,6 @@ export default {
     tag: 'Tag',
     tag_manage: 'Tag Manage',
     tag_insert: 'Tag Insert',
-    tag_modify: 'Tag Modify',
     user: 'User',
     user_manage: 'User Manage',
     user_insert: 'User Add',

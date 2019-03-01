@@ -113,7 +113,7 @@ export default [
                     title: '标签管理',
                     icon: 'md-pricetag'
                 },
-                component: () => import('@/views/article/article-manage.vue')
+                component: () => import('@/views/tag/tag-manage.vue')
             },
             {
                 path: 'tag_insert',
@@ -123,14 +123,6 @@ export default [
                     icon: 'md-pricetag'
                 },
                 component: () => import('@/views/tag/tag-insert.vue')
-            },
-            {
-                path: 'tag_modify',
-                name: 'tag_modify',
-                meta: {
-                    title: '标签修正',
-                    icon: 'md-pricetag'
-                }
             }
         ]
     },
