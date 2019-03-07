@@ -235,7 +235,7 @@ export default {
     watch: {
         'articles.data'(val) {
             this.tableData = val;
-            this.loading = true;
+            this.loading = false;
         },
         'articles.total'(val) {
             this.total = val;

@@ -1,12 +1,11 @@
-import api from '~api';
-
 import {
     getTagList,
-    postTagInsert,
     getTagClassifyList,
-    getRecoverTag,
-    getDeleteTag,
-    getDeleteCompletelyTag
+    insertTagSingle,
+    getTagSingle,
+    deleteTagSingle,
+    recoverTagSingle,
+    deleteCompletelyTagSingle
 } from '@/api/tag';
 
 const state = {
@@ -83,11 +82,20 @@ const actions = {
             });
         });
     },
-    async getTagItem({ commit, rootState: { route: { params: { tag_name }}}}) {
-        const { data: { data, code }} = await api.get('backend/tag/item', { tag_name });
-        if (data && code === 200) {
-            commit('receiveTagItem', data);
-        }
+    getTagItem({ commit }, { tagId }) {
+        return new Promise((resolve, reject) => {
+            getTagSingle({ tagId }).then(res => {
+                const data = res.data;
+                if (data && data.code === 200) {
+                    commit('receiveTagItem', data.data);
+                    resolve();
+                } else {
+                    reject(data.message);
+                }
+            }).catch(err => {
+                reject(err);
+            });
+        });
     },
     getClassifyList({ commit }) {
         // if (state.lists.length) return;
@@ -107,7 +115,7 @@ const actions = {
     },
     handleInsertTag({ commit }, { tag_name, tag_desc, tag_classify }) {
         return new Promise((resolve, reject) => {
-            postTagInsert({
+            insertTagSingle({
                 tag_name,
                 tag_desc,
                 tag_classify
@@ -131,7 +139,7 @@ const actions = {
     },
     handleRecoverTag({ commit }, { tag_name }) {
         return new Promise((resolve, reject) => {
-            getRecoverTag({
+            recoverTagSingle({
                 tag_name
             }).then(res => {
                 const data = res.data;
@@ -148,7 +156,7 @@ const actions = {
     },
     handleDeleteTag({ commit }, { tag_name }) {
         return new Promise((resolve, reject) => {
-            getDeleteTag({
+            deleteTagSingle({
                 tag_name
             }).then(res => {
                 const data = res.data;
@@ -165,7 +173,7 @@ const actions = {
     },
     handleDeleteCompletelyTag({ commit }, { tag_name }) {
         return new Promise((resolve, reject) => {
-            getDeleteCompletelyTag({
+            deleteCompletelyTagSingle({
                 tag_name
             }).then(res => {
                 const data = res.data;

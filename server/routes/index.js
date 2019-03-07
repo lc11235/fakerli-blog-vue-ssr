@@ -34,24 +34,48 @@ router.post('/backend/article/modify', isAdmin, multipartMiddleware, backendArti
 router.post('/backend/article/upload', isAdmin, backendArticle.upload);
 
 // ------- 标签 -------
-// 管理时, 获取标签列表
-router.get('/backend/tag/list', backendTag.getList);
-// 管理时, 获取单个标签
-router.get('/backend/tag/item', backendTag.getItem);
-// 管理时, 获取标签列表
-router.get('/backend/tag/classifyList', backendTag.getClassifyList);
-// 管理时, 获取单个标签
-router.get('/backend/tag/classifyItem', backendTag.getClassifyItem);
-// 管理时, 添加标签
-router.post('/backend/tag/insert', multipartMiddleware, isAdmin, backendTag.insert);
-// 管理时, 删除标签
-router.get('/backend/tag/delete', isAdmin, backendTag.deletes);
-// 管理时，彻底删除标签
-router.get('/backend/tag/deleteCompletely', isAdmin, backendTag.deleteCompletely);
-// 管理时, 恢复标签
-router.get('/backend/tag/recover', isAdmin, backendTag.recover);
-// 管理时, 编辑标签
-router.post('/backend/tag/modify', isAdmin, multipartMiddleware, backendTag.modify);
+// 管理时, 获取普通标签列表
+router.get('/backend/tag/getTagList', isAdmin, backendTag.getTagList);
+
+// 管理时, 插入单个普通标签
+router.post('/backend/tag/insertTagSingle', isAdmin, multipartMiddleware, backendTag.insertTagSingle);
+
+// 管理时, 删除单个普通标签
+router.get('/backend/tag/deleteTagSingle', isAdmin, backendTag.deleteTagSingle);
+
+// 管理时, 修改单个普通标签
+router.post('/backend/tag/modifyTagSingle', isAdmin, multipartMiddleware, backendTag.modifyTagSingle);
+
+// 管理时, 查询单个普通标签
+router.get('/backend/tag/getTagSingle', isAdmin, backendTag.getTagSingle);
+
+// 管理时, 恢复单个普通标签
+router.get('/backend/tag/recoverTagSingle', isAdmin, backendTag.recover);
+
+// 管理时，彻底删除单个普通标签
+router.get('/backend/tag/deleteTagCompletelySingle', isAdmin, backendTag.deleteTagCompletelySingle);
+
+// -----------------------------------------
+// 管理时, 获取特征标签列表
+router.get('/backend/tag/getTagClassifyList', isAdmin, backendTag.getClassifyList);
+
+// 管理时, 插入单个特征标签
+router.post('/backend/tag/insertClassifyTagSingle', isAdmin, multipartMiddleware, backendTag.insertClassifyTagSingle);
+
+// 管理时, 删除单个特征标签
+router.get('/backend/tag/deleteClassifyTagSingle', isAdmin, backendTag.deleteClassifyTagSingle);
+
+// 管理时, 修改单个特征标签
+router.post('/backend/tag/modifyClassifyTagSingle', isAdmin, multipartMiddleware, backendTag.modifyClassifyTagSingle);
+
+// 管理时, 查询单个特征标签
+router.get('/backend/tag/getClassifyTagSingle', isAdmin, backendTag.getClassifyTagSingle);
+
+// 管理时, 恢复单个特征标签
+router.get('/backend/tag/recoverClassifyTagSingle', isAdmin, backendTag.recoverClassifyTagSingle);
+
+// 管理时，彻底删除单个特征标签
+router.get('/backend/tag/deleteClassifyTagCompletelySingle', isAdmin, backendTag.deleteClassifyTagCompletelySingle);
 
 // ------- 管理 -------
 // 后台注册

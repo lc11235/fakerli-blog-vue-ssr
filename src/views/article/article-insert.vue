@@ -254,10 +254,10 @@
                     $('body').stopTime('A');
                 }
             });
-            if (this.tags.length <= 0) {
+            if (this.tags.data.length <= 0) {
                 fetchInitIalData(this.$store);
             } else {
-                this.tagAll = this.tags;
+                this.tagAll = this.tags.data;
             }
             if (this.tagClassifys.length <= 0) {
                 fetchInitIalData(this.$store);
@@ -295,7 +295,7 @@
             });
         },
         watch: {
-            tags(val) {
+            'tags.data'(val) {
                 this.tagAll = val;
             },
             tagClassifys(val) {

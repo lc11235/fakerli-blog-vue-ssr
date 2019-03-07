@@ -1,17 +1,8 @@
 import axios from '@/libs/api.request';
 
-export const postTagInsert = (formData) => {
-    return axios.request({
-        url: 'api/backend/tag/insert',
-        method: 'post',
-        data: formData,
-        source: 'server'
-    });
-};
-
 export const getTagList = (config) => {
     return axios.request({
-        url: 'api/backend/tag/list',
+        url: 'api/backend/tag/getTagList',
         method: 'get',
         params: config,
         source: 'server'
@@ -20,39 +11,59 @@ export const getTagList = (config) => {
 
 export const getTagClassifyList = () => {
     return axios.request({
-        url: 'api/backend/tag/classifyList',
+        url: 'api/backend/tag/getTagClassifyList',
         method: 'get',
         source: 'server'
     });
 };
 
-export const getRecoverTag = ({ tag_name }) => {
+export const insertTagSingle = (formData) => {
     return axios.request({
-        url: 'api/backend/tag/recover',
+        url: 'api/backend/tag/insertTagSingle',
+        method: 'post',
+        data: formData,
+        source: 'server'
+    });
+};
+
+export const deleteTagSingle = ({ tagId }) => {
+    return axios.request({
+        url: 'api/backend/tag/deleteTagSingle',
         params: {
-            tag_name
+            tagId
         },
         method: 'get',
         source: 'server'
     });
 };
 
-export const getDeleteTag = ({ tag_name }) => {
+export const getTagSingle = ({ tagId }) => {
     return axios.request({
-        url: 'api/backend/tag/delete',
+        url: 'api/backend/tag/getTagSingle',
         params: {
-            tag_name
+            tagId
         },
         method: 'get',
         source: 'server'
     });
 };
 
-export const getDeleteCompletelyTag = ({ tag_name }) => {
+export const recoverTagSingle = ({ tagId }) => {
     return axios.request({
-        url: 'api/backend/tag/deleteCompletely',
+        url: 'api/backend/tag/recoverTagSingle',
         params: {
-            tag_name
+            tagId
+        },
+        method: 'get',
+        source: 'server'
+    });
+};
+
+export const deleteCompletelyTagSingle = ({ tagId }) => {
+    return axios.request({
+        url: 'api/backend/tag/deleteTagCompletelySingle',
+        params: {
+            tagId
         },
         method: 'get',
         source: 'server'

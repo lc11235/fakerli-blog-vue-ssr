@@ -9,7 +9,7 @@
                 <i class="icon icon-arrow-down"></i>
                 <select v-model="form.tag" class="select-item" name="tags">
                     <option value="">请选择标签</option>
-                    <option v-for="tag in tags" :value="tag.tag_name" :key="tag.tag_name">{{ tag.tag_name }}</option>
+                    <option v-for="tag in tags.data" :value="tag.tag_name" :key="tag.tag_name">{{ tag.tag_name }}</option>
                 </select>
                 <a @click="addTagList" href="javascript:;" class="btn btn-yellow">添加标签</a>
                 <span class="input-info error">请输入标签</span>
@@ -107,7 +107,7 @@
                     $('body').stopTime('A');
                 }
             });
-            if (this.tags.length <= 0 || !this.item.data) {
+            if (this.tags.data.length <= 0 || !this.item.data) {
                 fetchInitialData(this.$store);
             } else {
                 this.tagList = this.item.data.tags;

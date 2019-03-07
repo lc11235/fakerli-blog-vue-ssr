@@ -3,9 +3,9 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const VueSSRServerPlugin = require('vue-server-renderer/server-plugin');
 const nodeExternals = require('webpack-node-externals');
-const SpeedMeasurePlugin = require('speed-measure-webpack-plugin');
+//const SpeedMeasurePlugin = require('speed-measure-webpack-plugin');
 
-const smp = new SpeedMeasurePlugin();
+//const smp = new SpeedMeasurePlugin();
 
 const base = require('./webpack.base.config');
 
@@ -68,4 +68,4 @@ const config = merge(base, {
     ]
 });
 
-module.exports = smp.wrap(config);
+module.exports = config;

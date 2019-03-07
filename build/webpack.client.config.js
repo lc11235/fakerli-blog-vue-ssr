@@ -9,9 +9,9 @@ const devConfig = require('./webpack.client.dev.config');
 const prodConfig = require('./webpack.client.prod.config');
 const vueConfig = require('./vue-loader.config');
 const projectRoot = path.resolve(__dirname, '../');
-const SpeedMeasurePlugin = require('speed-measure-webpack-plugin');
+//const SpeedMeasurePlugin = require('speed-measure-webpack-plugin');
 
-const smp = new SpeedMeasurePlugin();
+//const smp = new SpeedMeasurePlugin();
 
 let config = merge(baseConfig, {
     entry: {
@@ -45,4 +45,4 @@ if (process.env.NODE_ENV === 'production') {
     config = merge(config, devConfig);
 }
 
-module.exports = smp.wrap(config);
+module.exports = config;
