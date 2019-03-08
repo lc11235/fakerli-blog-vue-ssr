@@ -50,14 +50,14 @@ router.post('/backend/tag/modifyTagSingle', isAdmin, multipartMiddleware, backen
 router.get('/backend/tag/getTagSingle', isAdmin, backendTag.getTagSingle);
 
 // 管理时, 恢复单个普通标签
-router.get('/backend/tag/recoverTagSingle', isAdmin, backendTag.recover);
+router.get('/backend/tag/recoverTagSingle', isAdmin, backendTag.recoverTagSingle);
 
 // 管理时，彻底删除单个普通标签
 router.get('/backend/tag/deleteTagCompletelySingle', isAdmin, backendTag.deleteTagCompletelySingle);
 
 // -----------------------------------------
 // 管理时, 获取特征标签列表
-router.get('/backend/tag/getTagClassifyList', isAdmin, backendTag.getClassifyList);
+router.get('/backend/tag/getClassifyTagList', isAdmin, backendTag.getClassifyTagList);
 
 // 管理时, 插入单个特征标签
 router.post('/backend/tag/insertClassifyTagSingle', isAdmin, multipartMiddleware, backendTag.insertClassifyTagSingle);

@@ -1,11 +1,18 @@
 import {
     getTagList,
-    getTagClassifyList,
     insertTagSingle,
-    getTagSingle,
     deleteTagSingle,
+    modifyTagSingle,
+    getTagSingle,
     recoverTagSingle,
-    deleteCompletelyTagSingle
+    deleteTagCompletelySingle,
+    getClassifyTagList,
+    insertClassifyTagSingle,
+    deleteClassifyTagSingle,
+    modifyClassifyTagSingle,
+    getClassifyTagSingle,
+    recoverClassifyTagSingle,
+    deleteClassifyTagCompletelySingle
 } from '@/api/tag';
 
 const state = {
@@ -14,65 +21,92 @@ const state = {
         total: 0,
         page: 1
     },
-    tagItem: {},
-    classifyLists: []
+    tagSingle: {},
+    classifyTagLists: {
+        data: [],
+        total: 0,
+        page: 1
+    },
+    classifyTagSingle: {}
 };
 
 const mutations = {
-    'receiveTagList'(states, payload) {
+    'getTagList'(states, payload) {
         states.tagLists.data = [].concat(payload.list);
         states.tagLists.total = payload.total;
         states.tagLists.page = payload.page;
     },
-    'receiveTagItem'(states, data) {
-        states.item = data;
+    'insertTagSingle'(states, data) {
+        states.tagSingle = data;
     },
-    'insertTagItem'(states, data) {
-        states.item = data;
-    },
-    'updateTagItem'(states, data) {
-        states.item = data;
-    },
-    'receiveClassifyList'(states, payload) {
-        states.classifyLists = payload;
-    },
-    'insertClassifyList'(states, data) {
-        states.classifyLists.push(data);
-    },
-    'deleteTag'(states, tag_name) {
-        const obj = states.tagLists.data.find(ii => ii.tag_name === tag_name);
+    'deleteTagSingle'(states, tagId) {
+        const obj = states.tagLists.data.find(ii => ii._id === tagId);
         if (obj) obj.is_delete = 1;
     },
-    'deleteTagCompletely'(states, tag_name) {
-        const obj = states.tagLists.data.findIndex(ii => ii.tag_name === tag_name);
-        if (obj > -1) states.tagLists.data.splice(obj, 1);
+    'modifyTagSingle'(states, data) {
+        states.tagSingle = data;
     },
-    'recoverTag'(states, tag_name) {
-        const obj = states.tagLists.data.find(ii => ii.tag_name === tag_name);
+    'getTagSingle'(states, data) {
+        states.tagSingle = data;
+    },
+    'recoverTagSingle'(states, tagId) {
+        const obj = states.tagLists.data.find(ii => ii._id === tagId);
         if (obj) obj.is_delete = 0;
-    }
+    },
+    'deleteTagCompletelySingle'(states, tagId) {
+        const obj = states.tagLists.data.findIndex(ii => ii._id === tagId);
+        if (obj) states.tagLists.data.splice(obj, 1);
+    },
+    'getClassifyTagList'(states, payload) {
+        states.classifyTagLists.data = [].concat(payload.list);
+        states.classifyTagLists.total = payload.total;
+        states.classifyTagLists.page = payload.page;
+    },
+    'insertClassifyTagSingle'(states, data) {
+        states.classifyTagSingle = data;
+    },
+    'deleteClassifyTagSingle'(states, tagId) {
+        const obj = states.classifyTagLists.data.find(ii => ii._id === tagId);
+        if (obj) obj.is_delete = 1;
+    },
+    'modifyClassifyTagSingle'(states, data) {
+        states.classifyTagSingle = data;
+    },
+    'getClassifyTagSingle'(states, data) {
+        states.classifyTagSingle = data;
+    },
+    'recoverClassifyTagSingle'(states, tagId) {
+        const obj = states.classifyTagLists.data.find(ii => ii._id === tagId);
+        if (obj) obj.is_delete = 0;
+    },
+    'deleteClassifyTagCompletelySingle'(states, tagId) {
+        const obj = states.classifyTagLists.data.findIndex(ii => ii._id === tagId);
+        if (obj) states.classifyTagLists.data.splice(obj, 1);
+    },
 };
 
 const getters = {
     'getTagList'(states) {
         return states.tagLists;
     },
-    'getTagItem'(states) {
-        return states.item;
+    'getTagSingle'(states) {
+        return states.tagSingle;
     },
-    'getClassifyList'(states) {
-        return states.classifyLists;
+    'getClassifyTagList'(states) {
+        return states.classifyTagLists;
+    },
+    'getClassifyTagSingle'(states) {
+        return states.classifyTagSingle;
     }
 };
 
 const actions = {
-    getTagList({ commit }, config) {
-        // if (state.lists.length) return;
+    handleGetTagList({ commit }, config) {
         return new Promise((resolve, reject) => {
             getTagList(config).then(res => {
                 const data = res.data;
                 if (data && data.code === 200) {
-                    commit('receiveTagList', data.data);
+                    commit('getTagList', data.data);
                     resolve();
                 } else {
                     reject(data.message);
@@ -82,12 +116,70 @@ const actions = {
             });
         });
     },
-    getTagItem({ commit }, { tagId }) {
+    handleInsertTagSingle({ commit }, { tagName, tagDesc, tagClassify }) {
+        return new Promise((resolve, reject) => {
+            insertTagSingle({
+                tagName,
+                tagDesc,
+                tagClassify
+            }).then(res => {
+                const data = res.data;
+                if (data && data.code === 200) {
+                    commit('insertTagSingle', {
+                        ...data.data
+                    });
+                    resolve();
+                } else {
+                    reject(data.message);
+                }
+            }).catch(err => {
+                reject(err);
+            });
+        });
+    },
+    handleDeleteTagSingle({ commit }, { tagId }) {
+        return new Promise((resolve, reject) => {
+            deleteTagSingle({
+                tagId
+            }).then(res => {
+                const data = res.data;
+                if (data && data.code === 200) {
+                    commit('deleteTagSingle', data.data);
+                    resolve(data.message);
+                } else {
+                    reject(data.message);
+                }
+            }).catch(err => {
+                reject(err);
+            });
+        });
+    },
+    handleModifyTagSingle({ commit }, { tagId, tagName, tagDesc, tagClassify }) {
+        return new Promise((resolve, reject) => {
+            modifyTagSingle({
+                tagId,
+                tagName,
+                tagDesc,
+                tagClassify
+            }).then(res => {
+                const data = res.data;
+                if (data && data.code === 200) {
+                    commit('modifyTagSingle', data.data);
+                    resolve(data.message);
+                } else {
+                    reject(data.message);
+                }
+            }).catch(err => {
+                reject(err);
+            });
+        });
+    },
+    handleGetTagSingle({ commit }, { tagId }) {
         return new Promise((resolve, reject) => {
             getTagSingle({ tagId }).then(res => {
                 const data = res.data;
                 if (data && data.code === 200) {
-                    commit('receiveTagItem', data.data);
+                    commit('getTagSingle', data.data);
                     resolve();
                 } else {
                     reject(data.message);
@@ -97,54 +189,14 @@ const actions = {
             });
         });
     },
-    getClassifyList({ commit }) {
-        // if (state.lists.length) return;
-        return new Promise((resolve, reject) => {
-            getTagClassifyList().then(res => {
-                const data = res.data;
-                if (data && data.code === 200) {
-                    commit('receiveClassifyList', data.data.list);
-                    resolve();
-                } else {
-                    reject(data.message);
-                }
-            }).catch(err => {
-                reject(err);
-            });
-        });
-    },
-    handleInsertTag({ commit }, { tag_name, tag_desc, tag_classify }) {
-        return new Promise((resolve, reject) => {
-            insertTagSingle({
-                tag_name,
-                tag_desc,
-                tag_classify
-            }).then(res => {
-                const data = res.data;
-                if (data && data.code === 200) {
-                    commit('insertTagItem', {
-                        ...data.data
-                    });
-                    if (tag_classify === 'classify') {
-                        commit('insertClassifyList', data.data);
-                    }
-                    resolve();
-                } else {
-                    reject(data.message);
-                }
-            }).catch(err => {
-                reject(err);
-            });
-        });
-    },
-    handleRecoverTag({ commit }, { tag_name }) {
+    handleRecoverTagSingle({ commit }, { tagId }) {
         return new Promise((resolve, reject) => {
             recoverTagSingle({
-                tag_name
+                tagId
             }).then(res => {
                 const data = res.data;
                 if (data && data.code === 200) {
-                    commit('recoverTag', data.data);
+                    commit('recoverTagSingle', data.data);
                     resolve(data.message);
                 } else {
                     reject(data.message);
@@ -154,14 +206,14 @@ const actions = {
             });
         });
     },
-    handleDeleteTag({ commit }, { tag_name }) {
+    handleDeleteTagCompletelySingle({ commit }, { tagId }) {
         return new Promise((resolve, reject) => {
-            deleteTagSingle({
-                tag_name
+            deleteTagCompletelySingle({
+                tagId
             }).then(res => {
                 const data = res.data;
                 if (data && data.code === 200) {
-                    commit('deleteTag', data.data);
+                    commit('deleteTagCompletelySingle', data.data);
                     resolve(data.message);
                 } else {
                     reject(data.message);
@@ -171,14 +223,50 @@ const actions = {
             });
         });
     },
-    handleDeleteCompletelyTag({ commit }, { tag_name }) {
+    handleGetClassifyTagList({ commit }, config) {
         return new Promise((resolve, reject) => {
-            deleteCompletelyTagSingle({
-                tag_name
+            getClassifyTagList(config).then(res => {
+                const data = res.data;
+                if (data && data.code === 200) {
+                    commit('getClassifyTagList', data.data);
+                    resolve();
+                } else {
+                    reject(data.message);
+                }
+            }).catch(err => {
+                reject(err);
+            });
+        });
+    },
+    handleInsertClassifyTagSingle({ commit }, { tagName, tagDesc, tagClassify }) {
+        return new Promise((resolve, reject) => {
+            insertClassifyTagSingle({
+                tagName,
+                tagDesc,
+                tagClassify
             }).then(res => {
                 const data = res.data;
                 if (data && data.code === 200) {
-                    commit('deleteTagCompletely', data.data);
+                    commit('insertClassifyTagSingle', {
+                        ...data.data
+                    });
+                    resolve();
+                } else {
+                    reject(data.message);
+                }
+            }).catch(err => {
+                reject(err);
+            });
+        });
+    },
+    handleDeleteClassifyTagSingle({ commit }, { tagId }) {
+        return new Promise((resolve, reject) => {
+            deleteClassifyTagSingle({
+                tagId
+            }).then(res => {
+                const data = res.data;
+                if (data && data.code === 200) {
+                    commit('deleteClassifyTagSingle', data.data);
                     resolve(data.message);
                 } else {
                     reject(data.message);
@@ -187,7 +275,76 @@ const actions = {
                 reject(err);
             });
         });
-    }
+    },
+    handleModifyClassifyTagSingle({ commit }, { tagId, tagName, tagDesc, tagClassify }) {
+        return new Promise((resolve, reject) => {
+            modifyClassifyTagSingle({
+                tagId,
+                tagName,
+                tagDesc,
+                tagClassify
+            }).then(res => {
+                const data = res.data;
+                if (data && data.code === 200) {
+                    commit('modifyClassifyTagSingle', data.data);
+                    resolve(data.message);
+                } else {
+                    reject(data.message);
+                }
+            }).catch(err => {
+                reject(err);
+            });
+        });
+    },
+    handleGetClassifyTagSingle({ commit }, { tagId }) {
+        return new Promise((resolve, reject) => {
+            getClassifyTagSingle({ tagId }).then(res => {
+                const data = res.data;
+                if (data && data.code === 200) {
+                    commit('getClassifyTagSingle', data.data);
+                    resolve();
+                } else {
+                    reject(data.message);
+                }
+            }).catch(err => {
+                reject(err);
+            });
+        });
+    },
+    handleRecoverClassifyTagSingle({ commit }, { tagId }) {
+        return new Promise((resolve, reject) => {
+            recoverClassifyTagSingle({
+                tagId
+            }).then(res => {
+                const data = res.data;
+                if (data && data.code === 200) {
+                    commit('recoverClassifyTagSingle', data.data);
+                    resolve(data.message);
+                } else {
+                    reject(data.message);
+                }
+            }).catch(err => {
+                reject(err);
+            });
+        });
+    },
+    handleDeleteClassifyTagCompletelySingle({ commit }, { tagId }) {
+        return new Promise((resolve, reject) => {
+            deleteClassifyTagCompletelySingle({
+                tagId
+            }).then(res => {
+                const data = res.data;
+                if (data && data.code === 200) {
+                    commit('deleteClassifyTagCompletelySingle', data.data);
+                    resolve(data.message);
+                } else {
+                    reject(data.message);
+                }
+            }).catch(err => {
+                reject(err);
+            });
+        });
+    },
 };
 
 export default {

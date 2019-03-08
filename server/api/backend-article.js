@@ -2,9 +2,6 @@ const moment = require('moment');
 const mongoose = require('../mongoose');
 const Article = mongoose.model('Article');
 const Tag = mongoose.model('Tag');
-const general = require('./general');
-
-const list = general.list;
 
 const marked = require('marked');
 const hightlight = require('highlight.js');
@@ -35,22 +32,47 @@ const uploadFile = uploadMulter.single('file');
 /**
  * 管理时，获取文章列表
  * @method
- * @param  {[Object]} req [请求]
- * @param  {[Object]} res [返回]
- * @return {[type]}     [description]
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
  */
-exports.getList = (req, res) => {
-    list(req, res, Article, '-update_date');
+exports.getArticleList = (req, res) => {
+    let sortlist = '-update_date';
+    let limit = req.body.limit || req.query.limit;
+    let page = req.body.page || req.query.page;
+    page = parseInt(page, 10);
+    limit = parseInt(limit, 10);
+    if (!page) page = 1;
+    if (!limit) limit = 10;
+    let skip = (page - 1) * limit;
+    Promise.all([
+        Article.find().sort(sortlist).skip(skip).limit(limit).exec(),
+        Article.countDocuments()
+    ]).then(result => {
+        let total = result[1];
+        let json = {
+            code: 200,
+            data: {
+                list: result[0],
+                total,
+                page: page
+            }
+        };
+        res.json(json);
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
 };
 
 /**
  * 管理时，获取单篇文章
  * @method
- * @param  {[type]} req [description]
- * @param  {[type]} res [description]
- * @return {[type]}     [description]
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
  */
-exports.getItem = (req, res) => {
+exports.getArticleSingle = (req, res) => {
     let title = req.query.title;
     if (!title) {
         res.json({
@@ -74,11 +96,10 @@ exports.getItem = (req, res) => {
 /**
  * 发布文章
  * @method
- * @param  {[type]} req [description]
- * @param  {[type]} res [description]
- * @return {[type]}     [description]
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
  */
-exports.insert = (req, res) => {
+exports.insertArticleSingle = (req, res) => {
     let tagString = req.body.tagString;
     let content = req.body.content;
     // html = marked(content)
@@ -127,11 +148,10 @@ exports.insert = (req, res) => {
 /**
  * 管理时，标记删除文章，文章在数据库中只是标记删除，未消失
  * @method
- * @param  {[type]} req [description]
- * @param  {[type]} res [description]
- * @return {[type]}     [description]
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
  */
-exports.deletes = (req, res) => {
+exports.deleteArticleSingle = (req, res) => {
     let title = req.query.title;
     let tagList = req.query.tagList;
     let arr_tag = tagList.split('|');
@@ -154,11 +174,10 @@ exports.deletes = (req, res) => {
 /**
  * 管理时，完全删除文章，即从数据库中删除
  * @method
- * @param  {[type]} req [description]
- * @param  {[type]} res [description]
- * @return {[type]}     [description]
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
  */
-exports.deleteCompletely = (req, res) => {
+exports.deleteCompletelyArticleSingle = (req, res) => {
     let title = req.query.title;
     let tagList = req.query.tagList;
     let arr_tag = tagList.split('|');
@@ -181,11 +200,10 @@ exports.deleteCompletely = (req, res) => {
 /**
  * 管理时，恢复文章，这是文章被标记删除的时候才能提供的功能
  * @method
- * @param  {[type]} req [description]
- * @param  {[type]} res [description]
- * @return {[type]}     [description]
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
  */
-exports.recover = (req, res) => {
+exports.recoverArticleSingle = (req, res) => {
     let title = req.query.title;
     let tagList = req.query.tagList;
     let arr_tag = tagList.split('|');
@@ -216,11 +234,10 @@ exports.recover = (req, res) => {
 /**
  * 管理时，编辑文章
  * @method
- * @param  {[type]} req [description]
- * @param  {[type]} res [description]
- * @return {[type]}     [description]
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
  */
-exports.modify = (req, res) => {
+exports.modifyArticleSingle = (req, res) => {
     let tagList_new = req.body.tagList_new;
     let tagList_old = req.body.tagList_old;
     let content = req.body.content;
@@ -283,11 +300,10 @@ exports.modify = (req, res) => {
 /**
  * 管理时，上传已经写好的markdown格式的文章
  * @method
- * @param  {[type]} req [description]
- * @param  {[type]} res [description]
- * @return {[type]}     [description]
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
  */
-exports.upload = (req, res) => {
+exports.uploadArticleSingle = (req, res) => {
     uploadFile(req, res, err => {
         if (err) {
             res.json({

@@ -1,18 +1,11 @@
 import axios from '@/libs/api.request';
 
+// ---------------普通标签的请求--------------------
 export const getTagList = (config) => {
     return axios.request({
         url: 'api/backend/tag/getTagList',
         method: 'get',
         params: config,
-        source: 'server'
-    });
-};
-
-export const getTagClassifyList = () => {
-    return axios.request({
-        url: 'api/backend/tag/getTagClassifyList',
-        method: 'get',
         source: 'server'
     });
 };
@@ -33,6 +26,15 @@ export const deleteTagSingle = ({ tagId }) => {
             tagId
         },
         method: 'get',
+        source: 'server'
+    });
+};
+
+export const modifyTagSingle = (formData) => {
+    return axios.request({
+        url: 'api/backend/tag/modifyTagSingle',
+        data: formData,
+        method: 'post',
         source: 'server'
     });
 };
@@ -59,9 +61,81 @@ export const recoverTagSingle = ({ tagId }) => {
     });
 };
 
-export const deleteCompletelyTagSingle = ({ tagId }) => {
+export const deleteTagCompletelySingle = ({ tagId }) => {
     return axios.request({
         url: 'api/backend/tag/deleteTagCompletelySingle',
+        params: {
+            tagId
+        },
+        method: 'get',
+        source: 'server'
+    });
+};
+
+// ---------------特征标签的请求--------------------
+export const getClassifyTagList = (config) => {
+    return axios.request({
+        url: 'api/backend/tag/getClassifyTagList',
+        params: config,
+        method: 'get',
+        source: 'server'
+    });
+};
+
+export const insertClassifyTagSingle = (formdata) => {
+    return axios.request({
+        url: 'api/backend/tag/insertClassifyTagSingle',
+        data: formdata,
+        method: 'post',
+        source: 'server'
+    });
+};
+
+export const deleteClassifyTagSingle = ({ tagId }) => {
+    return axios.request({
+        url: 'api/backend/tag/deleteClassifyTagSingle',
+        params: {
+            tagId
+        },
+        method: 'get',
+        source: 'server'
+    });
+};
+
+export const modifyClassifyTagSingle = (formdata) => {
+    return axios.request({
+        url: 'api/backend/tag/modifyClassifyTagSingle',
+        data: formdata,
+        method: 'post',
+        source: 'server'
+    });
+};
+
+export const getClassifyTagSingle = ({ tagId }) => {
+    return axios.request({
+        url: 'api/backend/tag/getClassifyTagSingle',
+        params: {
+            tagId
+        },
+        method: 'get',
+        source: 'server'
+    });
+};
+
+export const recoverClassifyTagSingle = ({ tagId }) => {
+    return axios.request({
+        url: 'api/backend/tag/recoverClassifyTagSingle',
+        params: {
+            tagId
+        },
+        method: 'get',
+        source: 'server'
+    });
+};
+
+export const deleteClassifyTagCompletelySingle = ({ tagId }) => {
+    return axios.request({
+        url: 'api/backend/tag/deleteClassifyTagCompletelySingle',
         params: {
             tagId
         },

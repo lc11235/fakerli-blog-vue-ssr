@@ -300,7 +300,7 @@ exports.deleteTagCompletelySingle = (req, res) => {
  * @param  {[type]} req [请求体]
  * @param  {[type]} res [返回体]
  */
-exports.getTagClassifyList = (req, res) => {
+exports.getClassifyTagList = (req, res) => {
     let sortlist = '-tag_num';
     let limit = req.body.limit || req.query.limit;
     let page = req.body.page || req.query.page;
@@ -332,16 +332,28 @@ exports.getTagClassifyList = (req, res) => {
  * @param  {[type]} res [返回体]
  */
 exports.insertClassifyTagSingle = (req, res) => {
-    let tag_name = req.body.tag_name;
-    let tag_desc = req.body.tag_desc;
-    let tag_classify = req.body.tag_classify;
-    if (!tag_name) {
+    let tagName = req.body.tagName;
+    let tagDesc = req.body.tagDesc;
+    let tagClassify = req.body.tagClassify;
+    if (!tagName) {
         return res.json({
             code: -200,
             message: '请填写标签名称'
         });
     }
-    Tag.findOne({ tag_name }).then(result => {
+    if (!tagDesc) {
+        return res.json({
+            code: -200,
+            message: '请填写标签名称'
+        });
+    }
+    if (!tagClassify) {
+        return res.json({
+            code: -200,
+            message: '请填写标签名称'
+        });
+    }
+    Tag.findOne({ tag_name: tagName }).then(result => {
         if (result) {
             return res.json({
                 code: -200,
@@ -349,10 +361,10 @@ exports.insertClassifyTagSingle = (req, res) => {
             });
         }
         return Tag.create({
-            tag_name,
+            tag_name: tagName,
             tag_num: 0,
-            tag_desc: tag_desc,
-            tag_classify: tag_classify,
+            tag_desc: tagDesc,
+            tag_classify: tagClassify,
             create_date: moment().format('YYYY-MM-DD HH:mm:ss'),
             update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
             is_delete: 0,
@@ -379,14 +391,20 @@ exports.insertClassifyTagSingle = (req, res) => {
  * @param  {[type]} res [返回体]
  */
 exports.deleteClassifyTagSingle = (req, res) => {
-    let tag_name = req.query.tag_name;
-    Article.find({ tags: tag_name, is_delete: 0 }).then(reason => {
+    let tagId = req.query.tagId;
+    if (!tagId) {
+        return res.json({
+            code: -200,
+            message: '请填写标签名称'
+        });
+    }
+    Article.find({ _id: tagId, is_delete: 0 }).then(reason => {
         if (reason.length === 0) {
-            return Tag.update({ tag_name: tag_name }, { is_delete: 1 }).then(() => {
+            return Tag.update({ _id: tagId }, { is_delete: 1 }).then(() => {
                 res.json({
                     code: 200,
                     message: '失效成功！',
-                    data: tag_name
+                    data: tagId
                 });
             });
         }
@@ -409,12 +427,41 @@ exports.deleteClassifyTagSingle = (req, res) => {
  * @param  {[type]} res [返回体]
  */
 exports.modifyClassifyTagSingle = (req, res) => {
-    let tag_name = req.body.tag_name;
-    let tag_name_old = req.body.tag_name_old;
+    let tagId = req.body.tagId;
+    let tagName = req.body.tagName;
+    let tagDesc = req.body.tagDesc;
+    let tagClassify = req.body.tagClassify;
+    if (!tagId) {
+        return res.json({
+            code: -200,
+            message: '请填写标签名称'
+        });
+    }
+    if (!tagName) {
+        return res.json({
+            code: -200,
+            message: '请填写标签名称'
+        });
+    }
+    if (!tagDesc) {
+        return res.json({
+            code: -200,
+            message: '请填写标签名称'
+        });
+    }
+    if (!tagClassify) {
+        return res.json({
+            code: -200,
+            message: '请填写标签名称'
+        });
+    }
     let data = {
-        tag_name, update_date: moment().format('YYYY-MM-DD HH:mm:ss')
+        tag_name: tagName,
+        tag_desc: tagDesc,
+        tag_classify: tagClassify,
+        update_date: moment().format('YYYY-MM-DD HH:mm:ss')
     };
-    Tag.findOneAndUpdate({ tag_name: tag_name_old }, data, { new: true }).then(result => {
+    Tag.findOneAndUpdate({ _id: tagId }, data, { new: true }).then(result => {
         res.json({
             code: 200,
             message: '更新成功',
@@ -435,8 +482,14 @@ exports.modifyClassifyTagSingle = (req, res) => {
  * @param  {[type]} res [返回体]
  */
 exports.getClassifyTagSingle = (req, res) => {
-    let tag_name = req.query.tag_name;
-    Tag.findOne({ tag_name: tag_name }).then(result => {
+    let tagId = req.query.tagId;
+    if (!tagId) {
+        return res.json({
+            code: -200,
+            message: '请填写标签名称'
+        });
+    }
+    Tag.findOne({ _id: tagId }).then(result => {
         res.json({
             code: 200,
             data: result
@@ -456,12 +509,18 @@ exports.getClassifyTagSingle = (req, res) => {
  * @param  {[type]} res [返回体]
  */
 exports.recoverClassifyTagSingle = (req, res) => {
-    let tag_name = req.query.tag_name;
-    Tag.update({ tag_name: tag_name }, { is_delete: 0 }).then(() => {
+    let tagId = req.query.tagId;
+    if (!tagId) {
+        return res.json({
+            code: -200,
+            message: '请填写标签名称'
+        });
+    }
+    Tag.update({ _id: tagId }, { is_delete: 0 }).then(() => {
         res.json({
             code: 200,
             message: '恢复成功',
-            data: tag_name
+            data: tagId
         });
     }).catch(err => {
         res.json({
@@ -478,14 +537,20 @@ exports.recoverClassifyTagSingle = (req, res) => {
  * @param  {[type]} res [返回体]
  */
 exports.deleteClassifyTagCompletelySingle = (req, res) => {
-    let tag_name = req.query.tag_name;
-    Article.find({ tags: tag_name, is_delete: 0 }).then(reason => {
+    let tagId = req.query.tagId;
+    if (!tagId) {
+        return res.json({
+            code: -200,
+            message: '请填写标签名称'
+        });
+    }
+    Article.find({ _id: tagId, is_delete: 0 }).then(reason => {
         if (reason.length === 0) {
-            return Tag.remove({ tag_name: tag_name }).then(() => {
+            return Tag.remove({ _id: tagId }).then(() => {
                 res.json({
                     code: 200,
                     message: '彻底删除成功！',
-                    data: tag_name
+                    data: tagId
                 });
             });
         }
