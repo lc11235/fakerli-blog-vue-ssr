@@ -89,9 +89,12 @@
     /* global postEditor */
     import api from '~api';
     import { mapGetters } from 'vuex';
-    const fetchInitIalData = async (store) => {
-        await store.dispatch('global/tag/getTagList');
-        await store.dispatch('global/tag/getClassifyList');
+    const fetchInitIalData = async (store, config = { page: 1, limit: 10 }) => {
+        await store.dispatch('global/tag/handleGetTagList', config);
+    };
+
+    const fetchInitialDataClassify = async (store, config = { page: 1, limit: 10 }) => {
+        await store.dispatch('global/tag/handleGetClassifyTagList', config);
     };
 
     export default {
@@ -116,21 +119,20 @@
                         'the-matrix', 'tomorrow-night-eighties', 'twilight', 'vibrant-ink', 'xq-dark', 'xq-light'],
                     previewTheme: ['default', 'dark'],
                 },
-                tagList: [],
+                tags: [],
                 file: null,
                 opacity: true,
                 modalWriteOrUpload: false,
                 modalTheme: false,
                 modalUpload: false,
-                value4: '',
                 tagAll: [],
                 tagClassifyAll: []
             };
         },
         computed: {
             ...mapGetters({
-                tags: 'global/tag/getTagList',
-                tagClassifys: 'global/tag/getClassifyList',
+                tagList: 'global/tag/getTagList',
+                classifyTagList: 'global/tag/getClassifyTagList',
             })
         },
         methods: {
@@ -254,15 +256,15 @@
                     $('body').stopTime('A');
                 }
             });
-            if (this.tags.data.length <= 0) {
+            if (this.tagList.data.length <= 0) {
                 fetchInitIalData(this.$store);
             } else {
-                this.tagAll = this.tags.data;
+                this.tagAll = this.tagList.data;
             }
-            if (this.tagClassifys.length <= 0) {
-                fetchInitIalData(this.$store);
+            if (this.classifyTagList.data.length <= 0) {
+                fetchInitialDataClassify(this.$store);
             } else {
-                this.tagClassifyAll = this.tagClassifys;
+                this.tagClassifyAll = this.classifyTagList.data;
             }
             // eslint-disable-next-line
             window.postEditor = editormd('post-content', {
@@ -295,10 +297,10 @@
             });
         },
         watch: {
-            'tags.data'(val) {
+            'tagList.data'(val) {
                 this.tagAll = val;
             },
-            tagClassifys(val) {
+            'classifyTagList.data'(val) {
                 this.tagClassifyAll = val;
             }
         }

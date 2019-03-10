@@ -17,21 +17,28 @@ const isAdmin = require('./is-admin');
 // ================ 后台 ================
 // ------- 文章 -------
 // 管理时, 获取文章列表
-router.get('/backend/article/list', isAdmin, backendArticle.getList);
+router.get('/backend/article/list', isAdmin, backendArticle.getArticleList);
+
 // 管理时，获取单篇文章
-router.get('/backend/article/item', isAdmin, backendArticle.getItem);
+router.get('/backend/article/item', isAdmin, backendArticle.getArticleSingle);
+
 // 管理时，发布文章
-router.post('/backend/article/insert', isAdmin, multipartMiddleware, backendArticle.insert);
+router.post('/backend/article/insert', isAdmin, multipartMiddleware, backendArticle.insertArticleSingle);
+
 // 管理时，删除文章
-router.get('/backend/article/delete', isAdmin, backendArticle.deletes);
+router.get('/backend/article/delete', isAdmin, backendArticle.deleteArticleSingle);
+
 // 管理时，彻底删除文章
-router.get('/backend/article/deleteCompletely', isAdmin, backendArticle.deleteCompletely);
+router.get('/backend/article/deleteCompletely', isAdmin, backendArticle.deleteCompletelyArticleSingle);
+
 // 管理时，恢复文章
-router.get('/backend/article/recover', isAdmin, backendArticle.recover);
+router.get('/backend/article/recover', isAdmin, backendArticle.recoverArticleSingle);
+
 // 管理时，编辑文章
-router.post('/backend/article/modify', isAdmin, multipartMiddleware, backendArticle.modify);
+router.post('/backend/article/modify', isAdmin, multipartMiddleware, backendArticle.modifyArticleSingle);
+
 // 管理时，上传md文件
-router.post('/backend/article/upload', isAdmin, backendArticle.upload);
+router.post('/backend/article/upload', isAdmin, backendArticle.uploadArticleSingle);
 
 // ------- 标签 -------
 // 管理时, 获取普通标签列表
