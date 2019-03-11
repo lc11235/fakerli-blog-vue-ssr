@@ -1,4 +1,3 @@
-import api from '~api';
 import {
     getBreadCrumbList,
     setTagNavListInLocalstorage,
@@ -12,6 +11,15 @@ import {
     localSave,
     localRead
 } from '@/libs/util';
+import {
+    getArticleList,
+    insertArticleSingle,
+    deleteArticleSingle,
+    modifyArticleSingle,
+    getArticleSingle,
+    deleteCompletelyArticleSingle,
+    recoverArticleSingle,
+} from '@/api/article';
 import beforeClose from '@/router/before-close';
 import { saveErrorLogger } from '@/api/data';
 import router from '@/router';
@@ -28,15 +36,12 @@ const closePage = (state, route) => {
 };
 
 const state = {
-    lists: {
+    articleLists: {
         data: [],
         total: 0,
         page: 1
     },
-    item: {
-        data: {},
-        path: ''
-    },
+    articleSingle: {},
     breadCrumbList: [],
     tagNavList: [],
     homeRoute: {},
@@ -47,42 +52,40 @@ const state = {
 
 const getters = {
     'getArticleList'(states) {
-        return states.lists;
+        return states.articleLists;
     },
-    'getArticleItem'(states) {
-        return states.item;
+    'getArticleSingle'(states) {
+        return states.articleSingle;
     },
     menuList: (state, getters, rootState) => getMenuByRouter(routers, rootState.backend.admin.access),
     errorCount: state => state.errorList.length
 };
 
 const mutations = {
-    'receiveArticleList'(states, payload) {
-        states.lists.data = [].concat(payload.list);
-        states.lists.total = payload.total;
-        states.lists.page = payload.page;
+    'getArticleList'(states, payload) {
+        states.articleLists.data = [].concat(payload.list);
+        states.articleLists.total = payload.total;
+        states.articleLists.page = payload.page;
     },
-    'receiveArticleItem'(states, { data, path }) {
-        states.item = {
-            data, path
-        };
+    'insertArticleSingle'(states, data) {
+        states.articleSingle.data = data;
     },
-    'insertArticleItem'(states, data) {
-        states.item.data = data;
-    },
-    'updateArticleItem'(states, data) {
-        states.item.data = data;
-    },
-    'deleteArticle'(states, title) {
-        const obj = states.lists.data.find(ii => ii.title === title);
+    'deleteArticleSingle'(states, articleId) {
+        const obj = states.articleLists.data.find(ii => ii._id === articleId);
         if (obj) obj.is_delete = 1;
     },
-    'deleteArticleCompletely'(states, title) {
-        const obj = states.lists.data.findIndex(ii => ii.title === title);
-        if (obj > -1) states.lists.data.splice(obj, 1);
+    'modifyArticleSingle'(states, data) {
+        states.articleSingle.data = data;
     },
-    'recoverArticle'(states, title) {
-        const obj = states.lists.data.find(ii => ii.title === title);
+    'getArticleSingle'(states, data) {
+        states.articleSingle = data;
+    },
+    'deleteCompletelyArticleSingle'(states, articleId) {
+        const obj = states.articleLists.data.findIndex(ii => ii._id === articleId);
+        if (obj > -1) states.articleLists.data.splice(obj, 1);
+    },
+    'recoverArticleSingle'(states, articleId) {
+        const obj = states.articleLists.data.find(ii => ii._id === articleId);
         if (obj) obj.is_delete = 0;
     },
     setBreadCrumb(state, route) {
@@ -151,41 +154,138 @@ const mutations = {
 };
 
 const actions = {
-    async 'getArticleList'({ commit, rootState: { global, route: { fullPath }}}, config) {
-        // const path = fullPath;
-        // if (state.lists.data.length > 0 && path === state.lists.path && config.page === 1) {
-        //     global.progress = 100;
-        //     return;
-        // }
-        const { data: { data, code }} = await api.get('backend/article/list', config);
-        if (data && code === 200) {
-            commit('receiveArticleList', data);
-        }
-    },
-    async 'getArticleItem'({ commit, rootState: { global, route: { path, params: { title }}}}) {
-        if (path === state.item.path) {
-            global.progress = 100;
-            return;
-        }
-        const { data: { data, code }} = await api.get('backend/article/item', { title });
-        if (data && code === 200) {
-            commit('receiveArticleItem', {
-                data,
-                path
+    handleGetArticleList({ commit }, config) {
+        return new Promise((resolve, reject) => {
+            getArticleList(config).then(res => {
+                const data = res.data;
+                if (data && data.code === 200) {
+                    commit('getArticleList', data.data);
+                    resolve();
+                } else {
+                    reject(data.message);
+                }
+            }).catch(err => {
+                reject(err);
             });
-        }
+        });
     },
-    async 'deleteArticle'({ commit }, config) {
-        const { data: { code }} = await api.get('backend/article/delete', config);
-        if (code === 200) {
-            commit('deleteArticle', config.id);
-        }
+    handleInsertArticleSingle({ commit }, { tagString, content, html, title, toc }) {
+        return new Promise((resolve, reject) => {
+            insertArticleSingle({
+                tagString,
+                content,
+                html,
+                title,
+                toc
+            }).then(res => {
+                const data = res.data;
+                if (data && data.code === 200) {
+                    commit('insertArticleSingle', {
+                        ...data.data
+                    });
+                    resolve();
+                } else {
+                    reject(data.message);
+                }
+            }).catch(err => {
+                reject(err);
+            });
+        });
     },
-    async 'recoverArticle'({ commit }, config) {
-        const { data: { code }} = await api.get('backend/article/recover', config);
-        if (code === 200) {
-            commit('recoverArticle', config.id);
-        }
+    handleDeleteArticleSingle({ commit }, { articleId, tagList }) {
+        return new Promise((resolve, reject) => {
+            deleteArticleSingle({
+                articleId,
+                tagList
+            }).then(res => {
+                const data = res.data;
+                if (data && data.code === 200) {
+                    commit('deleteArticleSingle', data.data);
+                    resolve(data.message);
+                } else {
+                    reject(data.message);
+                }
+            }).catch(err => {
+                reject(err);
+            });
+        });
+    },
+    handleModifyArticleSingle({ commit }, { articleId, content, html, title, toc, tagListOld, tagListNew }) {
+        return new Promise((resolve, reject) => {
+            modifyArticleSingle({
+                articleId,
+                content,
+                html,
+                title,
+                toc,
+                tagListOld,
+                tagListNew
+            }).then(res => {
+                const data = res.data;
+                if (data && data.code === 200) {
+                    commit('modifyArticleSingle', data.data);
+                    resolve(data.message);
+                } else {
+                    reject(data.message);
+                }
+            }).catch(err => {
+                reject(err);
+            });
+        });
+    },
+    handleGetArticleSingle({ commit }, { articleId, tagList }) {
+        return new Promise((resolve, reject) => {
+            getArticleSingle({
+                articleId,
+                tagList
+            }).then(res => {
+                const data = res.data;
+                if (data && data.code === 200) {
+                    commit('getArticleSingle', data.data);
+                    resolve();
+                } else {
+                    reject(data.message);
+                }
+            }).catch(err => {
+                reject(err);
+            });
+        });
+    },
+    handleRecoverArticleSingle({ commit }, { articleId, tagList }) {
+        return new Promise((resolve, reject) => {
+            recoverArticleSingle({
+                articleId,
+                tagList
+            }).then(res => {
+                const data = res.data;
+                if (data && data.code === 200) {
+                    commit('recoverArticleSingle', data.data);
+                    resolve(data.message);
+                } else {
+                    reject(data.message);
+                }
+            }).catch(err => {
+                reject(err);
+            });
+        });
+    },
+    handleDeleteCompletelyArticleSingle({ commit }, { articleId, tagList }) {
+        return new Promise((resolve, reject) => {
+            deleteCompletelyArticleSingle({
+                articleId,
+                tagList
+            }).then(res => {
+                const data = res.data;
+                if (data && data.code === 200) {
+                    commit('deleteCompletelyArticleSingle', data.data);
+                    resolve(data.message);
+                } else {
+                    reject(data.message);
+                }
+            }).catch(err => {
+                reject(err);
+            });
+        });
     },
     addErrorLog({ commit, rootState }, info) {
         if (!window.location.href.includes('error_logger_page')) commit('setHasReadErrorLoggerStatus', false);

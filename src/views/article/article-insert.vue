@@ -15,7 +15,7 @@
                         <Input v-model="formArticle.title" placeholder="请输入文章标题"></Input>
                     </FormItem>
                     <FormItem label="文章标签">
-                        <Select v-model="tagList" multiple @on-change="addTagList">
+                        <Select v-model="tags" multiple @on-change="addTags">
                             <OptionGroup v-for="item1 in tagClassifyAll" :label="item1.tag_name" :value="item1.tag_name" :key="item1.tag_name">
                                 <Option v-for="item2 in tagAll.filter(word => word.tag_classify === item1.tag_name)" :value="item2.tag_name" :key="item2.tag_name">{{ item2.tag_name }}</Option>
                             </OptionGroup>
@@ -69,7 +69,7 @@
             </Modal>
             <Button style="margin: 10px 0;" type="primary" @click="handleArticleMode">文章标题</Button>
             <Divider type="vertical" />
-            <Button style="margin: 10px 0;" type="success" @click="handleInsertArticle" shape="circle">添加文章</Button>
+            <Button style="margin: 10px 0;" type="success" @click="insertArticleSingle" shape="circle">添加文章</Button>
             <Divider type="vertical" />
             <Button style="margin: 10px 0;" type="success" @click="handleUploadArticle" shape="circle">上传文章</Button>
             <Divider type="vertical" />
@@ -87,8 +87,7 @@
 
 <script lang="babel">
     /* global postEditor */
-    import api from '~api';
-    import { mapGetters } from 'vuex';
+    import { mapActions, mapGetters } from 'vuex';
     const fetchInitIalData = async (store, config = { page: 1, limit: 10 }) => {
         await store.dispatch('global/tag/handleGetTagList', config);
     };
@@ -136,7 +135,10 @@
             })
         },
         methods: {
-            async handleInsertArticle() {
+            ...mapActions({
+                handleInsertArticleSingle: 'backend/article/handleInsertArticleSingle',
+            }),
+            insertArticleSingle() {
                 const content = postEditor.getMarkdown();
                 const html = postEditor.getPreviewedHTML();
                 let tocHtml = '';
@@ -158,15 +160,14 @@
                 this.formArticle.content = content;
                 this.formArticle.html = html;
                 this.formArticle.tocHTML = tocHtml;
-                const { data: { message, code, data }} = await api.post('backend/article/insert', this.formArticle);
-                if (code === 200) {
-                    this.$Message.success(message);
-                    this.$store.commit('backend/article/insertArticleItem', data);
-                    this.$router.push('/backend/article/article_manage');
-                }
+                this.handleInsertArticleSingle(this.formArticle).then(res => {
+                    this.$Message.success('新增文章成功！');
+                }, reject => {
+                    this.$Message.error(reject);
+                });
             },
-            addTagList() {
-                this.formArticle.tagString = this.tagList.join('|');
+            addTags() {
+                this.formArticle.tagString = this.tags.join('|');
             },
             themeChange(themeTitle, source) {
                 if (source === 'theme') {
@@ -187,8 +188,8 @@
                 this.modalUpload = true;
             },
             closeTag(event, name) {
-                const index = this.tagList.indexOf(name);
-                this.tagList.splice(index, 1);
+                const index = this.tags.indexOf(name);
+                this.tags.splice(index, 1);
             },
             handleFormatError(file) {
                 this.$Notice.warning({

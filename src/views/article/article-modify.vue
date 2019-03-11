@@ -1,103 +1,92 @@
 <template>
-    <div class="settings-main card">
-        <div class="settings-main-content">
-            <a-input title="标题">
-                <input type="text" v-model="form.title" placeholder="标题" class="base-input" name="title">
-                <span class="input-info error">请输入标题</span>
-            </a-input>
-            <a-input title="标签" class="select-item-wrap">
-                <i class="icon icon-arrow-down"></i>
-                <select v-model="form.tag" class="select-item" name="tags">
-                    <option value="">请选择标签</option>
-                    <option v-for="tag in tags.data" :value="tag.tag_name" :key="tag.tag_name">{{ tag.tag_name }}</option>
-                </select>
-                <a @click="addTagList" href="javascript:;" class="btn btn-yellow">添加标签</a>
-                <span class="input-info error">请输入标签</span>
-            </a-input>
-            <a-input title="已有标签" v-if="tagList.length > 0">
-                <ul class="tag-list">
-                    <li v-for="tagItem in tagList" v-text="tagItem" :key="tagItem"></li>
-                </ul>
-            </a-input>
+    <Card>
+        <Form :model="formArticle" :lable-width="200">
+            <FormItem label="文章标题">
+                <Input v-model="formArticle.title" placeholder="请输入文章标题" style="width: 50%"></Input>
+            </FormItem>
+            <FormItem label="选择标签">
+                <Select class="select-item" multiple name="selectTags" v-model="formArticle.selectTags" @on-change="addTags" style="width: 50%">
+                    <OptionGroup v-for="item1 in tagClassifyAll" :label="item1.tag_name" :value="item1.tag_name" :key="item1.tag_name">
+                        <Option v-for="item2 in tagAll.filter(word => word.tag_classify === item1.tag_name)" :value="item2.tag_name" :key="item2.tag_name">{{ item2.tag_name }}</Option>
+                    </OptionGroup>
+                </Select>
+            </FormItem>
+            <FormItem label="已有标签">
+                <Tag color="success" v-for="item in formArticle.hadTags" :key="item" :name="item" closable @on-close="handleCloseHadTag">{{ item }}</Tag>
+            </FormItem>
+        </Form>
+        <div class="settings-main-content"> 
             <div class="settings-section">
                 <div id="modify-content" class="settings-item-content">
                     <textarea id="editor" name="content" class="form-control hidden" data-autosave="editor-content"></textarea>
                 </div>
             </div>
         </div>
-        <div class="settings-footer clearfix">
-            <router-link to="/backend/aticle/list" class="btn btn-blue">返回</router-link>
-            <a @click="modify" href="javascript:;" class="btn btn-yellow">编辑文章</a>
-        </div>
-    </div>
+    </Card>
 </template>
 
 <script lang='babel'>
     /* global modifyEditor */
-    import api from '~api';
-    import { mapGetters } from 'vuex';
-    import aInput from '@/views/backend/_input.vue';
-    const fetchInitialData = async (store) => {
-        await store.dispatch('global/tag/getTagList');
-        await store.dispatch('backend/article/getArticleItem');
+    import { mapGetters, mapActions } from 'vuex';
+    const fetchInitialData = async (store , config = { page: 1, limit: 10 }) => {
+        await store.dispatch('global/tag/handleGetTagList', config);
     };
 
     export default {
         name: 'backend-article-modify',
         data() {
             return {
-                form: {
+                formArticle: {
                     title: '',
-                    tag: '',
-                    title_old: '',
-                    tagList_old: '',
-                    tagList_new: '',
+                    tagListNew: '',
+                    tagListOld: '',
                     content: '',
                     html: '',
-                    tocHTML: ''
+                    tocHTML: '',
+                    articleId: ''
                 },
-                tagList: []
+                selectTags: [],
+                hadTags: [],
+                tagAll: [],
+                tagClassifyAll: []
             };
-        },
-        components: {
-            aInput
         },
         computed: {
             ...mapGetters({
-                tags: 'global/tag/getTagList',
-                item: 'backend/article/getArticleItem'
+                articleSingle: 'backend/article/getArticleSingle',
+                tagList: 'global/tag/getTagList',
+                classifyTagList: 'global/tag/getClassifyTagList',
             })
         },
         methods: {
-            async modify() {
+            ...mapActions({
+                handleModifyArticleSingle: 'backend/article/handleModifyArticleSingle',
+            }),
+            modifyArticle() {
                 const content = modifyEditor.getMarkdown();
                 const html = modifyEditor.getPreviewedHTML();
                 let tocHtml = '';
                 if (document.querySelectorAll('.markdown-toc')[0]) {
                     tocHtml = document.querySelectorAll('.markdown-toc')[0].outerHTML;
                 }
-                if (!this.form.title || !this.form.tagList_new || !content) {
+                if (!this.formArticle.title || !this.formArticle.hadTags || !content) {
                     this.$store.dispatch('global/showMsg', '请将表单填写完整！');
                     return;
                 }
-                this.form.content = content;
-                this.form.html = html;
-                this.form.tocHTML = tocHtml;
-                const { data: { message, code, data }} = await api.post('backend/article/modify', this.form);
-                if (code === 200) {
-                    this.$store.dispatch('global/showMsg', {
-                        type: 'success',
-                        content: message
-                    });
-                    this.$store.commit('backend/article/updateArticleItem', data);
-                    this.$router.push('/backend/article/list');
-                }
+                this.formArticle.content = content;
+                this.formArticle.html = html;
+                this.formArticle.tocHTML = tocHtml;
+                this.formArticle.tagListOld =  this.hadTags.join('|');
+                this.handleModifyArticleSingle(this.formArticle).then(res => {
+                    this.$Message.success('新增文章成功！');
+                }, reject => {
+                    this.$Message.error(reject);
+                });
             },
-            addTagList() {
-                if (!this.tagList.includes(this.form.tag)) {
-                    this.tagList.push(this.form.tag);
-                    this.form.tagList_new = this.tagList.join('|');
-                }
+            addTags() {
+            },
+            handleCloseHadTag() {
+
             }
         },
         mounted() {
@@ -107,20 +96,22 @@
                     $('body').stopTime('A');
                 }
             });
-            if (this.tags.data.length <= 0 || !this.item.data) {
+            if (this.tagList.data.length <= 0 || !this.articleSingle.data) {
                 fetchInitialData(this.$store);
             } else {
-                this.tagList = this.item.data.tags;
-                this.form.tagList_old = this.item.data.tags.join('|');
-                this.form.tagList_new = this.item.data.tags.join('|');
-                this.form.title = this.item.data.title;
-                this.form.title_old = this.item.data.title;
-                this.form.content = this.item.data.content;
+                this.formArticle.title = this.articleSingle.data.title;
+                this.formArticle.hadTags = this.articleSingle.data.tags;
+                this.formArticle.content = this.articleSingle.data.content;
+                this.formArticle.articleId = this.articleSingle.data._id;
+                this.formArticle.tagListOld = this.articleSingle.data.tags.join('|');
+
+                this.tagAll = this.tagList.data;
+                this.tagClassifyAll = this.classifyTagList.data;
                 // eslint-disable-next-line
                 window.modifyEditor = editormd('modify-content', {
                     width: '100%',
                     height: 500,
-                    markdown: this.form.content,
+                    markdown: this.formArticle.content,
                     placeholder: '请输入内容...',
                     path: '/static/editor.md/lib/',
                     toolbarIcons() {
@@ -134,7 +125,7 @@
                         ];
                     },
                     watch: true,
-                    saveHTMLToTextarea: true,
+                    saveHTMLToTextarea: false,
                     tex: true,
                     flowChart: true,
                     sequenceDiagram: true,
@@ -146,17 +137,13 @@
         },
         watch: {
             item(val) {
-                this.tagList = val.data.tags;
-                this.form.tagList_old = val.data.tags.join('|');
-                this.form.tagList_new = val.data.tags.join('|');
-                this.form.title = val.data.title;
-                this.form.title_old = val.data.title;
-                this.form.content = val.data.content;
+                this.formArticle.title = val.data.title;
+                this.formArticle.content = val.data.content;
                 // eslint-disable-next-line
                 window.modifyEditor = editormd('modify-content', {
                     width: '100%',
                     height: 500,
-                    markdown: this.form.content,
+                    markdown: this.formArticle.content,
                     placeholder: '请输入内容...',
                     path: '/static/editor.md/lib/',
                     toolbarIcons() {

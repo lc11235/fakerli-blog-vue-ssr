@@ -22,7 +22,7 @@ exports.getTagList = (req, res) => {
     let skip = (page - 1) * limit;
     Promise.all([
         Tag.find({ tag_classify: { $ne: 'classify' }}).sort(sortlist).skip(skip).limit(limit).exec(),
-        Tag.countDocuments()
+        Tag.countDocuments({ tag_classify: { $ne: 'classify' }})
     ]).then(result => {
         let total = result[1];
         // let totalPage = Math.ceil(total / limit);
@@ -30,7 +30,7 @@ exports.getTagList = (req, res) => {
             code: 200,
             data: {
                 list: result[0],
-                total,
+                total: total,
                 page: page
             }
         };
@@ -309,11 +309,17 @@ exports.getClassifyTagList = (req, res) => {
     if (!page) page = 1;
     if (!limit) limit = 10;
     let skip = (page - 1) * limit;
-    Tag.find({ tag_classify: 'classify' }).sort(sortlist).skip(skip).limit(limit).exec().then(result => {
+    Promise.all([
+        Tag.find({ tag_classify: 'classify' }).sort(sortlist).skip(skip).limit(limit).exec(),
+        Tag.countDocuments({ tag_classify: 'classify' }).exec()
+    ]).then(result => {
+        let total = result[1];
         let json = {
             code: 200,
             data: {
-                list: result
+                list: result[0],
+                total: total,
+                page: page
             }
         };
         res.json(json);

@@ -1,7 +1,7 @@
 <template>
   <div>
     <Card>
-        <tables ref="tables" editable searchable search-place="top" :loading="loading" v-model="tableData" :columns="columns" @on-delete-completely="deleteCompletely"/>
+        <tables ref="tables" editable searchable search-place="top" :loading="loading" v-model="tableData" :columns="columns" @on-delete-completely="deleteCompletelyArticleSingle"/>
         <div style="margin: 10px;overflow: hidden;">
             <div style="float: right;">
                 <Page :total="total" :current="current" @on-change="changePage"></Page>
@@ -14,9 +14,9 @@
 <script>
 import Tables from '~components/tables';
 import { timeAgo } from '@/filters';
-import { mapGetters, mapActions } from 'vuex';
-const fetchInitialData = async (store) => {
-  await store.dispatch('backend/article/getArticleList');
+import { mapGetters, mapActions, mapMutations } from 'vuex';
+const fetchInitialData = async (store, config = { page: 1, limit: 10 }) => {
+  await store.dispatch('backend/article/handleGetArticleList', config);
 };
 export default {
     name: 'article_manage',
@@ -86,7 +86,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.go(params.index);
+                                        this.modifyArticleSingle(params.index);
                                     }
                                 }
                             }, '编辑');
@@ -100,7 +100,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.recover(params.index);
+                                        this.recoverArticleSingle(params.index);
                                     }
                                 }
                             }, '恢复');
@@ -114,7 +114,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.deletes(params.index);
+                                        this.deleteArticleSingle(params.index);
                                     }
                                 }
                             }, '失效');
@@ -125,7 +125,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.deleteCompletely(params.index);
+                                        vm.$emit('on-delete-completely', params.index);
                                     }
                                 }
                             }, '删除');
@@ -137,70 +137,75 @@ export default {
                         }
                     }
                 ],
-            tableData: []
+            tableData: [],
         }
     },
     methods: {
         ...mapActions({
-            getArticleList: 'backend/article/getArticleList',
+            handleDeleteArticleSingle: 'backend/article/handleDeleteArticleSingle',
+            handleRecoverArticleSingle: 'backend/article/handleRecoverArticleSingle',
+            handleDeleteCompletelyArticleSingle: 'backend/article/handleDeleteCompletelyArticleSingle',
         }),
-        async recover(index) {
-                let title = this.tableData[index].title;
-                let tagList = this.tableData[index].tags.join('|');
-                const { data: { code, message }} = await api.get('backend/article/recover', { title, tagList });
-                if (code === 200) {
-                    this.$Message.success({
-                        content: message,
-                        duration: 3
-                    });
-                    this.$store.commit('backend/article/recoverArticle', title);
-                } else {
-                    this.$Message.error({
-                        content: message,
-                        duration: 3
-                    });
-                }
-            },
-            async deletes(index) {
-                let title = this.tableData[index].title;
-                let tagList = this.tableData[index].tags.join('|');
-                const { data: { code, message }} = await api.get('backend/article/delete', { title, tagList });
-                if (code === 200) {
-                    this.$Message.success({
-                        content: message,
-                        duration: 3
-                    });
-                    this.$store.commit('backend/article/deleteArticle', title);
-                } else {
-                    this.$Message.error({
-                        content: message,
-                        duration: 3
-                    });
-                }
-            },
-            async deleteCompletely(index) {
-                let title = this.tableData[index].title;
-                let tagList = this.tableData[index].tags.join('|');
-                const { data: { code, message }} = await api.get('backend/article/deleteCompletely', { title, tagList });
-                if (code === 200) {
-                    this.$Message.success({
-                        content: message,
-                        duration: 3
-                    });
-                    this.$store.commit('backend/article/deleteArticleCompletely', title);
-                } else {
-                    this.$Message.error({
-                        content: message,
-                        duration: 3
-                    });
-                }
-            },
-            goItem(item) {
-                this.$router.push({ name: 'tag_modify', params: { tag_name: item }});
-            },
-            go(index) {
-                this.$router.push({ name: 'article_modify', params: { title: this.tableData[index].title }});
-            },
+        ...mapMutations({
+            insertArticleSingle: 'backend/article/insertArticleItem',
+        }),
+        deleteArticleSingle(index) {
+            let articleId = this.tableData[index]._id;
+            let tagList = this.tableData[index].tags.join('|');
+            this.handleDeleteArticleSingle({ articleId, tagList }).then(res => {
+                this.$Message.success({
+                    content: res,
+                    duration: 3
+                });
+            }, reject => {
+                this.$Message.error({
+                    content: reject,
+                    duration: 3
+                });
+            });
+        },
+        recoverArticleSingle(index) {
+            let articleId = this.tableData[index]._id;
+            let tagList = this.tableData[index].tags.join('|');
+            this.handleRecoverArticleSingle({ articleId, tagList }).then(res => {
+                this.$Message.success({
+                    content: res,
+                    duration: 3
+                });
+            }, reject => {
+                this.$Message.error({
+                    content: reject,
+                    duration: 3
+                });
+            });
+        },
+        deleteCompletelyArticleSingle(index) {
+            let articleId = this.tableData[index]._id;
+            let tagList = this.tableData[index].tags.join('|');
+            this.handleDeleteCompletelyArticleSingle({ articleId, tagList }).then(res => {
+                this.$Message.success({
+                    content: res,
+                    duration: 3
+                });
+            }, reject => {
+                this.$Message.error({
+                    content: reject,
+                    duration: 3
+                });
+            });
+        },
+        goItem(item) {
+            this.$router.push({ name: 'tag_modify', params: { tag_name: item }});
+        },
+        modifyArticleSingle(index) {
+            this.insertArticleSingle({
+                id: this.tableData[index]._id,
+                title: this.tableData[index].title,
+                tags: this.tableData[index].tags,
+                content: this.tableData[index].content
+            });
+            this.$router.push({ name: 'article_modify', params: { title: this.tableData[index].title }});
+        },
         exportExcel () {
             this.$refs.tables.exportCsv({
                 filename: `table-${(new Date()).valueOf()}.csv`

@@ -9,6 +9,36 @@ export const getArticleList = (config) => {
     });
 };
 
+export const insertArticleSingle = (formData) => {
+    return axios.request({
+        url: 'api/backend/article/insertArticleSingle',
+        method: 'post',
+        data: formData,
+        source: 'server'
+    });
+};
+
+export const deleteArticleSingle = (articleId, tagList) => {
+    return axios.request({
+        url: 'api/backend/article/deleteArticleSingle',
+        method: 'get',
+        params: {
+            articleId,
+            tagList
+        },
+        source: 'server'
+    });
+};
+
+export const modifyArticleSingle = (formData) => {
+    return axios.request({
+        url: 'api/backend/article/modifyArticleSingle',
+        method: 'post',
+        data: formData,
+        source: 'server'
+    });
+};
+
 export const getArticleSingle = (articleId) => {
     return axios.request({
         url: 'api/backend/article/getArticleSingle',
@@ -20,23 +50,25 @@ export const getArticleSingle = (articleId) => {
     });
 };
 
-export const deleteArticleSingle = (articleId) => {
+export const deleteCompletelyArticleSingle = (articleId, tagList) => {
     return axios.request({
-        url: 'api/backend/article/deleteArticleSingle',
+        url: 'api/backend/article/deleteCompletelyArticleSingle',
         method: 'get',
         params: {
-            articleId
+            articleId,
+            tagList
         },
         source: 'server'
     });
 };
 
-export const recoverArticleSingle = (articleId) => {
+export const recoverArticleSingle = (articleId, tagList) => {
     return axios.request({
         url: 'api/backend/article/recoverArticleSingle',
         method: 'get',
         params: {
-            articleId
+            articleId,
+            tagList
         },
         source: 'server'
     });

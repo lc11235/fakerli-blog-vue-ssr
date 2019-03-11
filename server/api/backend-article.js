@@ -67,33 +67,6 @@ exports.getArticleList = (req, res) => {
 };
 
 /**
- * 管理时，获取单篇文章
- * @method
- * @param  {[type]} req [请求体]
- * @param  {[type]} res [返回体]
- */
-exports.getArticleSingle = (req, res) => {
-    let title = req.query.title;
-    if (!title) {
-        res.json({
-            code: -200,
-            message: '参数错误'
-        });
-    }
-    Article.findOne({ title: title }).then(result => {
-        res.json({
-            code: 200,
-            data: result
-        });
-    }).catch(err => {
-        res.json({
-            code: -200,
-            message: err.toString()
-        });
-    });
-};
-
-/**
  * 发布文章
  * @method
  * @param  {[type]} req [请求体]
@@ -152,75 +125,15 @@ exports.insertArticleSingle = (req, res) => {
  * @param  {[type]} res [返回体]
  */
 exports.deleteArticleSingle = (req, res) => {
-    let title = req.query.title;
+    let articleId = req.query.articleId;
     let tagList = req.query.tagList;
     let arr_tag = tagList.split('|');
-    Article.update({ title: title }, { is_delete: 1 }).then(() => {
+    Article.update({ _id: articleId }, { is_delete: 1 }).then(() => {
         return Tag.update({ tag_name: { '$in': arr_tag }, tag_num: { '$gt': 0 }}, { '$inc': { 'tag_num': -1 }}, { upsert: false, multi: true }).then(result => {
             res.json({
                 code: 200,
                 message: '更新成功',
-                data: result
-            });
-        });
-    }).catch(err => {
-        res.json({
-            code: -200,
-            message: err.toString()
-        });
-    });
-};
-
-/**
- * 管理时，完全删除文章，即从数据库中删除
- * @method
- * @param  {[type]} req [请求体]
- * @param  {[type]} res [返回体]
- */
-exports.deleteCompletelyArticleSingle = (req, res) => {
-    let title = req.query.title;
-    let tagList = req.query.tagList;
-    let arr_tag = tagList.split('|');
-    Article.remove({ title: title }).then(() => {
-        return Tag.update({ tag_name: { '$in': arr_tag }, tag_num: { '$gt': 0 }}, { '$inc': { 'tag_num': -1 }}, { upsert: false, multi: true }).then(result => {
-            res.json({
-                code: 200,
-                message: '更新成功',
-                data: result
-            });
-        });
-    }).catch(err => {
-        res.json({
-            code: -200,
-            message: err.toString()
-        });
-    });
-};
-
-/**
- * 管理时，恢复文章，这是文章被标记删除的时候才能提供的功能
- * @method
- * @param  {[type]} req [请求体]
- * @param  {[type]} res [返回体]
- */
-exports.recoverArticleSingle = (req, res) => {
-    let title = req.query.title;
-    let tagList = req.query.tagList;
-    let arr_tag = tagList.split('|');
-    Tag.find({ tag_name: { '$in': arr_tag }, is_delete: 1 }).then(reason => {
-        if (reason.length > 0) {
-            return res.json({
-                code: -200,
-                message: '有标签被删除，不可恢复文章！'
-            });
-        }
-        Article.update({ title: title }, { is_delete: 0 }).then(() => {
-            return Tag.update({ tag_name: { '$in': arr_tag }}, { '$inc': { 'tag_num': 1 }}, { upsert: false, multi: true }).then(() => {
-                res.json({
-                    code: 200,
-                    message: '更新成功',
-                    data: 'success'
-                });
+                data: articleId
             });
         });
     }).catch(err => {
@@ -238,14 +151,14 @@ exports.recoverArticleSingle = (req, res) => {
  * @param  {[type]} res [返回体]
  */
 exports.modifyArticleSingle = (req, res) => {
-    let tagList_new = req.body.tagList_new;
-    let tagList_old = req.body.tagList_old;
+    let tagListNew = req.body.tagListNew;
+    let tagListOld = req.body.tagListOld;
     let content = req.body.content;
     let html = req.body.html;
     let toc = req.body.tocHTML;
     let title = req.body.title;
-    let title_old = req.body.title_old;
-    if (!tagList_new || !tagList_old || !content || !title || !title_old || !html) {
+    let articleId = req.body.articleId;
+    if (!tagListNew || !tagListOld || !content || !title || !articleId || !html) {
         res.json({
             code: -200,
             message: '参数错误'
@@ -254,8 +167,8 @@ exports.modifyArticleSingle = (req, res) => {
     }
 
     // let html = marked(content);
-    let arr_tags = tagList_new.split('|');
-    let arr_tags_old = tagList_old.split('|');
+    let arr_tags = tagListNew.split('|');
+    let arr_tags_old = tagListOld.split('|');
     let data = {
         title: title,
         $set: { tags: arr_tags },
@@ -265,8 +178,8 @@ exports.modifyArticleSingle = (req, res) => {
         update_date: moment().format('YYYY-MM-DD HH:mm:ss')
     };
 
-    Article.findOneAndUpdate({ title: title_old }, data, { new: true }).then(result => {
-        if (tagList_new !== tagList_old) {
+    Article.findOneAndUpdate({ _id: articleId }, data, { new: true }).then(result => {
+        if (tagListNew !== tagListOld) {
             Promise.all([
                 Tag.update({ tag_name: { '$in': arr_tags }}, { '$inc': { 'tag_num': 1 }}, { upsert: false, multi: true }),
                 Tag.update({ tag_name: { '$in': arr_tags_old }}, { '$inc': { 'tag_num': -1 }}, { upsert: false, multi: true })
@@ -289,6 +202,93 @@ exports.modifyArticleSingle = (req, res) => {
                 data: result
             });
         }
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
+};
+
+/**
+ * 管理时，获取单篇文章
+ * @method
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
+ */
+exports.getArticleSingle = (req, res) => {
+    let articleId = req.query.articleId;
+    if (!articleId) {
+        res.json({
+            code: -200,
+            message: '参数错误'
+        });
+    }
+    Article.findOne({ _id: articleId }).then(result => {
+        res.json({
+            code: 200,
+            data: result
+        });
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
+};
+
+/**
+ * 管理时，完全删除文章，即从数据库中删除
+ * @method
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
+ */
+exports.deleteCompletelyArticleSingle = (req, res) => {
+    let articleId = req.query.articleId;
+    let tagList = req.query.tagList;
+    let arr_tag = tagList.split('|');
+    Article.remove({ _id: articleId }).then(() => {
+        return Tag.update({ tag_name: { '$in': arr_tag }, tag_num: { '$gt': 0 }}, { '$inc': { 'tag_num': -1 }}, { upsert: false, multi: true }).then(result => {
+            res.json({
+                code: 200,
+                message: '更新成功',
+                data: articleId
+            });
+        });
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
+};
+
+/**
+ * 管理时，恢复文章，这是文章被标记删除的时候才能提供的功能
+ * @method
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
+ */
+exports.recoverArticleSingle = (req, res) => {
+    let articleId = req.query.articleId;
+    let tagList = req.query.tagList;
+    let arr_tag = tagList.split('|');
+    Tag.find({ tag_name: { '$in': arr_tag }, is_delete: 1 }).then(reason => {
+        if (reason.length > 0) {
+            return res.json({
+                code: -200,
+                message: '有标签被删除，不可恢复文章！'
+            });
+        }
+        Article.update({ _id: articleId }, { is_delete: 0 }).then(() => {
+            return Tag.update({ tag_name: { '$in': arr_tag }}, { '$inc': { 'tag_num': 1 }}, { upsert: false, multi: true }).then(() => {
+                res.json({
+                    code: 200,
+                    message: '更新成功',
+                    data: articleId
+                });
+            });
+        });
     }).catch(err => {
         res.json({
             code: -200,
