@@ -1,7 +1,7 @@
 <template>
   <div>
     <Card>
-        <tables ref="tables" editable searchable search-place="top" :loading="loading" v-model="tableData" :columns="columns" @on-delete-completely="deleteCompletelyArticleSingle"/>
+        <tables ref="tables" editable searchable search-place="top" :loading="loading" v-model="tableData" :columns="columns"/>
         <div style="margin: 10px;overflow: hidden;">
             <div style="float: right;">
                 <Page :total="total" :current="current" @on-change="changePage"></Page>
@@ -125,7 +125,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        vm.$emit('on-delete-completely', params.index);
+                                        this.deleteCompletelyArticleSingle(params.index);
                                     }
                                 }
                             }, '删除');
@@ -147,7 +147,7 @@ export default {
             handleDeleteCompletelyArticleSingle: 'backend/article/handleDeleteCompletelyArticleSingle',
         }),
         ...mapMutations({
-            insertArticleSingle: 'backend/article/insertArticleItem',
+            insertArticleSingle: 'backend/article/insertArticleSingle',
         }),
         deleteArticleSingle(index) {
             let articleId = this.tableData[index]._id;
@@ -199,7 +199,7 @@ export default {
         },
         modifyArticleSingle(index) {
             this.insertArticleSingle({
-                id: this.tableData[index]._id,
+                _id: this.tableData[index]._id,
                 title: this.tableData[index].title,
                 tags: this.tableData[index].tags,
                 content: this.tableData[index].content

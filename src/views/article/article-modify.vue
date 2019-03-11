@@ -96,14 +96,15 @@
                     $('body').stopTime('A');
                 }
             });
-            if (this.tagList.data.length <= 0 || !this.articleSingle.data) {
+            if (this.tagList.data.length <= 0 || !this.articleSingle) {
                 fetchInitialData(this.$store);
             } else {
-                this.formArticle.title = this.articleSingle.data.title;
-                this.formArticle.hadTags = this.articleSingle.data.tags;
-                this.formArticle.content = this.articleSingle.data.content;
-                this.formArticle.articleId = this.articleSingle.data._id;
-                this.formArticle.tagListOld = this.articleSingle.data.tags.join('|');
+                console.log(this.articleSingle);
+                this.formArticle.title = this.articleSingle.title;
+                this.formArticle.hadTags = this.articleSingle.tags;
+                this.formArticle.content = this.articleSingle.content;
+                this.formArticle.articleId = this.articleSingle._id;
+                this.formArticle.tagListOld = this.articleSingle.tags.join('|');
 
                 this.tagAll = this.tagList.data;
                 this.tagClassifyAll = this.classifyTagList.data;

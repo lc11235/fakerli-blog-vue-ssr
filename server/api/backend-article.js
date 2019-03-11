@@ -125,6 +125,7 @@ exports.insertArticleSingle = (req, res) => {
  * @param  {[type]} res [返回体]
  */
 exports.deleteArticleSingle = (req, res) => {
+    console.log(req.query);
     let articleId = req.query.articleId;
     let tagList = req.query.tagList;
     let arr_tag = tagList.split('|');

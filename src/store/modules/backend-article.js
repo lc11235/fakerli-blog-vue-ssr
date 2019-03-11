@@ -68,14 +68,14 @@ const mutations = {
         states.articleLists.page = payload.page;
     },
     'insertArticleSingle'(states, data) {
-        states.articleSingle.data = data;
+        states.articleSingle = data;
     },
     'deleteArticleSingle'(states, articleId) {
         const obj = states.articleLists.data.find(ii => ii._id === articleId);
         if (obj) obj.is_delete = 1;
     },
     'modifyArticleSingle'(states, data) {
-        states.articleSingle.data = data;
+        states.articleSingle = data;
     },
     'getArticleSingle'(states, data) {
         states.articleSingle = data;
@@ -194,10 +194,10 @@ const actions = {
     },
     handleDeleteArticleSingle({ commit }, { articleId, tagList }) {
         return new Promise((resolve, reject) => {
-            deleteArticleSingle({
+            deleteArticleSingle(
                 articleId,
                 tagList
-            }).then(res => {
+            ).then(res => {
                 const data = res.data;
                 if (data && data.code === 200) {
                     commit('deleteArticleSingle', data.data);
@@ -235,10 +235,10 @@ const actions = {
     },
     handleGetArticleSingle({ commit }, { articleId, tagList }) {
         return new Promise((resolve, reject) => {
-            getArticleSingle({
+            getArticleSingle(
                 articleId,
                 tagList
-            }).then(res => {
+            ).then(res => {
                 const data = res.data;
                 if (data && data.code === 200) {
                     commit('getArticleSingle', data.data);
@@ -253,10 +253,10 @@ const actions = {
     },
     handleRecoverArticleSingle({ commit }, { articleId, tagList }) {
         return new Promise((resolve, reject) => {
-            recoverArticleSingle({
+            recoverArticleSingle(
                 articleId,
                 tagList
-            }).then(res => {
+            ).then(res => {
                 const data = res.data;
                 if (data && data.code === 200) {
                     commit('recoverArticleSingle', data.data);
@@ -271,10 +271,10 @@ const actions = {
     },
     handleDeleteCompletelyArticleSingle({ commit }, { articleId, tagList }) {
         return new Promise((resolve, reject) => {
-            deleteCompletelyArticleSingle({
+            deleteCompletelyArticleSingle(
                 articleId,
                 tagList
-            }).then(res => {
+            ).then(res => {
                 const data = res.data;
                 if (data && data.code === 200) {
                     commit('deleteCompletelyArticleSingle', data.data);
