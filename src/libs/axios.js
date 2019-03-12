@@ -69,7 +69,7 @@ class HttpRequest {
         return config;
     }
     destroy(url) {
-        delete this.queue(url);
+        delete this.queue[url];
         if (!Object.keys(this.queue).length) {
             // Spin.hide()
         }

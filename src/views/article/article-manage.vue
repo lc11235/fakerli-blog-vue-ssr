@@ -7,6 +7,38 @@
                 <Page :total="total" :current="current" @on-change="changePage"></Page>
             </div>
         </div>
+        <Modal
+            title="文章标题"
+            v-model="modalModifyArticleSingle"
+            fullscreen
+            :closable="false"
+            :mask-closable="false"
+            :loading="loadingModal"
+            @on-cancel="cancelModal"
+            @on-ok="asyncOkModal">
+            <Form :model="formArticle" :lable-width="200">
+                <FormItem label="文章标题">
+                    <Input v-model="formArticle.title" placeholder="请输入文章标题" style="width: 50%"></Input>
+                </FormItem>
+                <FormItem label="选择标签">
+                    <Select class="select-item" name="selectTags" v-model="selectTags" @on-change="addTags" style="width: 50%">
+                        <OptionGroup v-for="item1 in tagClassifyAll" :label="item1.tag_name" :value="item1.tag_name" :key="item1.tag_name">
+                            <Option v-for="item2 in tagAll.filter(word => word.tag_classify === item1.tag_name)" :value="item2.tag_name" :key="item2.tag_name">{{ item2.tag_name }}</Option>
+                        </OptionGroup>
+                    </Select>
+                </FormItem>
+                <FormItem label="已有标签">
+                    <Tag color="success" v-for="item in hadTags.filter(word => !!word)" :key="item" :name="item" closable @on-close="handleCloseHadTag">{{ item }}</Tag>
+                </FormItem>
+            </Form>
+            <div class="settings-main-content"> 
+                <div class="settings-section">
+                    <div id="modify-content" class="settings-item-content">
+                        <textarea id="editor" name="content" class="form-control hidden" data-autosave="editor-content"></textarea>
+                    </div>
+                </div>
+            </div>
+        </Modal>
     </Card>
   </div>
 </template>
@@ -14,9 +46,11 @@
 <script>
 import Tables from '~components/tables';
 import { timeAgo } from '@/filters';
-import { mapGetters, mapActions, mapMutations } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 const fetchInitialData = async (store, config = { page: 1, limit: 10 }) => {
-  await store.dispatch('backend/article/handleGetArticleList', config);
+    await store.dispatch('backend/article/handleGetArticleList', config);
+    await store.dispatch('global/tag/handleGetTagList', config);
+    await store.dispatch('global/tag/handleGetClassifyTagList', config);
 };
 export default {
     name: 'article_manage',
@@ -138,6 +172,21 @@ export default {
                     }
                 ],
             tableData: [],
+            modalModifyArticleSingle: false,
+            formArticle: {
+                title: '',
+                tagListNew: '',
+                tagListOld: '',
+                content: '',
+                html: '',
+                tocHTML: '',
+                articleId: ''
+            },
+            selectTags: '',
+            hadTags: [],
+            tagAll: [],
+            tagClassifyAll: [],
+            loadingModal: true,
         }
     },
     methods: {
@@ -145,9 +194,7 @@ export default {
             handleDeleteArticleSingle: 'backend/article/handleDeleteArticleSingle',
             handleRecoverArticleSingle: 'backend/article/handleRecoverArticleSingle',
             handleDeleteCompletelyArticleSingle: 'backend/article/handleDeleteCompletelyArticleSingle',
-        }),
-        ...mapMutations({
-            insertArticleSingle: 'backend/article/insertArticleSingle',
+            handleModifyArticleSingle: 'backend/article/handleModifyArticleSingle',
         }),
         deleteArticleSingle(index) {
             let articleId = this.tableData[index]._id;
@@ -198,13 +245,45 @@ export default {
             this.$router.push({ name: 'tag_modify', params: { tag_name: item }});
         },
         modifyArticleSingle(index) {
-            this.insertArticleSingle({
-                _id: this.tableData[index]._id,
-                title: this.tableData[index].title,
-                tags: this.tableData[index].tags,
-                content: this.tableData[index].content
+            $('body').everyTime('500ms', 'A', function () {
+                if ($('.editormd-preview-close-btn').length > 0) {
+                    $('.editormd-preview-close-btn').hide();
+                    $('body').stopTime('A');
+                }
             });
-            this.$router.push({ name: 'article_modify', params: { title: this.tableData[index].title }});
+            this.modalModifyArticleSingle = true;
+            this.formArticle.title = this.tableData[index].title;
+            this.hadTags = this.tableData[index].tags.concat([]);
+            this.selectTags = '';
+            this.formArticle.content = this.tableData[index].content;
+            this.formArticle.articleId = this.tableData[index]._id;
+            this.formArticle.tagListOld = this.tableData[index].tags.join('|');
+                // eslint-disable-next-line
+            window.modifyEditor = editormd('modify-content', {
+                width: '100%',
+                height: 500,
+                markdown: this.formArticle.content,
+                placeholder: '请输入内容...',
+                path: '/static/editor.md/lib/',
+                toolbarIcons() {
+                    return [
+                        'undo', 'redo', '|',
+                        'bold', 'del', 'italic', 'quote', 'ucwords', 'uppercase', 'lowercase', '|',
+                        'list-ul', 'list-ol', 'hr', '|',
+                        'link', 'reference-link', 'image', 'code', 'preformatted-text', 'code-block', 'table', 'datetime', 'emoji', 'html-entities', 'pagebreak', '|',
+                        'goto-line', 'watch', 'preview', 'fullscreen', 'clear', 'search', '|',
+                        'help', 'info'
+                    ];
+                },
+                watch: true,
+                saveHTMLToTextarea: false,
+                tex: true,
+                flowChart: true,
+                sequenceDiagram: true,
+                taskList: true,
+                htmlDecode: true,
+                emoji: true
+            });
         },
         exportExcel () {
             this.$refs.tables.exportCsv({
@@ -215,19 +294,59 @@ export default {
             this.loading = true;
             this.current = page;
             fetchInitialData(this.$store, { page: page});
+        },
+        addTags(value) {
+            if(!this.hadTags.includes(value) && value){
+                this.hadTags.push(value);
+            }
+        },
+        handleCloseHadTag(value) {
+            let index = this.hadTags.indexOf(value);
+            this.hadTags.splice(index, 1);
+        },
+        cancelModal() {
+            this.hadTags = [];
+        },
+        asyncOkModal() {
+            const content = modifyEditor.getMarkdown();
+            const html = modifyEditor.getPreviewedHTML();
+            let tocHtml = '';
+            if (document.querySelectorAll('.markdown-toc')[0]) {
+                tocHtml = document.querySelectorAll('.markdown-toc')[0].outerHTML;
+            }
+            if (!this.formArticle.title || !this.hadTags || !content) {
+                this.$Message.error('请将表单填写完整！');
+                return;
+            }
+            this.formArticle.content = content;
+            this.formArticle.html = html;
+            this.formArticle.tocHTML = tocHtml;
+            this.formArticle.tagListNew =  this.hadTags.join('|');
+            this.handleModifyArticleSingle(this.formArticle).then(res => {
+                this.modalModifyArticleSingle = false;
+                this.$Message.success('修改文章成功！');
+                fetchInitialData(this.$store);
+            }, reject => {
+                this.modalModifyArticleSingle = false;
+                this.$Message.error(reject);
+            });
         }
     },
     computed: {
         ...mapGetters({
-            articles: 'backend/article/getArticleList'
+            articles: 'backend/article/getArticleList',
+            tagList: 'global/tag/getTagList',
+            classifyTagList: 'global/tag/getClassifyTagList',
         })
     },
     mounted () {
-        if (this.articles.data.length <= 0) {
+        if (this.articles.data.length <= 0 || this.tagList.data.length <= 0) {
             fetchInitialData(this.$store);
         } else {
             this.tableData = this.articles.data;
             this.total = this.articles.total;
+            this.tagAll = this.tagList.data;
+            this.tagClassifyAll = this.classifyTagList.data;
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -244,6 +363,12 @@ export default {
         },
         'articles.total'(val) {
             this.total = val;
+        },
+        'tagList.data'(val) {
+            this.tagAll = val;
+        },
+        'classifyTagList.data'(val) {
+            this.tagClassifyAll = val;
         }
     } 
 }

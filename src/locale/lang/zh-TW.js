@@ -13,7 +13,6 @@ export default {
     article: '文章',
     article_manage: '文章管理',
     article_insert: '文章發表',
-    article_modify: '文章修正',
     tag: '標籤',
     tag_manage: '標籤管理',
     tag_insert: '標籤發表',

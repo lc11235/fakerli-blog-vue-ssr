@@ -85,15 +85,6 @@ export default [
                     icon: 'ios-book'
                 },
                 component: () => import('@/views/article/article-insert.vue')
-            },
-            {
-                path: 'article_modify',
-                name: 'article_modify',
-                meta: {
-                    title: '文章修正',
-                    icon: 'ios-book'
-                },
-                component: () => import('@/views/article/article-modify.vue')
             }
         ]
     },

@@ -12,7 +12,6 @@ export default {
     article: 'Article',
     article_manage: 'Article Manage',
     article_insert: 'Article Insert',
-    article_modify: 'Article Modify',
     tag: 'Tag',
     tag_manage: 'Tag Manage',
     tag_insert: 'Tag Insert',
