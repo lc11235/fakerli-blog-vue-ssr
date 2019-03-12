@@ -133,7 +133,7 @@ export default [
                     title: '用户管理',
                     icon: 'md-person'
                 },
-                component: () => import('@/views/article/article-manage.vue')
+                component: () => import('@/views/user/user-manage.vue')
             },
             {
                 path: 'user_insert',
@@ -141,7 +141,8 @@ export default [
                 meta: {
                     title: '用户新增',
                     icon: 'md-person-add'
-                }
+                },
+                component: () => import('@/views/user/user-insert.vue')
             },
             {
                 path: 'user_access',
@@ -149,7 +150,8 @@ export default [
                 meta: {
                     title: '用户权限',
                     icon: 'md-person'
-                }
+                },
+                component: () => import('@/views/user/user-access.vue')
             }
         ]
     },
