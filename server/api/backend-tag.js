@@ -20,23 +20,27 @@ exports.getTagList = (req, res) => {
     if (!page) page = 1;
     if (!limit) limit = 10;
     let skip = (page - 1) * limit;
-    Promise.all([
+    return Promise.all([
         Tag.find({ tag_classify: { $ne: 'classify' }}).sort(sortlist).skip(skip).limit(limit).exec(),
         Tag.countDocuments({ tag_classify: { $ne: 'classify' }})
     ]).then(result => {
-        let total = result[1];
-        // let totalPage = Math.ceil(total / limit);
-        let json = {
+        if (result[1] === 0) {
+            return res.json({
+                code: -200,
+                message: '无数据！'
+            });
+        }
+        return res.json({
             code: 200,
+            message: '取得普通标签列表成功！',
             data: {
                 list: result[0],
-                total: total,
+                total: result[1],
                 page: page
             }
-        };
-        res.json(json);
+        });
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -53,29 +57,17 @@ exports.insertTagSingle = (req, res) => {
     let tagName = req.body.tagName;
     let tagDesc = req.body.tagDesc;
     let tagClassify = req.body.tagClassify;
-    if (!tagName) {
+    if (!tagName || !tagDesc || !tagClassify) {
         return res.json({
             code: -200,
-            message: '请填写标签名称'
-        });
-    }
-    if (!tagDesc) {
-        return res.json({
-            code: -200,
-            message: '请填写标签描述'
-        });
-    }
-    if (!tagClassify) {
-        return res.json({
-            code: -200,
-            message: '请选择标签类型'
+            message: '参数错误！'
         });
     }
     Tag.findOne({ tag_name: tagName }).then(result => {
         if (result) {
             return res.json({
                 code: -200,
-                message: '这个标签已经存在'
+                message: '这个标签已经存在！'
             });
         }
         return Tag.create({
@@ -88,14 +80,19 @@ exports.insertTagSingle = (req, res) => {
             is_delete: 0,
             timestamp: moment().format('X')
         }).then(resultTag => {
-            res.json({
+           return res.json({
                 code: 200,
-                message: '添加成功',
+                message: '添加普通标签成功！',
                 data: resultTag
+            });
+        }).catch(err => {
+            return res.json({
+                code: -200,
+                message: err.toString()
             });
         });
     }).catch(err => {
-        res.json({
+       return res.json({
             code: -200,
             message: err.toString()
         });
@@ -113,22 +110,27 @@ exports.deleteTagSingle = (req, res) => {
     if (!tagId) {
         return res.json({
             code: -200,
-            message: '请填写标签名称'
+            message: '参数错误！'
         });
     }
-    Article.find({ _id: tagId, is_delete: 0 }).then(reason => {
-        if (reason.length === 0) {
-            return Tag.update({ _id: tagId }, { is_delete: 1 }).then(() => {
-                res.json({
-                    code: 200,
-                    message: '失效成功！',
-                    data: tagId
-                });
+    Tag.find({ _id: tagId, is_delete: 0, tag_num: { $gt: 0 }}).then(result => {
+        if (result) {
+            return res.json({
+                code: -200,
+                message: '标签还在使用！'
             });
         }
-        res.json({
-            code: -200,
-            message: '标签还在使用！'
+        return Tag.update({ _id: tagId }, { is_delete: 1 }).then(() => {
+            return res.json({
+                code: 200,
+                message: '失效普通标签成功！',
+                data: tagId
+            });
+        }).catch(err => {
+            return res.json({
+                code: -200,
+                message: err.toString()
+            });
         });
     }).catch(err => {
         res.json({
@@ -149,28 +151,10 @@ exports.modifyTagSingle = (req, res) => {
     let tagName = req.body.tagName;
     let tagDesc = req.body.tagDesc;
     let tagClassify = req.body.tagClassify;
-    if (!tagId) {
+    if (!tagId || !tagName || !tagDesc || !tagClassify) {
         return res.json({
             code: -200,
-            message: '请填写标签名称'
-        });
-    }
-    if (!tagName) {
-        return res.json({
-            code: -200,
-            message: '请填写标签名称'
-        });
-    }
-    if (!tagDesc) {
-        return res.json({
-            code: -200,
-            message: '请填写标签名称'
-        });
-    }
-    if (!tagClassify) {
-        return res.json({
-            code: -200,
-            message: '请填写标签名称'
+            message: '参数错误！'
         });
     }
     let data = {
@@ -179,18 +163,32 @@ exports.modifyTagSingle = (req, res) => {
         tag_classify: tagClassify,
         update_date: moment().format('YYYY-MM-DD HH:mm:ss')
     };
-    Tag.findOneAndUpdate({ _id: tagId }, data, { new: true }).then(result => {
-        res.json({
-            code: 200,
-            message: '更新成功',
-            data: result
+    Tag.find({ tag_name: tagName }).then(result => {
+        if (result) {
+            return res.json({
+                code: -200,
+                message: '标签名已存在！'
+            });
+        }
+        return Tag.findOneAndUpdate({ _id: tagId }, data, { new: true }).then(result => {
+            return res.json({
+                code: 200,
+                message: '更新普通标签成功！',
+                data: result
+            });
+        }).catch(err => {
+            return res.json({
+                code: -200,
+                message: err.toString()
+            });
         });
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
     });
+    
 };
 
 /**
@@ -204,24 +202,24 @@ exports.getTagSingle = (req, res) => {
     if (!tagId) {
         return res.json({
             code: -200,
-            message: '请填写标签名称'
+            message: '参数错误！'
         });
     }
     Tag.findOne({ _id: tagId }).then(result => {
         if (result) {
             return res.json({
                 code: 200,
-                message: '查询成功！',
+                message: '查询普通标签成功！',
                 data: result
             });
         } else {
-            res.json({
+            return res.json({
                 code: -200,
                 message: '查询失败！'
             });
         }
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -239,17 +237,17 @@ exports.recoverTagSingle = (req, res) => {
     if (!tagId) {
         return res.json({
             code: -200,
-            message: '请填写标签名称'
+            message: '参数错误！'
         });
     }
     Tag.update({ _id: tagId }, { is_delete: 0 }).then(() => {
-        res.json({
+        return res.json({
             code: 200,
-            message: '恢复成功',
+            message: '恢复普通标签成功！',
             data: tagId
         });
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -267,25 +265,30 @@ exports.deleteTagCompletelySingle = (req, res) => {
     if (!tagId) {
         return res.json({
             code: -200,
-            message: '请填写标签名称'
+            message: '参数错误！'
         });
     }
-    Article.find({ _id: tagId, is_delete: 0 }).then(reason => {
-        if (reason.length === 0) {
-            return Tag.remove({ _id: tagId }).then(() => {
-                res.json({
-                    code: 200,
-                    message: '彻底删除成功！',
-                    data: tagId
-                });
+    Tag.find({ _id: tagId, tag_num: { $gt: 0 }}).then(result => {
+        if (result) {
+            return res.json({
+                code: -200,
+                message: '标签还在使用！'
             });
         }
-        res.json({
-            code: -200,
-            message: '标签还在使用！'
+        return Tag.remove({ _id: tagId }).then(() => {
+            return res.json({
+                code: 200,
+                message: '删除普通标签成功！',
+                data: tagId
+            });
+        }).catch(err => {
+            return res.json({
+                code: -200,
+                message: err.toString()
+            });
         });
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -309,22 +312,27 @@ exports.getClassifyTagList = (req, res) => {
     if (!page) page = 1;
     if (!limit) limit = 10;
     let skip = (page - 1) * limit;
-    Promise.all([
+    return Promise.all([
         Tag.find({ tag_classify: 'classify' }).sort(sortlist).skip(skip).limit(limit).exec(),
         Tag.countDocuments({ tag_classify: 'classify' }).exec()
     ]).then(result => {
-        let total = result[1];
-        let json = {
+        if (result[1] === 0) {
+            return res.json({
+                code: -200,
+                message: '无数据！'
+            });
+        }
+        return res.json({
             code: 200,
+            message: '取得特征标签列表成功！',
             data: {
                 list: result[0],
-                total: total,
+                total: result[1],
                 page: page
             }
-        };
-        res.json(json);
+        });
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -341,29 +349,17 @@ exports.insertClassifyTagSingle = (req, res) => {
     let tagName = req.body.tagName;
     let tagDesc = req.body.tagDesc;
     let tagClassify = req.body.tagClassify;
-    if (!tagName) {
+    if (!tagName || !tagDesc || !tagClassify) {
         return res.json({
             code: -200,
-            message: '请填写标签名称'
-        });
-    }
-    if (!tagDesc) {
-        return res.json({
-            code: -200,
-            message: '请填写标签名称'
-        });
-    }
-    if (!tagClassify) {
-        return res.json({
-            code: -200,
-            message: '请填写标签名称'
+            message: '参数错误！'
         });
     }
     Tag.findOne({ tag_name: tagName }).then(result => {
         if (result) {
             return res.json({
                 code: -200,
-                message: '这个标签已经存在'
+                message: '这个标签已经存在！'
             });
         }
         return Tag.create({
@@ -376,14 +372,19 @@ exports.insertClassifyTagSingle = (req, res) => {
             is_delete: 0,
             timestamp: moment().format('X')
         }).then(resultTag => {
-            res.json({
+            return res.json({
                 code: 200,
-                message: '添加成功',
+                message: '添加特征标签成功！',
                 data: resultTag
+            });
+        }).catch(err => {
+            return res.json({
+                code: -200,
+                message: err.toString()
             });
         });
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -401,22 +402,40 @@ exports.deleteClassifyTagSingle = (req, res) => {
     if (!tagId) {
         return res.json({
             code: -200,
-            message: '请填写标签名称'
+            message: '参数错误！'
         });
     }
-    Article.find({ _id: tagId, is_delete: 0 }).then(reason => {
-        if (reason.length === 0) {
-            return Tag.update({ _id: tagId }, { is_delete: 1 }).then(() => {
+    Tag.find({ _id: tagId, is_delete: 0 }).then(result => {
+        if (result) {
+            return Tag.find({ tag_classify: result.tag_name }).then(result1 => {
+                if (result1) {
+                    return res.json({
+                        code: -200,
+                        message: '有标签依赖此特征标签，不能删除！'
+                    });
+                }
+                return Tag.update({ _id: tagId }, { is_delete: 1 }).then(() => {
+                    res.json({
+                        code: 200,
+                        message: '失效特征标签成功！',
+                        data: tagId
+                    });
+                }).catch(err => {
+                    return res.json({
+                        code: -200,
+                        message: err.toString()
+                    });
+                });
+            }).catch(err => {
                 res.json({
-                    code: 200,
-                    message: '失效成功！',
-                    data: tagId
+                    code: -200,
+                    message: err.toString()
                 });
             });
         }
         res.json({
             code: -200,
-            message: '标签还在使用！'
+            message: '标签不存在！'
         });
     }).catch(err => {
         res.json({
@@ -437,28 +456,10 @@ exports.modifyClassifyTagSingle = (req, res) => {
     let tagName = req.body.tagName;
     let tagDesc = req.body.tagDesc;
     let tagClassify = req.body.tagClassify;
-    if (!tagId) {
+    if (!tagId || !tagName || !tagDesc || !tagClassify) {
         return res.json({
             code: -200,
-            message: '请填写标签名称'
-        });
-    }
-    if (!tagName) {
-        return res.json({
-            code: -200,
-            message: '请填写标签名称'
-        });
-    }
-    if (!tagDesc) {
-        return res.json({
-            code: -200,
-            message: '请填写标签名称'
-        });
-    }
-    if (!tagClassify) {
-        return res.json({
-            code: -200,
-            message: '请填写标签名称'
+            message: '参数错误！'
         });
     }
     let data = {
@@ -467,14 +468,45 @@ exports.modifyClassifyTagSingle = (req, res) => {
         tag_classify: tagClassify,
         update_date: moment().format('YYYY-MM-DD HH:mm:ss')
     };
-    Tag.findOneAndUpdate({ _id: tagId }, data, { new: true }).then(result => {
-        res.json({
-            code: 200,
-            message: '更新成功',
-            data: result
+    Tag.find({ tag_name: tagName }).then(result => {
+        if (result) {
+            return res.json({
+                code: -200,
+                message: '标签名已经存在！'
+            });
+        }
+        return Tag.find({ _id: tagId }).then(result1 => {
+            if (result1) {
+                return Promise.all([
+                    Tag.update({ tag_classify: result1.tag_name }, { tag_classify: tagName }).exec(),
+                    Tag.findOneAndUpdate({ _id: tagId }, data, { new: true }).exec()
+                ]).then(result2 => {
+                    if(result2[0] && result2[1]) {
+                        return res.json({
+                            code: 200,
+                            message: '更新特征标签成功！',
+                            data: result
+                        });
+                    }
+                }).catch(err => {
+                    return res.json({
+                        code: -200,
+                        message: err.toString()
+                    });
+                });
+            }
+            return res.json({
+                code: -200,
+                message: '未找到此标签！'
+            })
+        }).catch(err => {
+            return res.json({
+                code: -200,
+                message: err.toString()
+            });
         });
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -492,16 +524,17 @@ exports.getClassifyTagSingle = (req, res) => {
     if (!tagId) {
         return res.json({
             code: -200,
-            message: '请填写标签名称'
+            message: '参数错误！'
         });
     }
     Tag.findOne({ _id: tagId }).then(result => {
-        res.json({
+        return res.json({
             code: 200,
+            message: '取得特征标签成功！',
             data: result
         });
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -519,13 +552,13 @@ exports.recoverClassifyTagSingle = (req, res) => {
     if (!tagId) {
         return res.json({
             code: -200,
-            message: '请填写标签名称'
+            message: '参数错误！'
         });
     }
     Tag.update({ _id: tagId }, { is_delete: 0 }).then(() => {
         res.json({
             code: 200,
-            message: '恢复成功',
+            message: '恢复特征标签成功！',
             data: tagId
         });
     }).catch(err => {
@@ -547,22 +580,40 @@ exports.deleteClassifyTagCompletelySingle = (req, res) => {
     if (!tagId) {
         return res.json({
             code: -200,
-            message: '请填写标签名称'
+            message: '参数错误！'
         });
     }
-    Article.find({ _id: tagId, is_delete: 0 }).then(reason => {
-        if (reason.length === 0) {
-            return Tag.remove({ _id: tagId }).then(() => {
+    Tag.find({ _id: tagId, is_delete: 0 }).then(result => {
+        if (result) {
+            return Tag.find({ tag_classify: result.tag_name }).then(result1 => {
+                if (result1) {
+                    return res.json({
+                        code: -200,
+                        message: '有标签依赖此特征标签，不能删除！'
+                    });
+                }
+                return Tag.remove({ _id: tagId }).then(() => {
+                    res.json({
+                        code: 200,
+                        message: '删除特征标签成功！',
+                        data: tagId
+                    });
+                }).catch(err => {
+                    return res.json({
+                        code: -200,
+                        message: err.toString()
+                    });
+                });
+            }).catch(err => {
                 res.json({
-                    code: 200,
-                    message: '彻底删除成功！',
-                    data: tagId
+                    code: -200,
+                    message: err.toString()
                 });
             });
         }
         res.json({
             code: -200,
-            message: '标签还在使用！'
+            message: '标签不存在！'
         });
     }).catch(err => {
         res.json({

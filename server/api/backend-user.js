@@ -9,41 +9,79 @@ const fsExistsSync = require('../utils').fsExistsSync;
 const config = require('../config');
 const md5Pre = config.md5Pre;
 const secret = config.secretServer;
-const general = require('./general');
-
-const list = general.list;
 
 /**
- * 获取管理员列表
- * @method getList
- * @param  {[type]} req [description]
- * @param  {[type]} res [description]
- * @return {[type]}     [description]
+ * 用户注册
+ * @method
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
  */
-exports.getList = (req, res) => {
-    list(req, res, Admin);
-};
-
-/**
- * 获取单个管理员
- * @method getItem
- * @param  {[type]} req [description]
- * @param  {[type]} res [description]
- * @return {[type]}     [description]
- */
-exports.getItem = (req, res) => {
-    let username = req.query.username;
-    if (!username) {
-        res.json({
+exports.register = (req, res) => {
+    let email = req.body.email;
+    let password = req.body.password;
+    let username = req.body.username;
+    if (!username || !password || !email) {
+        return res.json({
             code: -200,
-            message: '参数错误'
+            message: '请将表单填写完整!'
         });
     }
-    Admin.findOne({ username: username }).then(result => {
-        res.json({
-            code: 200,
-            data: result
-        });
+    Admin.findOne({ 
+        username: username
+    }).then(result => {
+        if (result) {
+            return res.json({
+                code: -200,
+                message: '该用户名已经被使用!'
+            });
+        }
+        if (fsExistsSync('./admin.lock')) {
+            return Admin.create({
+                username,
+                password: md5(md5Pre + password),
+                email,
+                access: 'normal',
+                avator: '',
+                create_date: moment().format('YYYY-MM-DD HH:mm:ss'),
+                update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
+                is_delete: 0,
+                is_confirm: 1,
+                is_login: 1,
+                user_level: 0,
+                timestamp: moment().format('X')
+            }).then(() => {
+                return res.json({
+                    code: 200,
+                    message: '已添加到申请列表，管理员审核后将发送邮件通知!'
+                });
+            });
+        } else {
+            return Admin.create({
+                username,
+                password: md5(md5Pre + password),
+                email,
+                access: 'super_admin',
+                avator: '/static/images/me.png',
+                create_date: moment().format('YYYY-MM-DD HH:mm:ss'),
+                update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
+                is_delete: 0,
+                is_confirm: 0,
+                is_login: 1,
+                user_level: 2,
+                timestamp: moment().format('X')
+            }).then(() => {
+                fs.writeFile('./admin.lock', username, (err) => {
+                    if (err) {
+                        throw err;
+                    } else {
+                        return res.json({
+                            code: 200,
+                            message: '添加用户成功!'
+                        });
+                    }
+                });
+            });
+        }
     }).catch(err => {
         res.json({
             code: -200,
@@ -53,11 +91,10 @@ exports.getItem = (req, res) => {
 };
 
 /**
- * 管理员登录
- * @method loginAdmin
- * @param  {[type]}   req [description]
- * @param  {[type]}   res [description]
- * @return {[type]}       [description]
+ * 用户登录
+ * @method
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
  */
 exports.login = (req, res) => {
     let json = {};
@@ -66,11 +103,10 @@ exports.login = (req, res) => {
     if (username === '' || password === '') {
         json = {
             code: -200,
-            message: '请输入用户名和密码'
+            message: '请输入用户名和密码！'
         };
         return res.json(json);
     }
-    console.log(username, password);
     Admin.findOneAndUpdate({
         username,
         password: md5(md5Pre + password),
@@ -93,7 +129,7 @@ exports.login = (req, res) => {
         }
         return res.json({
             code: -200,
-            message: '用户名或者密码错误'
+            message: '用户名或者密码错误！'
         });
     }).catch(err => {
         res.json({
@@ -104,14 +140,126 @@ exports.login = (req, res) => {
 };
 
 /**
- * 初始化时添加管理员
- * @method insertAdmin
- * @param  {Object}    req  [description]
- * @param  {Object}    res  [description]
- * @param  {Function}  next [description]
- * @return {json}         [description]
+ * 用户登出
+ * @method
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
  */
-exports.insert = (req, res, next) => {
+exports.logout = (req, res) => {
+    let userId = req.cookies.f_userId;
+    if (!userId) {
+        res.json({
+            code: -200,
+            message: '参数错误！'
+        });
+    }
+    Admin.findOneAndUpdate({ _id: userId }, { is_login: 1 }).then(result => {
+        if (result) {
+            return res.json({
+                code: 200,
+                message: '登出成功！'
+            });
+        }
+        return res.json({
+            code: -200,
+            message: '登出失败！'
+        });
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
+};
+
+/**
+ * 用户信息
+ * @method
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
+ */
+exports.getInfo = (req, res) => {
+    let userId = req.cookies.f_userId;
+    if (!userId) {
+        res.json({
+            code: -200,
+            message: '参数错误！'
+        });
+    }
+    Admin.findOne({ _id: userId }).then(result => {
+        if (result) {
+            return res.json({
+                code: 200,
+                message: '拉取信息成功！',
+                data: {
+                    avator: result.avator,
+                    access: result.access
+                }
+            });
+        }
+        return res.json({
+            code: -200,
+            message: '拉取信息失败！'
+        });
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
+};
+
+// ----普通账号---------
+
+/**
+ * 获取普通用户账号列表
+ * @method
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
+ */
+exports.getUserList = (req, res) => {
+    let sortlist = '-update_date';
+    let limit = req.body.limit || req.query.limit;
+    let page = req.body.page || req.query.page;
+    page = parseInt(page, 10);
+    limit = parseInt(limit, 10);
+    if (!page) page = 1;
+    if (!limit) limit = 10;
+    let skip = (page - 1) * limit;
+    Promise.all([
+        Admin.find({ user_level: 0 }).sort(sortlist).skip(skip).limit(limit).exec(),
+        Admin.countDocuments()
+    ]).then(result => {
+        if (result[1] === 0) {
+            return res.json({
+                code: -200,
+                message: '无数据！'
+            });
+        }
+        let json = {
+            code: 200,
+            data: {
+                list: result[0],
+                total: result[1],
+                page: page
+            }
+        };
+        res.json(json);
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
+};
+
+/**
+ * 增加单个普通用户账号
+ * @method
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
+ */
+exports.insertUserSingle = (req, res, next) => {
     let email = req.body.email;
     let password = req.body.password;
     let username = req.body.username;
@@ -128,72 +276,92 @@ exports.insert = (req, res, next) => {
                 message: '该用户已经存在!'
             });
         }
-        if (fsExistsSync('./admin.lock')) {
-            return Admin.create({
-                username,
-                password: md5(md5Pre + password),
-                email,
-                access: 'normal',
-                avator: '',
-                create_date: moment().format('YYYY-MM-DD HH:mm:ss'),
-                update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
-                is_delete: 0,
-                is_confirm: 1,
-                timestamp: moment().format('X')
-            }).then(() => {
-                return res.json({
-                    code: 200,
-                    message: '已添加到申请列表，管理员审核后将发送邮件通知!',
-                });
+        return Admin.create({
+            username,
+            password: md5(md5Pre + password),
+            email,
+            access: 'normal',
+            avator: '',
+            create_date: moment().format('YYYY-MM-DD HH:mm:ss'),
+            update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
+            is_delete: 0,
+            is_confirm: 1,
+            is_login: 1,
+            user_level: 0,
+            timestamp: moment().format('X')
+        }).then(() => {
+            return res.json({
+                code: 200,
+                message: '已添加到申请列表，管理员审核后将发送邮件通知!',
             });
-        } else {
-            return Admin.create({
-                username,
-                password: md5(md5Pre + password),
-                email,
-                access: 'super_admin',
-                avator: '/static/images/me.png',
-                create_date: moment().format('YYYY-MM-DD HH:mm:ss'),
-                update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
-                is_delete: 0,
-                is_confirm: 0,
-                timestamp: moment().format('X')
-            }).then(() => {
-                fs.writeFile('./admin.lock', username, (err) => {
-                    if (err) {
-                        throw err;
-                    } else {
-                        return res.json({
-                            code: 200,
-                            message: '添加用户成功!',
-                            data: username
-                        });
-                    }
-                });
-            });
-        }
-    }).catch(err => console.log(err));
+        });
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
 };
 
 /**
- * 管理员编辑
- * @method modifyAdmin
- * @param  {[type]}    req [description]
- * @param  {[type]}    res [description]
- * @return {[type]}        [description]
+ * 删除单个普通用户账号
+ * @method
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
  */
-exports.modify = (req, res) => {
+exports.deleteUserSingle = (req, res) => {
+    let userId = req.query.userId;
+    if (!userId) {
+        res.json({
+            code: -200,
+            message: '参数错误！'
+        });
+    }
+    Admin.update({ _id: userId }, { is_delete: 1, is_login: 1 }).then(() => {
+        res.json({
+            code: 200,
+            message: '删除用户成功！',
+            data: userId
+        });
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
+};
+
+/**
+ * 编辑单个普通用户账号
+ * @method
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
+ */
+exports.modifyUserSingle = (req, res) => {
+    let userId = req.body.userId;
     let email = req.body.email;
     let password = req.body.password;
     let username = req.body.username;
+    let access = req.body.access;
+    let avator = req.body.avator;
+    if (!userId || !email || !password || !username || !access || !avator) {
+        res.json({
+            code: -200,
+            message: '参数错误！'
+        });
+    }
     let data = {
-        email, username, update_date: moment().format('YYYY-MM-DD HH:mm:ss')
+        email: email, 
+        username: username, 
+        password: md5(md5Pre + password),
+        access: access,
+        avator: avator,
+        update_date: moment().format('YYYY-MM-DD HH:mm:ss')
     };
-    if (password) data.password = md5(md5Pre + password);
-    Admin.findOneAndUpdate({ username: username }, data, { new: true }).then(result => {
+    Admin.findOneAndUpdate({ _id: userId }, data, { new: true }).then(result => {
         res.json({
             code: 200,
-            message: '更新成功',
+            message: '更新成功！',
             data: result
         });
     }).catch(err => {
@@ -205,19 +373,24 @@ exports.modify = (req, res) => {
 };
 
 /**
- * 管理员删除
- * @method deletes
- * @param  {[type]}    req [description]
- * @param  {[type]}    res [description]
- * @return {[type]}        [description]
+ * 获取单个普通用户账号
+ * @method
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
  */
-exports.deletes = (req, res) => {
-    let username = req.query.username;
-    Admin.update({ username: username }, { is_delete: 1 }).then(() => {
+exports.getUserSingle = (req, res) => {
+    let userId = req.body.userId;
+    if (!userId) {
+        res.json({
+            code: -200,
+            message: '参数错误！'
+        });
+    }
+    Admin.findOne({ _id: userId }).then(result => {
         res.json({
             code: 200,
-            message: '更新成功',
-            data: 'success'
+            message: '查询成功！',
+            data: result
         });
     }).catch(err => {
         res.json({
@@ -228,19 +401,24 @@ exports.deletes = (req, res) => {
 };
 
 /**
- * 管理员恢复
- * @method recover
- * @param  {[type]}    req [description]
- * @param  {[type]}    res [description]
- * @return {[type]}        [description]
+ * 恢复单个普通用户账号
+ * @method
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
  */
-exports.recover = (req, res) => {
-    let username = req.query.username;
-    Admin.update({ username: username }, { is_delete: 0 }).then(() => {
+exports.recoverUserSingle = (req, res) => {
+    let userId = req.body.userId;
+    if (!userId) {
+        res.json({
+            code: -200,
+            message: '参数错误！'
+        });
+    }
+    Admin.update({ _id: userId }, { is_delete: 0 }).then(() => {
         res.json({
             code: 200,
-            message: '更新成功',
-            data: 'success'
+            message: '更新成功！',
+            data: userId
         });
     }).catch(err => {
         res.json({
@@ -251,28 +429,25 @@ exports.recover = (req, res) => {
 };
 
 /**
- * 取得用户详细信息
- * @method getInfo
- * @param  {[type]}    req [description]
- * @param  {[type]}    res [description]
- * @return {[type]}        [description]
+ * 彻底删除单个普通用户账号
+ * @method
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
  */
-exports.getInfo = (req, res) => {
-    let userid = req.cookies.f_userId;
-    Admin.findOne({ _id: userid }).then(result => {
-        if (result) {
-            return res.json({
-                code: 200,
-                message: '拉取信息成功',
-                data: {
-                    avator: result.avator,
-                    access: result.access
-                }
-            });
-        }
-        return res.json({
+
+exports.deleteUserCompletelySingle = (req, res) => {
+    let userId = req.body.userId;
+    if (!userId) {
+        res.json({
             code: -200,
-            message: '拉取信息失败'
+            message: '参数错误！'
+        });
+    }
+    Admin.remove({ _id: userId }).then(() => {
+        res.json({
+            code: 200,
+            message: '删除成功！',
+            data: userId
         });
     }).catch(err => {
         res.json({
@@ -283,24 +458,383 @@ exports.getInfo = (req, res) => {
 };
 
 /**
- * 取得用户详细信息
- * @method logout
- * @param  {[type]}    req [description]
- * @param  {[type]}    res [description]
- * @return {[type]}        [description]
+ * 审核单个普通账号
+ * @method
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
  */
-exports.logout = (req, res) => {
-    let userid = req.cookies.f_userId;
-    Admin.findOneAndUpdate({ _id: userid }, { is_login: 1 }).then(result => {
-        if (result) {
+exports.confirmUserSingle = (req, res) => {
+    let userId = req.body.userId;
+    if (!userId) {
+        res.json({
+            code: -200,
+            message: '参数错误！'
+        });
+    }
+    Admin.update({ _id: userId }, { is_comfirm: 1 }).then(() => {
+        res.json({
+            code: 200,
+            message: '审核成功！',
+            data: userId
+        });
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
+};
+
+/**
+ * 提升普通账号权限
+ * @method
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
+ */
+exports.upgradeUserLevel = (req, res) => {
+    let userId = req.body.userId;
+    if (!userId) {
+        res.json({
+            code: -200,
+            message: '参数错误！'
+        });
+    }
+    Admin.update({ _id: userId }, { user_level: 1 }).then(() => {
+        res.json({
+            code: 200,
+            message: '审核成功！',
+            data: userId
+        });
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
+};
+
+/**
+ * 取消普通账号的登录
+ * @method
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
+ */
+exports.logoutUserSingle = (req, res) => {
+    let userId = req.body.userId;
+    if (!userId) {
+        res.json({
+            code: -200,
+            message: '参数错误！'
+        });
+    }
+    Admin.update({ _id: userId }, { is_login: 1 }).then(() => {
+        res.json({
+            code: 200,
+            message: '审核成功！',
+            data: userId
+        });
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
+};
+
+// ----管理账号---------------
+
+/**
+ * 获取管理用户账号列表
+ * @method
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
+ */
+exports.getAdminList = (req, res) => {
+    let sortlist = '-update_date';
+    let limit = req.body.limit || req.query.limit;
+    let page = req.body.page || req.query.page;
+    page = parseInt(page, 10);
+    limit = parseInt(limit, 10);
+    if (!page) page = 1;
+    if (!limit) limit = 10;
+    let skip = (page - 1) * limit;
+    Promise.all([
+        Admin.find({ user_level: 1 }).sort(sortlist).skip(skip).limit(limit).exec(),
+        Admin.countDocuments()
+    ]).then(result => {
+        if (result[1] === 0) {
             return res.json({
-                code: 200,
-                message: '登出成功'
+                code: -200,
+                message: '无数据！'
             });
         }
+        let json = {
+            code: 200,
+            data: {
+                list: result[0],
+                total: result[1],
+                page: page
+            }
+        };
+        res.json(json);
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
+};
+
+/**
+ * 增加单个管理用户账号
+ * @method
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
+ */
+exports.insertAdminSingle = (req, res, next) => {
+    let email = req.body.email;
+    let password = req.body.password;
+    let username = req.body.username;
+    if (!username || !password || !email) {
         return res.json({
             code: -200,
-            message: '登出失败'
+            message: '请将表单填写完整!'
+        });
+    }
+    Admin.findOne({ username }).then(result => {
+        if (result) {
+            return res.json({
+                code: -200,
+                message: '该用户已经存在!'
+            });
+        }
+        return Admin.create({
+            username,
+            password: md5(md5Pre + password),
+            email,
+            access: 'normal',
+            avator: '',
+            create_date: moment().format('YYYY-MM-DD HH:mm:ss'),
+            update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
+            is_delete: 0,
+            is_confirm: 0,
+            user_level: 1,
+            timestamp: moment().format('X')
+        }).then(() => {
+            return res.json({
+                code: 200,
+                message: '已添加到申请列表，管理员审核后将发送邮件通知!',
+            });
+        });
+
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
+};
+
+/**
+ * 删除单个管理用户账号
+ * @method
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
+ */
+exports.deleteAdminSingle = (req, res) => {
+    let userId = req.body.userId;
+    if (!userId) {
+        res.json({
+            code: -200,
+            message: '参数错误！'
+        });
+    }
+    Admin.update({ _id: userId }, { is_delete: 1 }).then(() => {
+        res.json({
+            code: 200,
+            message: '审核成功！',
+            data: userId
+        });
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
+};
+
+/**
+ * 编辑单个管理用户账号
+ * @method
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
+ */
+exports.modifyAdminSingle = (req, res) => {
+    let userId = req.body.userId;
+    let email = req.body.email;
+    let password = req.body.password;
+    let username = req.body.username;
+    let access = req.body.access;
+    let avator = req.body.avator;
+    if (!userId || !email || !password || !username || !access || !avator) {
+        res.json({
+            code: -200,
+            message: '参数错误！'
+        });
+    }
+    let data = {
+        email: email, 
+        username: username,
+        password: md5(md5Pre + password),
+        access: access,
+        avator: avator,
+        update_date: moment().format('YYYY-MM-DD HH:mm:ss')
+    };
+    Admin.findOneAndUpdate({ _id: userId }, data, { new: true }).then(result => {
+        res.json({
+            code: 200,
+            message: '更新成功！',
+            data: result
+        });
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
+};
+
+/**
+ * 获取单个管理用户账号
+ * @method
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
+ */
+exports.getAdminSingle = (req, res) => {
+    let userId = req.body.userId;
+    if (!userId) {
+        res.json({
+            code: -200,
+            message: '参数错误！'
+        });
+    }
+    Admin.findOne({ _id: userId }).then(result => {
+        res.json({
+            code: 200,
+            data: result
+        });
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
+};
+
+/**
+ * 恢复单个管理用户账号
+ * @method
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
+ */
+exports.recoverAdminSingle = (req, res) => {
+    let userId = req.body.userId;
+    if (!userId) {
+        res.json({
+            code: -200,
+            message: '参数错误！'
+        });
+    }
+    Admin.update({ _id: userId }, { is_delete: 0 }).then(() => {
+        res.json({
+            code: 200,
+            message: '审核成功！',
+            data: userId
+        });
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
+};
+
+/**
+ * 彻底删除单个管理用户账号
+ * @method
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
+ */
+
+exports.deleteAdminCompletelySingle = (req, res) => {
+    let userId = req.body.userId;
+    if (!userId) {
+        res.json({
+            code: -200,
+            message: '参数错误！'
+        });
+    }
+    Admin.remove({ _id: userId }).then(() => {
+        res.json({
+            code: 200,
+            message: '审核成功！',
+            data: userId
+        });
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
+};
+
+/**
+ * 降低管理账号权限
+ * @method
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
+ */
+exports.downgradeAdminLevel = (req, res) => {
+    let userId = req.body.userId;
+    if (!userId) {
+        res.json({
+            code: -200,
+            message: '参数错误！'
+        });
+    }
+    Admin.update({ _id: userId }, { user_levle: 0 }).then(() => {
+        res.json({
+            code: 200,
+            message: '审核成功！',
+            data: userId
+        });
+    }).catch(err => {
+        res.json({
+            code: -200,
+            message: err.toString()
+        });
+    });
+};
+
+/**
+ * 取消管理账号的登录
+ * @method
+ * @param  {[type]} req [请求体]
+ * @param  {[type]} res [返回体]
+ */
+exports.logoutAdminSingle = (req, res) => {
+    let userId = req.body.userId;
+    if (!userId) {
+        res.json({
+            code: -200,
+            message: '参数错误！'
+        });
+    }
+    Admin.update({ _id: userId }, { is_login: 1 }).then(() => {
+        res.json({
+            code: 200,
+            message: '审核成功！',
+            data: userId
         });
     }).catch(err => {
         res.json({

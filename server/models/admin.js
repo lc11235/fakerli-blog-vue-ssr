@@ -13,6 +13,7 @@ const AdminSchema = new Schema({
     is_delete: Number,
     is_confirm: Number,
     is_login: Number,
+    user_level: Number,
     timestamp: Number
 });
 

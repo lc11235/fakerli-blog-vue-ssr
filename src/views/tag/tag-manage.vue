@@ -80,8 +80,8 @@ export default {
             columns: [
                 {title: '标签名称', key: 'tag_name'},
                 {title: '标签数量', key: 'tag_num'},
-                {title: '标签描述', key: 'tag_desc', editable: true},
-                {title: '标签类型', key: 'tag_classify', editable: true},
+                {title: '标签描述', key: 'tag_desc'},
+                {title: '标签类型', key: 'tag_classify'},
                 {title: '更新时间', key: 'update_date'},
                 {
                     title: '操作', 
@@ -158,8 +158,8 @@ export default {
             columnsClassify: [
                 {title: '标签名称', key: 'tag_name'},
                 {title: '标签数量', key: 'tag_num'},
-                {title: '标签描述', key: 'tag_desc', editable: true},
-                {title: '标签类型', key: 'tag_classify', editable: true},
+                {title: '标签描述', key: 'tag_desc'},
+                {title: '标签类型', key: 'tag_classify'},
                 {title: '更新时间', key: 'update_date'},
                 {
                     title: '操作', 

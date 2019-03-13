@@ -48,18 +48,23 @@ exports.getArticleList = (req, res) => {
         Article.find().sort(sortlist).skip(skip).limit(limit).exec(),
         Article.countDocuments()
     ]).then(result => {
-        let total = result[1];
-        let json = {
+        if (result[1] === 0) {
+            return res.json({
+                code: -200,
+                message: '无数据！'
+            });
+        }
+        return res.json({
             code: 200,
+            message: '获取文章列表成功！',
             data: {
                 list: result[0],
-                total,
+                total: result[1],
                 page: page
             }
-        };
-        res.json(json);
+        });
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -75,17 +80,22 @@ exports.getArticleList = (req, res) => {
 exports.insertArticleSingle = (req, res) => {
     let tagString = req.body.tagString;
     let content = req.body.content;
-    // html = marked(content)
     let html = req.body.html;
     let title = req.body.title;
     let toc = req.body.tocHTML;
-    let arr_tag = tagString.split('|');
+    if (!tagString || !content || !html || !title || !toc) {
+        return res.json({
+            code: -200,
+            message: '参数错误！'
+        });
+    }
+    let arrTag = tagString.split('|');
     let data = {
-        title,
-        content,
-        html,
-        toc,
-        tags: arr_tag,
+        title: title,
+        content: content,
+        html: html,
+        toc: toc,
+        tags: arrTag,
         visit: 0,
         create_date: moment().format('YYYY-MM-DD HH:mm:ss'),
         update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
@@ -93,14 +103,14 @@ exports.insertArticleSingle = (req, res) => {
         timestamp: moment().format('X')
     };
     Article.create(data).then(result => {
-        return Tag.update({ tag_name: { '$in': arr_tag }},
+        return Tag.update({ tag_name: { '$in': arrTag }},
             { '$inc': { 'tag_num': 1 }},
             { upsert: true, multi: true }).then(() => {
             Article.findOne({ title: title }, 'title content html tags update_date').then(resultArticle => {
                 elastic.addArticleIndex(resultArticle);
                 return res.json({
                     code: 200,
-                    message: '发布成功',
+                    message: '发布文章成功！',
                     data: result
                 });
             }).catch(err => {
@@ -109,9 +119,14 @@ exports.insertArticleSingle = (req, res) => {
                     message: err.toString()
                 });
             });
+        }).catch(err => {
+            return res.json({
+                code: -200,
+                message: err.toString()
+            });
         });
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -125,20 +140,30 @@ exports.insertArticleSingle = (req, res) => {
  * @param  {[type]} res [返回体]
  */
 exports.deleteArticleSingle = (req, res) => {
-    console.log(req.query);
     let articleId = req.query.articleId;
     let tagList = req.query.tagList;
-    let arr_tag = tagList.split('|');
+    if (!articleId || !tagList) {
+        return res.json({
+            code: -200,
+            message: '参数错误！'
+        });
+    }
+    let arrTag = tagList.split('|');
     Article.update({ _id: articleId }, { is_delete: 1 }).then(() => {
-        return Tag.update({ tag_name: { '$in': arr_tag }, tag_num: { '$gt': 0 }}, { '$inc': { 'tag_num': -1 }}, { upsert: false, multi: true }).then(result => {
+        return Tag.update({ tag_name: { '$in': arrTag }, tag_num: { '$gt': 0 }}, { '$inc': { 'tag_num': -1 }}, { upsert: false, multi: true }).then(result => {
             res.json({
                 code: 200,
-                message: '更新成功',
+                message: '更新文章成功！',
                 data: articleId
+            });
+        }).catch(err => {
+            return res.json({
+                code: -200,
+                message: err.toString()
             });
         });
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -160,51 +185,49 @@ exports.modifyArticleSingle = (req, res) => {
     let title = req.body.title;
     let articleId = req.body.articleId;
     if (!tagListNew || !tagListOld || !content || !title || !articleId || !html) {
-        res.json({
+        return res.json({
             code: -200,
-            message: '参数错误'
+            message: '参数错误！'
         });
-        return;
     }
 
-    // let html = marked(content);
-    let arr_tags = tagListNew.split('|');
-    let arr_tags_old = tagListOld.split('|');
+    let arrTags = tagListNew.split('|');
+    let arrTagsOld = tagListOld.split('|');
     let data = {
         title: title,
-        $set: { tags: arr_tags },
-        content,
-        html,
-        toc,
+        $set: { tags: arrTags },
+        content: content,
+        html: html,
+        toc: toc,
         update_date: moment().format('YYYY-MM-DD HH:mm:ss')
     };
 
     Article.findOneAndUpdate({ _id: articleId }, data, { new: true }).then(result => {
         if (tagListNew !== tagListOld) {
-            Promise.all([
-                Tag.update({ tag_name: { '$in': arr_tags }}, { '$inc': { 'tag_num': 1 }}, { upsert: false, multi: true }),
-                Tag.update({ tag_name: { '$in': arr_tags_old }}, { '$inc': { 'tag_num': -1 }}, { upsert: false, multi: true })
+            return Promise.all([
+                Tag.update({ tag_name: { '$in': arrTags }}, { '$inc': { 'tag_num': 1 }}, { upsert: false, multi: true }),
+                Tag.update({ tag_name: { '$in': arrTagsOld }}, { '$inc': { 'tag_num': -1 }}, { upsert: false, multi: true })
             ]).then(() => {
-                res.json({
+                return res.json({
                     code: 200,
-                    message: '更新成功',
+                    message: '修改文章成功！',
                     data: result
                 });
             }).catch(err => {
-                res.json({
+                return res.json({
                     code: -200,
                     message: err.toString()
                 });
             });
         } else {
-            res.json({
+            return res.json({
                 code: 200,
-                message: '更新成功',
+                message: '修改文章成功！',
                 data: result
             });
         }
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -222,12 +245,13 @@ exports.getArticleSingle = (req, res) => {
     if (!articleId) {
         res.json({
             code: -200,
-            message: '参数错误'
+            message: '参数错误！'
         });
     }
     Article.findOne({ _id: articleId }).then(result => {
         res.json({
             code: 200,
+            message: '获取文章成功！',
             data: result
         });
     }).catch(err => {
@@ -247,13 +271,24 @@ exports.getArticleSingle = (req, res) => {
 exports.deleteCompletelyArticleSingle = (req, res) => {
     let articleId = req.query.articleId;
     let tagList = req.query.tagList;
-    let arr_tag = tagList.split('|');
+    let arrTag = tagList.split('|');
+    if (!articleId || !tagList) {
+        res.json({
+            code: -200,
+            message: '参数错误！'
+        });
+    }
     Article.remove({ _id: articleId }).then(() => {
-        return Tag.update({ tag_name: { '$in': arr_tag }, tag_num: { '$gt': 0 }}, { '$inc': { 'tag_num': -1 }}, { upsert: false, multi: true }).then(result => {
+        return Tag.update({ tag_name: { '$in': arrTag }, tag_num: { '$gt': 0 }}, { '$inc': { 'tag_num': -1 }}, { upsert: false, multi: true }).then(result => {
             res.json({
                 code: 200,
-                message: '更新成功',
+                message: '彻底删除文章成功！',
                 data: articleId
+            });
+        }).catch(err => {
+            return res.json({
+                code: -200,
+                message: err.toString()
             });
         });
     }).catch(err => {
@@ -273,25 +308,35 @@ exports.deleteCompletelyArticleSingle = (req, res) => {
 exports.recoverArticleSingle = (req, res) => {
     let articleId = req.query.articleId;
     let tagList = req.query.tagList;
-    let arr_tag = tagList.split('|');
-    Tag.find({ tag_name: { '$in': arr_tag }, is_delete: 1 }).then(reason => {
-        if (reason.length > 0) {
+    let arrTag = tagList.split('|');
+    Tag.find({ tag_name: { '$in': arrTag }, is_delete: 1 }).then(reason => {
+        if (reason) {
             return res.json({
                 code: -200,
                 message: '有标签被删除，不可恢复文章！'
             });
         }
-        Article.update({ _id: articleId }, { is_delete: 0 }).then(() => {
-            return Tag.update({ tag_name: { '$in': arr_tag }}, { '$inc': { 'tag_num': 1 }}, { upsert: false, multi: true }).then(() => {
+        return Article.update({ _id: articleId }, { is_delete: 0 }).then(() => {
+            return Tag.update({ tag_name: { '$in': arrTag }}, { '$inc': { 'tag_num': 1 }}, { upsert: false, multi: true }).then(() => {
                 res.json({
                     code: 200,
-                    message: '更新成功',
+                    message: '恢复文章成功！',
                     data: articleId
                 });
+            }).catch(err => {
+                return res.json({
+                    code: -200,
+                    message: err.toString()
+                });
+            });
+        }).catch(err => {
+            return res.json({
+                code: -200,
+                message: err.toString()
             });
         });
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -307,14 +352,14 @@ exports.recoverArticleSingle = (req, res) => {
 exports.uploadArticleSingle = (req, res) => {
     uploadFile(req, res, err => {
         if (err) {
-            res.json({
+            return res.json({
                 code: -200,
                 message: err.toString()
             });
         } else {
-            res.json({
+            return res.json({
                 code: 200,
-                message: '更新成功'
+                message: '上传文章成功！'
             });
         }
     });
