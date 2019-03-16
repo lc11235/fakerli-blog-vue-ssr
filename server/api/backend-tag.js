@@ -1,7 +1,6 @@
 const moment = require('moment');
 const mongoose = require('../mongoose');
 const Tag = mongoose.model('Tag');
-const Article = mongoose.model('Article');
 
 // ------------------普通标签的操作-----------------
 
@@ -80,7 +79,7 @@ exports.insertTagSingle = (req, res) => {
             is_delete: 0,
             timestamp: moment().format('X')
         }).then(resultTag => {
-           return res.json({
+            return res.json({
                 code: 200,
                 message: '添加普通标签成功！',
                 data: resultTag
@@ -92,7 +91,7 @@ exports.insertTagSingle = (req, res) => {
             });
         });
     }).catch(err => {
-       return res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -188,7 +187,6 @@ exports.modifyTagSingle = (req, res) => {
             message: err.toString()
         });
     });
-    
 };
 
 /**
@@ -481,7 +479,7 @@ exports.modifyClassifyTagSingle = (req, res) => {
                     Tag.update({ tag_classify: result1.tag_name }, { tag_classify: tagName }).exec(),
                     Tag.findOneAndUpdate({ _id: tagId }, data, { new: true }).exec()
                 ]).then(result2 => {
-                    if(result2[0] && result2[1]) {
+                    if (result2[0] && result2[1]) {
                         return res.json({
                             code: 200,
                             message: '更新特征标签成功！',
@@ -498,7 +496,7 @@ exports.modifyClassifyTagSingle = (req, res) => {
             return res.json({
                 code: -200,
                 message: '未找到此标签！'
-            })
+            });
         }).catch(err => {
             return res.json({
                 code: -200,

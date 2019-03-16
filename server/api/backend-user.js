@@ -26,7 +26,7 @@ exports.register = (req, res) => {
             message: '请将表单填写完整!'
         });
     }
-    Admin.findOne({ 
+    Admin.findOne({
         username: username
     }).then(result => {
         if (result) {
@@ -37,9 +37,9 @@ exports.register = (req, res) => {
         }
         if (fsExistsSync('./admin.lock')) {
             return Admin.create({
-                username,
+                username: username,
                 password: md5(md5Pre + password),
-                email,
+                email: email,
                 access: 'normal',
                 avator: '',
                 create_date: moment().format('YYYY-MM-DD HH:mm:ss'),
@@ -54,12 +54,17 @@ exports.register = (req, res) => {
                     code: 200,
                     message: '已添加到申请列表，管理员审核后将发送邮件通知!'
                 });
+            }).catch(err => {
+                return res.json({
+                    code: -200,
+                    message: err.toString()
+                });
             });
         } else {
             return Admin.create({
-                username,
+                username: username,
                 password: md5(md5Pre + password),
-                email,
+                email: email,
                 access: 'super_admin',
                 avator: '/static/images/me.png',
                 create_date: moment().format('YYYY-MM-DD HH:mm:ss'),
@@ -80,10 +85,15 @@ exports.register = (req, res) => {
                         });
                     }
                 });
+            }).catch(err => {
+                return res.json({
+                    code: -200,
+                    message: err.toString()
+                });
             });
         }
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -97,33 +107,29 @@ exports.register = (req, res) => {
  * @param  {[type]} res [返回体]
  */
 exports.login = (req, res) => {
-    let json = {};
     let password = req.body.password;
     let username = req.body.username;
-    if (username === '' || password === '') {
-        json = {
+    if (!username || !password) {
+        return res.json({
             code: -200,
             message: '请输入用户名和密码！'
-        };
-        return res.json(json);
+        });
     }
     Admin.findOneAndUpdate({
-        username,
+        username: username,
         password: md5(md5Pre + password),
         is_delete: 0,
         is_confirm: 0
     }, { is_login: 0 }).then(result => {
         if (result) {
-            let id = result._id;
-            username = encodeURI(username);
-            let token = jwt.sign({ id, username }, secret, { expiresIn: 60 * 60 * 24 * 1 });
+            let token = jwt.sign({ id: result._id, username: encodeURI(username) }, secret, { expiresIn: 60 * 60 * 24 * 1 });
             return res.json({
                 code: 200,
                 message: '登录成功',
                 data: {
                     token: token,
-                    name: username,
-                    id: id
+                    name: encodeURI(username),
+                    id: result._id
                 }
             });
         }
@@ -165,7 +171,7 @@ exports.logout = (req, res) => {
             message: '登出失败！'
         });
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -181,7 +187,7 @@ exports.logout = (req, res) => {
 exports.getInfo = (req, res) => {
     let userId = req.cookies.f_userId;
     if (!userId) {
-        res.json({
+        return res.json({
             code: -200,
             message: '参数错误！'
         });
@@ -202,7 +208,7 @@ exports.getInfo = (req, res) => {
             message: '拉取信息失败！'
         });
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -236,17 +242,17 @@ exports.getUserList = (req, res) => {
                 message: '无数据！'
             });
         }
-        let json = {
+        return res.json({
             code: 200,
+            message: '取的普通用户账号列表成功！',
             data: {
                 list: result[0],
                 total: result[1],
                 page: page
             }
-        };
-        res.json(json);
+        });
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -269,7 +275,7 @@ exports.insertUserSingle = (req, res, next) => {
             message: '请将表单填写完整!'
         });
     }
-    Admin.findOne({ username }).then(result => {
+    Admin.findOne({ username: username }).then(result => {
         if (result) {
             return res.json({
                 code: -200,
@@ -277,9 +283,9 @@ exports.insertUserSingle = (req, res, next) => {
             });
         }
         return Admin.create({
-            username,
+            username: username,
             password: md5(md5Pre + password),
-            email,
+            email: email,
             access: 'normal',
             avator: '',
             create_date: moment().format('YYYY-MM-DD HH:mm:ss'),
@@ -292,11 +298,16 @@ exports.insertUserSingle = (req, res, next) => {
         }).then(() => {
             return res.json({
                 code: 200,
-                message: '已添加到申请列表，管理员审核后将发送邮件通知!',
+                message: '已添加到申请账号列表，管理员审核后将发送邮件通知!',
+            });
+        }).catch(err => {
+            return res.json({
+                code: -200,
+                message: err.toString()
             });
         });
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -312,19 +323,19 @@ exports.insertUserSingle = (req, res, next) => {
 exports.deleteUserSingle = (req, res) => {
     let userId = req.query.userId;
     if (!userId) {
-        res.json({
+        return res.json({
             code: -200,
             message: '参数错误！'
         });
     }
     Admin.update({ _id: userId }, { is_delete: 1, is_login: 1 }).then(() => {
-        res.json({
+        return res.json({
             code: 200,
-            message: '删除用户成功！',
+            message: '失效普通用户账号成功！',
             data: userId
         });
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -345,27 +356,40 @@ exports.modifyUserSingle = (req, res) => {
     let access = req.body.access;
     let avator = req.body.avator;
     if (!userId || !email || !password || !username || !access || !avator) {
-        res.json({
+        return res.json({
             code: -200,
             message: '参数错误！'
         });
     }
     let data = {
-        email: email, 
-        username: username, 
+        email: email,
+        username: username,
         password: md5(md5Pre + password),
         access: access,
         avator: avator,
         update_date: moment().format('YYYY-MM-DD HH:mm:ss')
     };
-    Admin.findOneAndUpdate({ _id: userId }, data, { new: true }).then(result => {
-        res.json({
-            code: 200,
-            message: '更新成功！',
-            data: result
+    Admin.find({ username: username }).then(result => {
+        if (result) {
+            return res.json({
+                code: -2000,
+                message: '用户名称已存在！'
+            });
+        }
+        return Admin.findOneAndUpdate({ _id: userId }, data, { new: true }).then(result => {
+            return res.json({
+                code: 200,
+                message: '更新普通用户账号成功！',
+                data: result
+            });
+        }).catch(err => {
+            return res.json({
+                code: -200,
+                message: err.toString()
+            });
         });
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -381,19 +405,19 @@ exports.modifyUserSingle = (req, res) => {
 exports.getUserSingle = (req, res) => {
     let userId = req.body.userId;
     if (!userId) {
-        res.json({
+        return res.json({
             code: -200,
             message: '参数错误！'
         });
     }
     Admin.findOne({ _id: userId }).then(result => {
-        res.json({
+        return res.json({
             code: 200,
-            message: '查询成功！',
+            message: '取的普通用户账号资料成功！',
             data: result
         });
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -409,19 +433,19 @@ exports.getUserSingle = (req, res) => {
 exports.recoverUserSingle = (req, res) => {
     let userId = req.body.userId;
     if (!userId) {
-        res.json({
+        return res.json({
             code: -200,
             message: '参数错误！'
         });
     }
     Admin.update({ _id: userId }, { is_delete: 0 }).then(() => {
-        res.json({
+        return res.json({
             code: 200,
-            message: '更新成功！',
+            message: '恢复普通用户账号成功！',
             data: userId
         });
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -438,19 +462,19 @@ exports.recoverUserSingle = (req, res) => {
 exports.deleteUserCompletelySingle = (req, res) => {
     let userId = req.body.userId;
     if (!userId) {
-        res.json({
+        return res.json({
             code: -200,
             message: '参数错误！'
         });
     }
     Admin.remove({ _id: userId }).then(() => {
-        res.json({
+        return res.json({
             code: 200,
-            message: '删除成功！',
+            message: '删除普通用户账号成功！',
             data: userId
         });
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -466,19 +490,19 @@ exports.deleteUserCompletelySingle = (req, res) => {
 exports.confirmUserSingle = (req, res) => {
     let userId = req.body.userId;
     if (!userId) {
-        res.json({
+        return res.json({
             code: -200,
             message: '参数错误！'
         });
     }
-    Admin.update({ _id: userId }, { is_comfirm: 1 }).then(() => {
-        res.json({
+    Admin.update({ _id: userId }, { is_confirm: 1 }).then(() => {
+        return res.json({
             code: 200,
-            message: '审核成功！',
+            message: '审核普通用户账号成功！',
             data: userId
         });
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -494,19 +518,19 @@ exports.confirmUserSingle = (req, res) => {
 exports.upgradeUserLevel = (req, res) => {
     let userId = req.body.userId;
     if (!userId) {
-        res.json({
+        return res.json({
             code: -200,
             message: '参数错误！'
         });
     }
     Admin.update({ _id: userId }, { user_level: 1 }).then(() => {
-        res.json({
+        return res.json({
             code: 200,
-            message: '审核成功！',
+            message: '升级普通用户账号权限成功！',
             data: userId
         });
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -522,19 +546,19 @@ exports.upgradeUserLevel = (req, res) => {
 exports.logoutUserSingle = (req, res) => {
     let userId = req.body.userId;
     if (!userId) {
-        res.json({
+        return res.json({
             code: -200,
             message: '参数错误！'
         });
     }
     Admin.update({ _id: userId }, { is_login: 1 }).then(() => {
-        res.json({
+        return res.json({
             code: 200,
-            message: '审核成功！',
+            message: '取消普通用户账号登录成功！',
             data: userId
         });
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -568,17 +592,17 @@ exports.getAdminList = (req, res) => {
                 message: '无数据！'
             });
         }
-        let json = {
+        return res.json({
             code: 200,
+            message: '查询管理用户账号列表成功！',
             data: {
                 list: result[0],
                 total: result[1],
                 page: page
             }
-        };
-        res.json(json);
+        });
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -601,11 +625,11 @@ exports.insertAdminSingle = (req, res, next) => {
             message: '请将表单填写完整!'
         });
     }
-    Admin.findOne({ username }).then(result => {
+    Admin.findOne({ username: username }).then(result => {
         if (result) {
             return res.json({
                 code: -200,
-                message: '该用户已经存在!'
+                message: '该用户账号已经存在!'
             });
         }
         return Admin.create({
@@ -623,12 +647,17 @@ exports.insertAdminSingle = (req, res, next) => {
         }).then(() => {
             return res.json({
                 code: 200,
-                message: '已添加到申请列表，管理员审核后将发送邮件通知!',
+                message: '已添加到申请账号列表，管理员审核后将发送邮件通知!',
+            });
+        }).catch(err => {
+            return res.json({
+                code: -200,
+                message: err.toString()
             });
         });
 
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -644,19 +673,19 @@ exports.insertAdminSingle = (req, res, next) => {
 exports.deleteAdminSingle = (req, res) => {
     let userId = req.body.userId;
     if (!userId) {
-        res.json({
+        return res.json({
             code: -200,
             message: '参数错误！'
         });
     }
     Admin.update({ _id: userId }, { is_delete: 1 }).then(() => {
-        res.json({
+        return res.json({
             code: 200,
-            message: '审核成功！',
+            message: '失效管理用户账号成功！',
             data: userId
         });
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -677,27 +706,40 @@ exports.modifyAdminSingle = (req, res) => {
     let access = req.body.access;
     let avator = req.body.avator;
     if (!userId || !email || !password || !username || !access || !avator) {
-        res.json({
+        return res.json({
             code: -200,
             message: '参数错误！'
         });
     }
     let data = {
-        email: email, 
+        email: email,
         username: username,
         password: md5(md5Pre + password),
         access: access,
         avator: avator,
         update_date: moment().format('YYYY-MM-DD HH:mm:ss')
     };
-    Admin.findOneAndUpdate({ _id: userId }, data, { new: true }).then(result => {
-        res.json({
-            code: 200,
-            message: '更新成功！',
-            data: result
+    Admin.find({ username: username }).then(result => {
+        if (result) {
+            return res.json({
+                code: -2000,
+                message: '用户名称已存在！'
+            });
+        }
+        return Admin.findOneAndUpdate({ _id: userId }, data, { new: true }).then(result => {
+            return res.json({
+                code: 200,
+                message: '更新管理用户账号成功！',
+                data: result
+            });
+        }).catch(err => {
+            return res.json({
+                code: -200,
+                message: err.toString()
+            });
         });
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -713,18 +755,19 @@ exports.modifyAdminSingle = (req, res) => {
 exports.getAdminSingle = (req, res) => {
     let userId = req.body.userId;
     if (!userId) {
-        res.json({
+        return res.json({
             code: -200,
             message: '参数错误！'
         });
     }
     Admin.findOne({ _id: userId }).then(result => {
-        res.json({
+        return res.json({
             code: 200,
+            message: '取得管理用户账号资料成功！',
             data: result
         });
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -740,19 +783,19 @@ exports.getAdminSingle = (req, res) => {
 exports.recoverAdminSingle = (req, res) => {
     let userId = req.body.userId;
     if (!userId) {
-        res.json({
+        return res.json({
             code: -200,
             message: '参数错误！'
         });
     }
     Admin.update({ _id: userId }, { is_delete: 0 }).then(() => {
-        res.json({
+        return res.json({
             code: 200,
-            message: '审核成功！',
+            message: '恢复管理用户账号成功！',
             data: userId
         });
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -769,19 +812,19 @@ exports.recoverAdminSingle = (req, res) => {
 exports.deleteAdminCompletelySingle = (req, res) => {
     let userId = req.body.userId;
     if (!userId) {
-        res.json({
+        return res.json({
             code: -200,
             message: '参数错误！'
         });
     }
     Admin.remove({ _id: userId }).then(() => {
-        res.json({
+        return res.json({
             code: 200,
-            message: '审核成功！',
+            message: '删除管理用户账号成功！',
             data: userId
         });
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -797,19 +840,19 @@ exports.deleteAdminCompletelySingle = (req, res) => {
 exports.downgradeAdminLevel = (req, res) => {
     let userId = req.body.userId;
     if (!userId) {
-        res.json({
+        return res.json({
             code: -200,
             message: '参数错误！'
         });
     }
-    Admin.update({ _id: userId }, { user_levle: 0 }).then(() => {
-        res.json({
+    Admin.update({ _id: userId }, { user_level: 0 }).then(() => {
+        return res.json({
             code: 200,
-            message: '审核成功！',
+            message: '降低管理用户账号权限成功！',
             data: userId
         });
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
@@ -825,19 +868,19 @@ exports.downgradeAdminLevel = (req, res) => {
 exports.logoutAdminSingle = (req, res) => {
     let userId = req.body.userId;
     if (!userId) {
-        res.json({
+        return res.json({
             code: -200,
             message: '参数错误！'
         });
     }
     Admin.update({ _id: userId }, { is_login: 1 }).then(() => {
-        res.json({
+        return res.json({
             code: 200,
-            message: '审核成功！',
+            message: '取消管理用户账号登录成功！',
             data: userId
         });
     }).catch(err => {
-        res.json({
+        return res.json({
             code: -200,
             message: err.toString()
         });
