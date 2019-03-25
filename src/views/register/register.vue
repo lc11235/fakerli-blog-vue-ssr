@@ -5,7 +5,7 @@
 <template>
     <div>
         <canvas-three />
-        <Form ref="formInline" :model="formInline" :rules="ruleInline" class="register">
+        <Form ref="formInline" :model="formInline" :rules="ruleInline" class="register" @keydown.enter.native="handleSubmit('formInline')">
             <FormItem prop="username">
                 <Input type="text" size="large" v-model="formInline.username" placeholder="Username">
                     <span slot="prepend">
@@ -35,19 +35,11 @@
 </template>
 
 <script lang="babel">
-    import cookies from 'js-cookie';
-    import api from '~api';
+    import { mapActions } from 'vuex';
     import canvasThree from '@/components/canvas/canvas-three.vue';
 
     export default {
         name: 'register',
-        beforeRouteEnter(to, from, next) {
-            if (cookies.get('f_token')) {
-                next('/backend/article/list');
-            } else {
-                next();
-            }
-        },
         data() {
             return {
                 formInline: {
@@ -74,23 +66,24 @@
             canvasThree
         },
         methods: {
+            ...mapActions({
+                handleRegister: 'backend/admin/handleRegister'
+            }),
             handleSubmit(name) {
                 this.$refs[name].validate((valid) => {
                     if (valid) {
-                        this.login();
+                        this.handleRegister(this.formInline).then(res => {
+                            this.formInline.username = '';
+                            this.formInline.email = '';
+                            this.formInline.password = '';
+                            this.$Message.success(res);
+                        }, reject => {
+                            this.$Message.error(reject);
+                        })
                     } else {
                         this.$Message.error('表单验证失败!');
                     }
                 });
-            },
-            async login() {
-                const { data: { data, code }} = await api.post('backend/admin/register', this.formInline);
-                if (data && code === 200) {
-                    this.$Message.success('注册成功!');
-                    this.$router.replace('/backend/login');
-                } else {
-                    this.$Message.error('注册失败!');
-                }
             }
         }
     };

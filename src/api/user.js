@@ -1,5 +1,14 @@
 import axios from '@/libs/api.request';
 
+export const register = (formData) => {
+    return axios.request({
+        url: 'api/backend/admin/register',
+        data: formData,
+        method: 'post',
+        source: 'server'
+    });
+};
+
 export const login = ({ username, password }) => {
     const data = {
         username,
@@ -7,7 +16,7 @@ export const login = ({ username, password }) => {
     };
     return axios.request({
         url: 'api/backend/admin/login',
-        data,
+        data: data,
         method: 'post',
         source: 'server'
     });

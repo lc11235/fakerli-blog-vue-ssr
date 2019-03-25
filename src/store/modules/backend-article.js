@@ -169,14 +169,14 @@ const actions = {
             });
         });
     },
-    handleInsertArticleSingle({ commit }, { tagString, content, html, title, toc }) {
+    handleInsertArticleSingle({ commit }, { tagString, content, html, title, tocHTML }) {
         return new Promise((resolve, reject) => {
             insertArticleSingle({
                 tagString,
                 content,
                 html,
                 title,
-                toc
+                tocHTML
             }).then(res => {
                 const data = res.data;
                 if (data && data.code === 200) {

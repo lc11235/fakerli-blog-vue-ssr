@@ -1,5 +1,6 @@
 import api from '~api';
 import {
+    register,
     login,
     logout,
     getUserInfo,
@@ -148,6 +149,24 @@ const actions = {
                 path
             });
         }
+    },
+    handleRegister({ commit }, { username, email, password }) {
+        return new Promise((resolve, reject) => {
+            register({
+                username,
+                email,
+                password
+            }).then(res => {
+                const data = res.data;
+                if (data && data.code === 200) {
+                    resolve(data.message);
+                } else {
+                    reject(data.message);
+                }
+            }).catch(err => {
+                reject(err);
+            });
+        });
     },
     // 登录
     handleLogin({ commit }, { username, password }) {
