@@ -55,7 +55,7 @@ const mutations = {
     },
     'deleteTagCompletelySingle'(states, tagId) {
         const obj = states.tagLists.data.findIndex(ii => ii._id === tagId);
-        if (obj) states.tagLists.data.splice(obj, 1);
+        if (obj > -1) states.tagLists.data.splice(obj, 1);
     },
     'getClassifyTagList'(states, payload) {
         states.classifyTagLists.data = [].concat(payload.list);
@@ -81,7 +81,7 @@ const mutations = {
     },
     'deleteClassifyTagCompletelySingle'(states, tagId) {
         const obj = states.classifyTagLists.data.findIndex(ii => ii._id === tagId);
-        if (obj) states.classifyTagLists.data.splice(obj, 1);
+        if (obj > -1) states.classifyTagLists.data.splice(obj, 1);
     },
 };
 
@@ -108,8 +108,6 @@ const actions = {
                 if (data && data.code === 200) {
                     commit('getTagList', data.data);
                     resolve();
-                } else {
-                    reject(data.message);
                 }
             }).catch(err => {
                 reject(err);
@@ -230,8 +228,6 @@ const actions = {
                 if (data && data.code === 200) {
                     commit('getClassifyTagList', data.data);
                     resolve();
-                } else {
-                    reject(data.message);
                 }
             }).catch(err => {
                 reject(err);

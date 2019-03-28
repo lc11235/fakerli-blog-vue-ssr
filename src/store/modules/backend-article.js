@@ -161,8 +161,6 @@ const actions = {
                 if (data && data.code === 200) {
                     commit('getArticleList', data.data);
                     resolve();
-                } else {
-                    reject(data.message);
                 }
             }).catch(err => {
                 reject(err);

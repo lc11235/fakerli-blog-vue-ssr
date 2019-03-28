@@ -113,7 +113,7 @@ exports.deleteTagSingle = (req, res) => {
         });
     }
     Tag.find({ _id: tagId, is_delete: 0, tag_num: { $gt: 0 }}).then(result => {
-        if (result) {
+        if (result.length) {
             return res.json({
                 code: -200,
                 message: '标签还在使用！'
@@ -163,7 +163,7 @@ exports.modifyTagSingle = (req, res) => {
         update_date: moment().format('YYYY-MM-DD HH:mm:ss')
     };
     Tag.find({ tag_name: tagName }).then(result => {
-        if (result) {
+        if (result.length) {
             return res.json({
                 code: -200,
                 message: '标签名已存在！'
@@ -204,7 +204,7 @@ exports.getTagSingle = (req, res) => {
         });
     }
     Tag.findOne({ _id: tagId }).then(result => {
-        if (result) {
+        if (result.length) {
             return res.json({
                 code: 200,
                 message: '查询普通标签成功！',
@@ -267,7 +267,7 @@ exports.deleteTagCompletelySingle = (req, res) => {
         });
     }
     Tag.find({ _id: tagId, tag_num: { $gt: 0 }}).then(result => {
-        if (result) {
+        if (result.length) {
             return res.json({
                 code: -200,
                 message: '标签还在使用！'
@@ -404,9 +404,9 @@ exports.deleteClassifyTagSingle = (req, res) => {
         });
     }
     Tag.find({ _id: tagId, is_delete: 0 }).then(result => {
-        if (result) {
+        if (result.length) {
             return Tag.find({ tag_classify: result.tag_name }).then(result1 => {
-                if (result1) {
+                if (result1.length) {
                     return res.json({
                         code: -200,
                         message: '有标签依赖此特征标签，不能删除！'
@@ -467,14 +467,14 @@ exports.modifyClassifyTagSingle = (req, res) => {
         update_date: moment().format('YYYY-MM-DD HH:mm:ss')
     };
     Tag.find({ tag_name: tagName }).then(result => {
-        if (result) {
+        if (result.length) {
             return res.json({
                 code: -200,
                 message: '标签名已经存在！'
             });
         }
         return Tag.find({ _id: tagId }).then(result1 => {
-            if (result1) {
+            if (result1.length) {
                 return Promise.all([
                     Tag.update({ tag_classify: result1.tag_name }, { tag_classify: tagName }).exec(),
                     Tag.findOneAndUpdate({ _id: tagId }, data, { new: true }).exec()
@@ -582,9 +582,9 @@ exports.deleteClassifyTagCompletelySingle = (req, res) => {
         });
     }
     Tag.find({ _id: tagId, is_delete: 0 }).then(result => {
-        if (result) {
+        if (result.length) {
             return Tag.find({ tag_classify: result.tag_name }).then(result1 => {
-                if (result1) {
+                if (result1.length) {
                     return res.json({
                         code: -200,
                         message: '有标签依赖此特征标签，不能删除！'
