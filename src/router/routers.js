@@ -156,6 +156,26 @@ export default [
         ]
     },
     {
+        path: '/backend/log',
+        name: 'log',
+        component: Main,
+        meta: {
+            title: '日志',
+            icon: 'md-person'
+        },
+        children: [
+            {
+                path: 'log_manage',
+                name: 'log_manage',
+                meta: {
+                    title: '日志管理',
+                    icon: 'md-person'
+                },
+                component: () => import('@/views/log/log-manage.vue')
+            }
+        ]
+    },
+    {
         path: '/backend/join',
         name: 'join',
         component: Main,

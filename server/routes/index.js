@@ -8,6 +8,7 @@ const backendTag = require('../api/backend-tag');
 const backendUser = require('../api/backend-user');
 const backendMessage = require('../api/backend-message');
 const backendData = require('../api/backend-data');
+const backendLog = require('../api/backend-log');
 const frontendArticle = require('../api/frontend-article');
 const frontendArchive = require('../api/frontend-archive');
 const frontendSearch = require('../api/frontend-search');
@@ -159,6 +160,11 @@ router.get('/backend/admin/downgradeAdminLevel', isAdmin, backendUser.downgradeA
 
 // 取消管理账号的登录
 router.get('/backend/admin/logoutAdminSingle', isAdmin, backendUser.logoutAdminSingle);
+
+
+// ------- 日志 -------
+// 取得请求日志列表
+router.get('/backend/log/logReqResList', isAdmin, backendLog.getLogReqResList);
 
 
 // ------- 消息 -------

@@ -20,6 +20,8 @@ export default {
     user_manage: '用戶管理',
     user_insert: '用戶新增',
     user_access: '用戶權限',
+    log: '日誌',
+    log_manage: '日誌管理',
     update_table_page: '上傳CSV文件',
     update_paste_page: '粘貼表格數據',
     multilevel: '多级菜单',

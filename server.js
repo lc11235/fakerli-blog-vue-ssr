@@ -15,6 +15,7 @@ const { createBundleRenderer } = require('vue-server-renderer');
 const config = require('./src/api/config-server');
 const resolve = file => path.resolve(__dirname, file);
 
+
 const serverInfo = `express/${require('express/package.json').version} ` +
   `vue-server-renderer/${require('vue-server-renderer/package.json').version}`;
 
@@ -82,7 +83,31 @@ app.use(favicon('./favicon.ico'));
 app.use(compression({ threshold: 0 }));
 
 // 日志
-app.use(logger('":method :url" :status :res[content-length] ":referrer" ":user-agent"'));
+// app.use(logger('":method :url" :status :res[content-length] ":referrer" ":user-agent"'));
+const saveLog = require('./server/utils/saveLog');
+app.use(logger(function (tokens, req, res) {
+    console.log(`${tokens.method(req, res)} `
+    + `${tokens.url(req, res)} `
+    + `${tokens.status(req, res)} `
+    + `${tokens.res(req, res, 'content-length')} `
+    + `${tokens['referrer'](req, res)} `
+    + `${tokens['response-time'](req, res)}ms `
+    + `${tokens['user-agent'](req, res)}`);
+    saveLog.saveLog({
+        reqTime: new Date().toString(),
+        reqHttpVersion: tokens['http-version'](req, res),
+        reqMethod: tokens.method(req, res),
+        reqUrl: tokens.url(req, res),
+        reqReferrer: tokens['referrer'](req, res),
+        reqRemoteAddr: tokens['remote-addr'](req, res),
+        reqUserAgent: tokens['user-agent'](req, res),
+        reqHeader: tokens.req(req, res, 'header'),
+        resStatus: tokens.status(req, res),
+        resHeader: tokens.res(req, res, 'header'),
+        resTime: `${tokens['response-time'](req, res)}ms `,
+        resContentLength: tokens.res(req, res, 'content-length')
+    }, 'REQRES');
+}));
 // body解析中间件
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: false }));

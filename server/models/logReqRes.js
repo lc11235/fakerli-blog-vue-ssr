@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 const Promise = require('bluebird');
 
 const LogReqResSchema = new Schema({
+    reqTime: String,
     reqHttpVersion: String,
     reqMethod: String,
     reqUrl: String,
@@ -13,8 +14,7 @@ const LogReqResSchema = new Schema({
     resStatus: Number,
     resHeader: String,
     resTime: String,
-    resContent: String,
-    resContentLength: Number,
+    resContentLength: String,
     create_date: String,
     update_date: String,
     is_delete: Number,

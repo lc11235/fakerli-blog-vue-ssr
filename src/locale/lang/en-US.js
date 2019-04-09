@@ -19,6 +19,8 @@ export default {
     user_manage: 'User Manage',
     user_insert: 'User Add',
     user_access: 'User Access',
+    log: 'Log',
+    log_manage: 'Log Manage',
     join_page: 'QQ Group',
     update_table_page: 'Update .CSV',
     update_paste_page: 'Paste Table Data',
