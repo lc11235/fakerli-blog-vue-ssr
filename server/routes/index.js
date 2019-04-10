@@ -164,7 +164,7 @@ router.get('/backend/admin/logoutAdminSingle', isAdmin, backendUser.logoutAdminS
 
 // ------- 日志 -------
 // 取得请求日志列表
-router.get('/backend/log/logReqResList', isAdmin, backendLog.getLogReqResList);
+router.get('/backend/log/getLogReqResList', isAdmin, backendLog.getLogReqResList);
 
 
 // ------- 消息 -------

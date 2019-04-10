@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import backendAdmin from './modules/backend-admin';
 import backendArticle from './modules/backend-article';
+import backendLog from './modules/backend-log';
 import global from './modules/global';
 import globalTag from './modules/global-tag';
 
@@ -13,7 +14,8 @@ export default new Vuex.Store({
             namespaced: true,
             modules: {
                 admin: backendAdmin,
-                article: backendArticle
+                article: backendArticle,
+                log: backendLog
             }
         },
         global: {

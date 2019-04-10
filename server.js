@@ -15,6 +15,8 @@ const { createBundleRenderer } = require('vue-server-renderer');
 const config = require('./src/api/config-server');
 const resolve = file => path.resolve(__dirname, file);
 
+const moment = require('moment');
+
 
 const serverInfo = `express/${require('express/package.json').version} ` +
   `vue-server-renderer/${require('vue-server-renderer/package.json').version}`;
@@ -94,7 +96,7 @@ app.use(logger(function (tokens, req, res) {
     + `${tokens['response-time'](req, res)}ms `
     + `${tokens['user-agent'](req, res)}`);
     saveLog.saveLog({
-        reqTime: new Date().toString(),
+        reqTime: moment().format('YYYY-MM-DD HH:mm:ss'),
         reqHttpVersion: tokens['http-version'](req, res),
         reqMethod: tokens.method(req, res),
         reqUrl: tokens.url(req, res),
